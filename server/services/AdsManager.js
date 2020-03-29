@@ -1,8 +1,10 @@
 const AdPetModel = require('../models/AdPetModel');
 const Validator = require('../validators');
 const createError = require('http-errors');
+const path = require('path');
+const ImageController = require('./ImageController');
 
-class AdsManager {
+module.exports = class AdsManager {
   constructor(req, action) {
     this.req = req;
     this.valid = this.validate();
@@ -16,8 +18,8 @@ class AdsManager {
       return false;
     }
 
-    const valid = Validator.adTypeValid(this.req.body.ad_type) && Validator.onlyLetters(this.req.body.city) && Validator.onlyLetters(this.req.body.state)
-    && Validator.isPhoneValid(req.body.phone) && Validator.isEmailValid(req.body.email) && Validator.petTypeValid(req.body.type)
+    let valid = Validator.adTypeValid(this.req.body.ad_type) && Validator.onlyLetters(this.req.body.city) && Validator.onlyLetters(this.req.body.state)
+    && Validator.isPhoneValid(this.req.body.phone) && Validator.isEmailValid(this.req.body.email) && Validator.petTypeValid(this.req.body.type)
     && Validator.lengthInRange(this.req.body.phone, 0, 50) && Validator.lengthInRange(this.req.body.city, 0, 50) && Validator.lengthInRange(this.req.body.state, 0, 50)
     && Validator.lengthInRange(this.req.body.description);
 
@@ -65,7 +67,7 @@ class AdsManager {
   }
 
   save() {
-    return new Promise((resolve, reject) => {
+    return new Promise(async(resolve, reject) => {
       if(this.valid) {
         try {
           const ad = this.constructAd();
@@ -107,7 +109,7 @@ class AdsManager {
   }
 
   saveImage() {
-    return new Promise((resolve, reject) => {
+    return new Promise(async(resolve, reject) => {
       try{
         await this.imgSaver.saveImage();
         return resolve(null);

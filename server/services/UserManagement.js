@@ -13,9 +13,7 @@ const hashPassword = util.promisify(bcrypt.hash);
 const jwtSign = util.promisify(jsonWebToken.sign);
 const jwtVerify = util.promisify(jsonWebToken.verify);
 
-//TODO ne zaboraviti da se provjeri koji user moze sta da uradi, odnosno koji ad da manageuje
-
-class UserManagement {
+module.exports = class UserManagement {
   constructor(req, action) {
     this.req = req;
     this.action = action;
@@ -154,5 +152,3 @@ class UserManagement {
     }
   }
 }
-
-module.exports = UserManagement;

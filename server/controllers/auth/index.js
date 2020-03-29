@@ -6,7 +6,9 @@ const upload = MulterUploader.upload('file');
 
 function registerUser(req, res, next) {
   upload(req, res, async (err) => {
-    if(err) return next(err);
+    if(err) {
+      return next(MulterUploader.handleError(err));
+    }
     try {
       let response = {
         user: null,
@@ -27,8 +29,10 @@ function registerUser(req, res, next) {
 
 function loginUser(req, res, next) {
  upload(req, res, async (err) => {
-   if(err) return next(err);
-   try {
+  if(err) {
+    return next(MulterUploader.handleError(err));
+  }
+  try {
      const userManager = new UserManagement(req, 'login');
      const [user, jwt] = await Promise.all([userManager.tryGetUserData(), userManager.tryGenerateToken()]);
      if(!user || !jwt) {

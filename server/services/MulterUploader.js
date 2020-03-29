@@ -3,9 +3,6 @@
     static upload(fieldName) {
       return multer({
         fileFilter: function(req, file, cb) {
-          if(!file) {
-            return cb(new Error('Uploaded file is null'), false);
-          }
           if(constants.allowedImageTypes.find(type => type === file.mimetype) != undefined) {
             return cb(null, true);
           }
