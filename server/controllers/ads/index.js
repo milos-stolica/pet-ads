@@ -18,13 +18,13 @@ const getAds = (req, res, next) => {
     AdPetModel.findById(id, (err, ad) => {
       if(err) return next(err);
       if(!ad) return next(createError(400, 'Ad not found'));
-      res.json(ad);
+      return res.json(ad);
     });
   } else {
     //return all
     AdPetModel.find((err, ads) => {
       if(err) return next(err);
-      res.json(ads);
+      return res.json(ads);
     });
     
   }
@@ -32,8 +32,6 @@ const getAds = (req, res, next) => {
 
 const updateAd = (imageUploader) => {
   return (req, res, next) => {
-    //Ako se mijenjala, izbrisati staru. Desava se da ne postoji izabrana slika, pa ishendlati na klijentu i serveru na pravi
-    //to do promijeniti lokaciju slike ako se promijenio tip oglasa, staviti je u odgovarajuci folder
     upload(req, res, (err) => {
       if(err) {
         return next(MulterUploader.handleError(err));
@@ -48,7 +46,7 @@ const updateAd = (imageUploader) => {
         
         let valid = Validator.adTypeValid(req.body.ad_type) && Validator.onlyLetters(req.body.city) && Validator.onlyLetters(req.body.state)
                   && Validator.isPhoneValid(req.body.phone) && Validator.isEmailValid(req.body.email) && Validator.petTypeValid(req.body.type)
-                  && Validator.lengthInRange(req.body.phone, 0, 50) && Validator.lengthInRange(req.body.city, 0 , 50) && Validator.lengthInRange(req.body.state, 0 , 50)
+                  && Validator.lengthInRange(req.body.phone, 0, 50) && Validator.lengthInRange(req.body.city, 0, 50) && Validator.lengthInRange(req.body.state, 0, 50)
                   && Validator.lengthInRange(req.body.description);
   
         if(valid && req.body.ad_type === 'Sell' && !Validator.valueInRange(req.body.price, 0)) {
@@ -77,11 +75,12 @@ const updateAd = (imageUploader) => {
         //if there is not any image uploaded it means that image should remain unchanged
         if(req.file) {
           ImageController.deleteImage(path.join(__dirname, '../../public', 'ads_images', ad.ad_type, ad.image_name));
-          const imgSaver = new ImageController(req.file.buffer, req.body.ad_type, imageUploader);
+          const newImgDestination = path.join(__dirname, '../../public', 'ads_images', req.body.ad_type);
+          const imgSaver = new ImageController(req.file.buffer, newImgDestination, imageUploader);
           try
           {
             //await image to be saved before send response to client
-            await imgSaver.saveImage(); 
+            await imgSaver.saveImage();
           } catch(err) {
             return next(err);
           }
@@ -90,12 +89,12 @@ const updateAd = (imageUploader) => {
           const oldPath = path.join(__dirname, '../../public', 'ads_images', ad.ad_type, ad.image_name);
           const newPath = path.join(__dirname, '../../public', 'ads_images', req.body.ad_type, ad.image_name);
           //await image to be moved to another folder before send response to client
-          await ImageController.moveImage(oldPath, newPath)
+          await ImageController.moveImage(oldPath, newPath);
         }
         const adForSaving = image_name != undefined ? { ...updatedAd, image_name } : updatedAd;
         AdPetModel.findOneAndUpdate({ _id: req.body.id}, adForSaving, { new: true }, (err, ad) => {
           if(err) return next(err);
-          res.json(ad);
+          return res.json(ad);
         });
       });
     });
@@ -115,7 +114,8 @@ const saveAd = (imageUploader) => {
   
       let valid = Validator.adTypeValid(req.body.ad_type) && Validator.onlyLetters(req.body.city) && Validator.onlyLetters(req.body.state)
                     && Validator.isPhoneValid(req.body.phone) && Validator.isEmailValid(req.body.email) && Validator.petTypeValid(req.body.type)
-                    && Validator.lengthInRange(req.body.phone, 0, 50) && Validator.lengthInRange(req.body.city, 0 , 50) && Validator.lengthInRange(req.body.state, 0 , 50);
+                    && Validator.lengthInRange(req.body.phone, 0, 50) && Validator.lengthInRange(req.body.city, 0 , 50) && Validator.lengthInRange(req.body.state, 0 , 50)
+                    && Validator.lengthInRange(req.body.description);
   
       if(valid && req.body.ad_type === 'sell' && !Validator.valueInRange(req.body.price, 0)) {
         valid = false;
@@ -138,8 +138,10 @@ const saveAd = (imageUploader) => {
       if(!isNaN(+req.body.price)) {
         adForSave.price = +req.body.price;
       }
-  
-      const imgSaver = new ImageController(req.file.buffer, req.body.ad_type, imageUploader);
+      
+      const imgDestination = path.join(__dirname, '../../public', 'ads_images', req.body.ad_type);
+      const imgSaver = new ImageController(req.file.buffer, imgDestination, imageUploader);
+
       try{
         await imgSaver.saveImage();
       }
@@ -151,7 +153,7 @@ const saveAd = (imageUploader) => {
       const adPetDoc = new AdPetModel(adPet);
       adPetDoc.save((err, document) => {
         if(err) return next(err);
-        res.json(document)
+        return res.json(document)
       });
     });
   }

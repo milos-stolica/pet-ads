@@ -61,13 +61,7 @@ const AdPetSchema = new mongoose.Schema({
   }
 }, {timestamps: true});
 
-AdPetSchema.index(
-  {
-    image_name: 1
-  },
-  {
-    unique: true
-  });
+AdPetSchema.index({ image_name: 1}, { unique: true });
 
 const AdPet = mongoose.model('AdPet', AdPetSchema);
 

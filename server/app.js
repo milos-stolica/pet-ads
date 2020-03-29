@@ -4,11 +4,15 @@ const cors = require('cors');
 const mongoose = require('mongoose');
 const adsRouter = require('./routes/ads');
 const typesRouter = require('./routes/types');
+const authRouter = require('./routes/auth');
 const createError = require('http-errors');
 const compression = require('compression');
+const cookieParser = require('cookie-parser');
 const helmet = require('helmet');
 const path = require('path');
 const { makeDirectories } = require('./utils');
+const { authentificateUser } = require('./controllers/auth');
+
 
 const app = express();
 //to do zasto ne moze da se skloni x-powered-by heder
@@ -31,6 +35,8 @@ makeDirectories();
 app.use(cors());
 app.use(compression());
 app.use(helmet());
+app.use(cookieParser());
+app.use(authentificateUser);
 
 app.use(express.static(path.join(__dirname, 'public')));
 
@@ -42,6 +48,7 @@ app.get('/', (req, res) => {
 
 app.use('/ads', adsRouter);
 app.use('/types', typesRouter);
+app.use('/auth', authRouter);
 
 // catch 404 and forward to error handler
 app.use((req, res, next) => {

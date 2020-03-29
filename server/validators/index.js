@@ -1,7 +1,11 @@
-(function({phone_regex, email_regex, only_letters_regex, ad_types, pet_types}) {
+(function({phone_regex, email_regex, password_regex, only_letters_regex, ad_types, pet_types}) {
   module.exports = class Validator {
     static isEmailValid(email) {
       return email_regex.test(email);
+    }
+
+    static isPasswordValid(password) {
+      return password_regex.test(password);
     }
 
     static isPhoneValid(phone) {

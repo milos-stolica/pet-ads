@@ -11,6 +11,9 @@ const makeDirectories = () => {
   });
 }
 
+const _path = path.join(__dirname, 'public', 'users_images');
+fs.existsSync(_path) || fs.mkdirSync(_path)
+
 module.exports = {
   makeDirectories
 }

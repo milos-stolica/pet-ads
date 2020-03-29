@@ -2,6 +2,7 @@ const express = require('express');
 const { getAds, updateAd, saveAd, deleteAd } = require('../../controllers/ads');
 const router = express.Router();
 const { fork } = require('child_process');
+const { checkAuthentificated } = require('../../controllers/auth');
 
 const imageUploader = fork('./server/child_processes/imageUploader.js');
 imageUploader.on('error', (error) => {
