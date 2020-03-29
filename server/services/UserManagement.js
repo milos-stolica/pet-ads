@@ -43,7 +43,6 @@ class UserManagement {
       if(!this.req.body) {
         return false;
       }
-  
       this.valid = Validator.isEmailValid(this.req.body.email) && Validator.isPasswordValid(this.req.body.password); 
       return this.valid;
     }
@@ -59,10 +58,11 @@ class UserManagement {
 
   tryGetUserData() {
     return new Promise((resolve, reject) => {
-      if(this.user) resolve(this.user);
-      if(!this.valid) resolve(null);
+      if(this.user) return resolve(this.user);
+      if(!this.valid) return reject(createError(400, 'Validation failed'));
       UserModel.findOne({email: this.req.body.email}, (err, user) => {
-        if(err) reject(err);
+        if(err) return reject(err);
+        if(!user) return reject(createError(400, 'Validation failed'));
         bcrypt.compare(this.req.body.password, user.password)
         .then(correct => {
           correct ? resolve(UserManagement.projectUser(user)) : resolve(null)
@@ -81,6 +81,7 @@ class UserManagement {
           if(!data) return resolve(null);
           UserModel.findById(data.sub, (err, user) => {
             if(err) throw err;
+            if(!user) return resolve(null);
             return resolve(UserManagement.projectUser(user));
           });
         } catch (err) {

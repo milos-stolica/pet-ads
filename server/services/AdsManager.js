@@ -30,8 +30,8 @@ class AdsManager {
   getAds() {
     return new Promise((resolve, reject) => {
       AdPetModel.find((err, ads) => {
-        if(err) reject(err);
-        resolve(ads);
+        if(err) return reject(err);
+        return resolve(ads);
       });
     });
   }
@@ -39,8 +39,8 @@ class AdsManager {
   getAdById() {
     return new Promise((resolve, reject) => {
       AdPetModel.findById(this.req.query.id, (err, ad) => {
-        if(err) reject(err);
-        resolve(ad);
+        if(err) return reject(err);
+        return resolve(ad);
       });
     });
   }
@@ -52,14 +52,14 @@ class AdsManager {
           const ad = this.constructAd();
           await this.tryChangeImage();
           AdPetModel.findOneAndUpdate({ _id: this.req.body.id }, ad, { new: true }, (err, ad) => {
-            if(err) reject(err);
-            resolve(ad);
+            if(err) return reject(err);
+            return resolve(ad);
           });
         } catch (err) {
-          reject(err);
+          return reject(err);
         }
       } else {
-        reject(createError(400, 'Validation failed'));
+        return reject(createError(400, 'Validation failed'));
       }
     });  
   }
@@ -72,14 +72,14 @@ class AdsManager {
           await this.saveImage();
           const adPetDoc = new AdPetModel(ad);
           adPetDoc.save((err, adPet) => {
-            if(err) reject(err);
-            resolve(adPet);
+            if(err) return reject(err);
+            return resolve(adPet);
           });
         } catch (err) {
-          reject(err);
+          return reject(err);
         }
       } else {
-        reject(createError(400, 'Validation failed'));
+        return reject(createError(400, 'Validation failed'));
       }
     });
   }
@@ -87,7 +87,7 @@ class AdsManager {
   tryChangeImage() {
     return new Promise((resolve, reject) => {
       AdPetModel.findById(this.req.body.id, async (err, ad) => {
-        if(err) reject(err);
+        if(err) return reject(err);
         try {
           if(this.req.file) {
             //delete previously saved image
@@ -98,9 +98,9 @@ class AdsManager {
             const newPath = path.join(__dirname, '../public', 'ads_images', this.req.body.ad_type, ad.image_name);
             await ImageController.moveImage(oldPath, newPath);
           }
-          resolve(null);
+          return resolve(null);
         } catch(err) {
-          reject(err);
+          return reject(err);
         }
       });
     });
@@ -110,10 +110,10 @@ class AdsManager {
     return new Promise((resolve, reject) => {
       try{
         await this.imgSaver.saveImage();
-        resolve(null);
+        return resolve(null);
       }
       catch(err) {
-        reject(err);
+        return reject(err);
       }
     });
   }
