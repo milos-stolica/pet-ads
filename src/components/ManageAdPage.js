@@ -55,7 +55,6 @@ function ManageAdPage ({allAds, allStates, types, actions}) {
       [event.target.name]: event.target.files ? event.target.files[0].name : event.target.value
     });
     if(event.target.files) {
-      console.log(event.target.files[0]);
       setFile(event.target.files[0]);
       URL.revokeObjectURL(imgUrl);
       setImgUrl(URL.createObjectURL(event.target.files[0]));
@@ -75,8 +74,7 @@ function ManageAdPage ({allAds, allStates, types, actions}) {
 
   function handleSubmit(event) {
     event.preventDefault();
-    const valid = isFormValid();
-    if(valid) {
+    if(isFormValid()) {
       console.log('Form is valid and will be submitted soon...');
       let func = ad._id !== undefined ? 'updateAd' : 'addAd';
       actions[func](ad, file);//to do catch bi ovde trebao da bude attachovan na promise koji se vraca iz funkcije
@@ -146,7 +144,7 @@ const initAd = {
   description: '',
   type: '',
   ad_type: '',
-  image_name: 'Choose pet image...',
+  image_name: 'Choose pet image',
   city: '',
   state: '',
   phone: '',

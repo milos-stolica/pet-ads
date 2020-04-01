@@ -32,10 +32,6 @@ function NavBar ({adTypes, actions}) {
               </NavLink>
               <div className="dropdown-menu" aria-labelledby="navbarDropdown">
                 {adTypes.map(type => <Link className="dropdown-item" to={`/ads?type=${type}`}>{type}</Link>)}
-                {/* <Link className="dropdown-item" to="/ads?type=sell">Sell</Link>
-                <Link className="dropdown-item" to="/ads?type=buy" >Buy</Link>
-                <Link className="dropdown-item" to="/ads?type=find">Find</Link>
-                <Link className="dropdown-item" to="/ads?type=lost">Lost</Link> */}
               </div>
             </li>
             <li>
@@ -44,10 +40,12 @@ function NavBar ({adTypes, actions}) {
               </NavLink>
             </li>
           </ul>
-          <form className="form-inline my-2 my-lg-0">
+          {/* <form className="form-inline my-2 my-lg-0">
             <input className="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search"/>
             <button className="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
-          </form>
+          </form> */}
+          {/* <button className="btn btn-outline-success my-2 my-sm-0" type="submit">Sign up</button> */}
+          <Link className="btn btn-outline-success my-2 my-sm-0" to='/signup'>Sign up</Link>
         </div>
       </nav>
     </>

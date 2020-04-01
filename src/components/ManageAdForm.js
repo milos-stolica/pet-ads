@@ -12,7 +12,7 @@ function ManageAdForm (props) {
         <Form.Group as={Col} controlId="adType">
           <Form.Label>Ad type</Form.Label>
           <Form.Control as="select" value={ad_type} onChange={props.onChange} name='ad_type'>
-            <option value=''>Choose ad type...</option>
+            <option value=''>Choose ad type</option>
             {adTypes && adTypes.map(type => <option key={type}>{type}</option>)}
           </Form.Control>
           {errors.ad_type && <div className='alert alert-danger'>{errors.ad_type}</div>}
@@ -21,7 +21,7 @@ function ManageAdForm (props) {
         <Form.Group as={Col} controlId="petType">
           <Form.Label>Pet type</Form.Label>
           <Form.Control as="select" value={type} onChange={props.onChange} name='type'>
-            <option value=''>Choose pet...</option>
+            <option value=''>Choose pet</option>
             {petTypes && petTypes.map(type => <option key={type}>{type}</option>)}
           </Form.Control>
           {errors.type && <div className='alert alert-danger'>{errors.type}</div>}

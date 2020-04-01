@@ -48,11 +48,33 @@ module.exports = class AdsManager {
   }
 
   update() {
+    const tryChangeImage = () => {
+      return new Promise((resolve, reject) => {
+        AdPetModel.findById(this.req.body.id, async (err, ad) => {
+          if(err) return reject(err);
+          try {
+            if(this.req.file) {
+              //delete previously saved image and save new one
+              ImageController.deleteImage(path.join(__dirname, '../public', 'ads_images', ad.ad_type, ad.image_name));
+              await this.imgSaver.saveImage();
+            } else if (ad.ad_type !== this.req.body.ad_type){
+              //only destination for image is changed
+              const oldPath = path.join(__dirname, '../public', 'ads_images', ad.ad_type, ad.image_name);
+              const newPath = path.join(__dirname, '../public', 'ads_images', this.req.body.ad_type, ad.image_name);
+              await ImageController.moveImage(oldPath, newPath);
+            }
+            return resolve(null);
+          } catch(err) {
+            return reject(err);
+          }
+        });
+      });
+    }
     return new Promise(async(resolve, reject) => {
       if(this.valid) {
         try {
           const ad = this.constructAd();
-          await this.tryChangeImage();
+          await tryChangeImage();
           AdPetModel.findOneAndUpdate({ _id: this.req.body.id }, ad, { new: true }, (err, ad) => {
             if(err) return reject(err);
             return resolve(ad);
@@ -86,28 +108,6 @@ module.exports = class AdsManager {
     });
   }
 
-  tryChangeImage() {
-    return new Promise((resolve, reject) => {
-      AdPetModel.findById(this.req.body.id, async (err, ad) => {
-        if(err) return reject(err);
-        try {
-          if(this.req.file) {
-            //delete previously saved image
-            ImageController.deleteImage(path.join(__dirname, '../public', 'ads_images', ad.ad_type, ad.image_name));
-            await this.imgSaver.saveImage();
-          } else if (ad.ad_type !== this.req.body.ad_type){
-            const oldPath = path.join(__dirname, '../public', 'ads_images', ad.ad_type, ad.image_name);
-            const newPath = path.join(__dirname, '../public', 'ads_images', this.req.body.ad_type, ad.image_name);
-            await ImageController.moveImage(oldPath, newPath);
-          }
-          return resolve(null);
-        } catch(err) {
-          return reject(err);
-        }
-      });
-    });
-  }
-
   saveImage() {
     return new Promise(async(resolve, reject) => {
       try{
@@ -120,6 +120,7 @@ module.exports = class AdsManager {
     });
   }
 
+  //TODO make this inaccessable out of this class
   constructAd() {
     const ad = {
       description:this.req.body.description, 

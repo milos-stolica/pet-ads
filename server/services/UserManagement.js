@@ -12,6 +12,16 @@ const { secret } = require('../config');
 const hashPassword = util.promisify(bcrypt.hash);
 const jwtSign = util.promisify(jsonWebToken.sign);
 const jwtVerify = util.promisify(jsonWebToken.verify);
+const projectUser = (user) => {
+  return {
+    ads: user.ads,
+    _id: user._id,
+    firstName: user.firstName,
+    lastName: user.lastName,
+    email: user.email,
+    image_name: user.image_name
+  }
+}
 
 module.exports = class UserManagement {
   constructor(req, action) {
@@ -63,31 +73,10 @@ module.exports = class UserManagement {
         if(!user) return reject(createError(400, 'Validation failed'));
         bcrypt.compare(this.req.body.password, user.password)
         .then(correct => {
-          correct ? resolve(UserManagement.projectUser(user)) : resolve(null)
+          correct ? resolve(projectUser(user)) : resolve(null)
         })
         .catch(err => reject(err));
       });
-    });
-  }
-
-   static tryGetUserData(req) {
-    return new Promise(async(resolve) => {
-      const token = req.cookies.jsonWebToken;
-      if(token) {
-        try {
-          const data = await jwtVerify(token, secret);
-          if(!data) return resolve(null);
-          UserModel.findById(data.sub, (err, user) => {
-            if(err) throw err;
-            if(!user) return resolve(null);
-            return resolve(UserManagement.projectUser(user));
-          });
-        } catch (err) {
-          throw err;
-        } 
-      } else {
-        return resolve(null);
-      }
     });
   }
 
@@ -141,14 +130,24 @@ module.exports = class UserManagement {
     });
   }
 
-  static projectUser(user) {
-    return {
-      ads: user.ads,
-      _id: user._id,
-      firstName: user.firstName,
-      lastName: user.lastName,
-      email: user.email,
-      image_name: user.image_name
-    }
+  static tryGetUserData(req) {
+    return new Promise(async(resolve) => {
+      const token = req.cookies.jsonWebToken;
+      if(token) {
+        try {
+          const data = await jwtVerify(token, secret);
+          if(!data) return resolve(null);
+          UserModel.findById(data.sub, (err, user) => {
+            if(err) throw err;
+            if(!user) return resolve(null);
+            return resolve(projectUser(user));
+          });
+        } catch (err) {
+          throw err;
+        } 
+      } else {
+        return resolve(null);
+      }
+    });
   }
 }
