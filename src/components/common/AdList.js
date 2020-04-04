@@ -10,7 +10,7 @@ function AdList ({ads}) {
         {ads.map(ad => {
           const url = `http://localhost:3001/ads_images/${ad.ad_type}/${ad.image_name}`;
           return (
-            <Col lg={4} md={6}>
+            <Col lg={4} md={6} key={ad._id}>
               <Ad 
                 id=           {ad._id}
                 key=          {ad._id}

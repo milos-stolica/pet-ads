@@ -119,7 +119,7 @@ module.exports = class UserManagement {
           const user = new UserModel(userData);
           user.save((err, userDoc) => {
             if(err) reject(err);
-            resolve(UserManagement.projectUser(userDoc));
+            resolve(projectUser(userDoc));
           });
         } catch(err) {
           reject(err);

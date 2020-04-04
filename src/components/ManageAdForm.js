@@ -63,7 +63,7 @@ function ManageAdForm (props) {
           <Form.Label>City</Form.Label>
           <Form.Control value={city} onChange={props.onChange} as="select" name='city'>
             <option>Choose your city</option>
-            {cities.map(city => <option key={city}>{city}</option>)}
+            {cities.map(cityName => <option key={cityName}>{cityName}</option>)}
           </Form.Control>
           {errors.city && <div className='alert alert-danger'>{errors.city}</div>}
         </Form.Group>  

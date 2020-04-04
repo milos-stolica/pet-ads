@@ -22,46 +22,7 @@ function updateAdSuccess(ad) {
   }
 }
 
-export function loadAds() {
-  return (dispatch) => {
-    AxiosInstance.get('/ads')
-      .then(response => { 
-        if(response.data.length > 0) dispatch(loadAdsSuccess(response.data))
-      })
-      .catch(err => console.log(err));
-  }
-}
-
-export function addAd(ad, image) {
-  const formData = GetFormData(ad, image);
-  const config = {
-      headers: {
-          'content-type': 'multipart/form-data'
-      }
-  }
-  return dispatch => {
-    AxiosInstance.post('/ads', formData, config)
-    .then(response => dispatch(addAdSuccess(response.data)))
-    .catch(err => console.log(err))
-  }
-}
-
-export function updateAd(ad, image) {
-  const formData = GetFormData(ad, image);
-  formData.append('id', ad._id);
-  const config = {
-      headers: {
-          'content-type': 'multipart/form-data'
-      }
-  }
-  return dispatch => {
-    return AxiosInstance.put('/ads', formData, config)
-    .then(response => dispatch(updateAdSuccess(response.data)))
-    .catch(err => console.log(err));
-  }
-}
-
-function GetFormData(ad, image) {
+function getFormData(ad, image) {
   const formData = new FormData();
   formData.append('file', image);
   formData.append('description', ad.description);
@@ -73,4 +34,43 @@ function GetFormData(ad, image) {
   formData.append('price', ad.price);
   formData.append('ad_type', ad.ad_type);
   return formData;
+}
+
+export function loadAds() {
+  return (dispatch) => {
+    AxiosInstance.get('/ads')
+      .then(response => { 
+        if(response.data.length > 0) dispatch(loadAdsSuccess(response.data))
+      })
+      .catch(err => console.log(err));
+  }
+}
+
+export function addAd(ad, image) {
+  const formData = getFormData(ad, image);
+  const config = {
+    headers: {
+      'content-type': 'multipart/form-data'
+    }
+  }
+  return dispatch => {
+    AxiosInstance.post('/ads', formData, config)
+    .then(response => dispatch(addAdSuccess(response.data)))
+    .catch(err => console.log(err))
+  }
+}
+
+export function updateAd(ad, image) {
+  const formData = getFormData(ad, image);
+  formData.append('id', ad._id);
+  const config = {
+    headers: {
+      'content-type': 'multipart/form-data'
+    }
+  }
+  return dispatch => {
+    return AxiosInstance.put('/ads', formData, config)
+    .then(response => dispatch(updateAdSuccess(response.data)))
+    .catch(err => console.log(err));
+  }
 }

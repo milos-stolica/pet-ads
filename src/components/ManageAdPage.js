@@ -19,56 +19,100 @@ function ManageAdPage ({allAds, allStates, types, actions}) {
   const [cities, setCities] = useState([]);
   const { id } = useParams();
   const history = useHistory();
+  
+  function areAdsLoaded() {
+    return allAds.length !== 0
+  }
 
-  useEffect(() => {
-    if(allAds.length === 0) {
+  function loadAds() {
+    if(!areAdsLoaded()) {
       actions.loadAds();
-    } else {
+    }
+  }
+
+  function loadStates() {
+    if(allStates.length === 0) {
+      actions.loadStates();
+    }
+  }
+
+  function loadAdTypes() {
+    if(types.ads.length === 0) {
+      actions.loadAdTypes();
+    }
+  }
+
+  function loadPetTypes() {
+    if(types.pets.length === 0) {
+      actions.loadPetTypes();
+    }
+  }
+
+  function initializeFormFieldValues() {
+    if(areAdsLoaded()) {
       const adForUpdate = allAds.find(ad => ad._id === id);
       if(adForUpdate) {
         setAd(adForUpdate);
         setImgUrl(`http://localhost:3001/ads_images/${adForUpdate.ad_type}/${adForUpdate.image_name}`);
+        setCitiesList(adForUpdate.state);
       } else {
         history.push('/ad');
         setAd(initAd);
         setImgUrl(emptyString);
       }
     }
-  }, [allAds, id]);
+  }
 
-  useEffect(() => {
-    if(allStates.length === 0) {
-      actions.loadStates();
-    }
-    if(types.ads.length === 0) {
-      actions.loadAdTypes();
-    }
+  function getFormErrors() {
+    const errors = {};
+    if(!Validator.isEmailValid(ad.email)) errors.email = 'This is not valid email address.';
+    if(!Validator.isPhoneValid(ad.phone)) errors.phone = 'This is not valid phone number.';
+    if(ad.ad_type === 'Sell' && !Validator.valueInRange(ad.price, 0)) errors.price = 'Price must be number greater or equal to zero.';
+    if(!Validator.onlyLetters(ad.city) || !Validator.lengthInRange(ad.city, 0 , 50)) errors.city = 'This is not valid city name.';
+    if(!Validator.onlyLetters(ad.state) || !Validator.lengthInRange(ad.state, 0 , 50)) errors.state = 'This is not valid state name.';
+    if(!Validator.typeValid(ad.ad_type, types.ads)) errors.ad_type = 'This is not valid ad type.';
+    if(!Validator.typeValid(ad.type, types.pets)) errors.type = 'This pet type is not supported yet.';
+    if(ad._id === undefined && !Validator.isImage(file)) errors.file = 'Only images of png, jpeg or webp types are allowed.';
+    if(!Validator.lengthInRange(ad.description)) errors.description = 'Description allow up to 1000 characters.';
+    return errors;
+  }
 
-    if(types.pets.length === 0) {
-      actions.loadPetTypes();
-    }
-  }, []);
+  function isFormValid() {
+    const errors = getFormErrors();
+    setErrors(errors);
+    return Object.keys(errors).length === 0;
+  }
 
-  function handleChange(event) {
-    setAd({
-      ...ad,
-      [event.target.name]: event.target.files ? event.target.files[0].name : event.target.value
-    });
+  function trySetFileAndImage(event) {
     if(event.target.files) {
       setFile(event.target.files[0]);
       URL.revokeObjectURL(imgUrl);
       setImgUrl(URL.createObjectURL(event.target.files[0]));
     }
+  }
+
+  function setCitiesList(stateName) {
+    const state = allStates.find(state => state.name === stateName)
+    if(state !== undefined) {
+      CitiesManager.getCities(state.code, 10000).then(cities => {
+        setCities(cities.map(city => city.name));
+      });
+    } else {
+      setCities([]);
+    }
+  }
+
+  useEffect(loadAds, [allAds, id]);
+  useEffect(initializeFormFieldValues, [allAds, id]);
+  useEffect(loadStates, []);
+  useEffect(loadAdTypes, []);
+  useEffect(loadPetTypes, []);
+
+  function handleChange(event) {
+    setAd({...ad, [event.target.name]: event.target.files ? event.target.files[0].name : event.target.value});
+    trySetFileAndImage(event);
     if(event.target.name === 'state') {
-      const state = allStates.find(state => state.name === event.target.value)
-      if(state !== undefined) {
-        CitiesManager.getCities(state.code, 10000).then(cities => {
-          setCities(cities.map(city => city.name));
-        });
-      } else {
-        setCities([]);
-      }
-      
+      setCitiesList(event.target.value);
     }
   }
 
@@ -80,21 +124,6 @@ function ManageAdPage ({allAds, allStates, types, actions}) {
       actions[func](ad, file);//to do catch bi ovde trebao da bude attachovan na promise koji se vraca iz funkcije
       history.push(`/ads?type=${ad.ad_type}`);
     }
-  }
-
-  function isFormValid() {
-    const errors = {};
-    if(!Validator.isEmailValid(ad.email)) errors.email = 'This is not valid email address.';
-    if(!Validator.isPhoneValid(ad.phone)) errors.phone = 'This is not valid phone number.';
-    if(ad.ad_type === 'Sell' && !Validator.valueInRange(ad.price, 0)) errors.price = 'Price must be number greater or equal to zero.';
-    if(!Validator.onlyLetters(ad.city) || !Validator.lengthInRange(ad.city, 0 , 50)) errors.city = 'This is not valid city name.';
-    if(!Validator.onlyLetters(ad.state) || !Validator.lengthInRange(ad.state, 0 , 50)) errors.state = 'This is not valid state name.';
-    if(!Validator.typeValid(ad.ad_type, types.ads)) errors.ad_type = 'This is not valid ad type.';
-    if(!Validator.typeValid(ad.type, types.pets)) errors.type = 'This pet type is not supported yet.';
-    if(ad._id === undefined && !Validator.isImage(file)) errors.file = 'Only images of png, jpeg or webp types are allowed.';
-    if(!Validator.lengthInRange(ad.description)) errors.description = 'Description allow up to 1000 characters.';
-    setErrors(errors);
-    return Object.keys(errors).length === 0;
   }
 
   return (

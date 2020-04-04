@@ -17,7 +17,7 @@ function SignupForm (props) {
       <Form.Group as={Col} controlId="secondName">
         <Form.Label>Last name</Form.Label>
         <Form.Control value={lastName} onChange={props.onChange} placeholder="Enter last name" name='lastName'/>
-        {errors.email && <div className='alert alert-danger'>{errors.email}</div>}
+        {errors.lastName && <div className='alert alert-danger'>{errors.lastName}</div>}
       </Form.Group>
 
       <Form.Group as={Col} controlId="email">
@@ -26,7 +26,7 @@ function SignupForm (props) {
         {errors.email && <div className='alert alert-danger'>{errors.email}</div>}
       </Form.Group>
 
-      <Form.Group as={Col} controlId="email">
+      <Form.Group as={Col} controlId="password">
         <Form.Label>Password</Form.Label>
         <Form.Control value={password} onChange={props.onChange} type="password" placeholder="Enter password" name='password'/>
         {errors.password && <div className='alert alert-danger'>{errors.password}</div>}

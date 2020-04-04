@@ -1,6 +1,6 @@
-import AxiosInstance from "./Axios";
 //TODO this validator is duplicated, it should be shared between client and server
-const email_regex = /^(([^<>()\[\]\.,;:\s@\"]+(\.[^<>()\[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i;
+const email_regex = /^(([^<>()[\].,;:\s@"]+(\.[^<>()[\].,;:\s@"]+)*)|(".+"))@(([^<>()[\].,;:\s@"]+\.)+[^<>()[\].,;:\s@"]{2,})$/i;
+const password_regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])(?=.{8,})/;
 const phone_regex = /^(\+)*[0-9]+$/;
 const only_letters_regex = /^[a-zA-Z ]+$/;
 const allowedImageTypes = ['image/jpeg', 'image/png', 'image/webp'];
@@ -8,6 +8,10 @@ const allowedImageTypes = ['image/jpeg', 'image/png', 'image/webp'];
 export default class Validator {
   static isEmailValid(email) {
     return email_regex.test(email);
+  }
+
+  static isPasswordValid(password) {
+    return password_regex.test(password);
   }
 
   static isPhoneValid(phone) {
@@ -34,7 +38,6 @@ export default class Validator {
   }
 
   static isImage(file) {
-    console.log('file', file);
     return file && !!allowedImageTypes.find(type => type === file.type);
   }
 }

@@ -31,7 +31,7 @@ function NavBar ({adTypes, actions}) {
                 ADS
               </NavLink>
               <div className="dropdown-menu" aria-labelledby="navbarDropdown">
-                {adTypes.map(type => <Link className="dropdown-item" to={`/ads?type=${type}`}>{type}</Link>)}
+                {adTypes.map(type => <Link className="dropdown-item" to={`/ads?type=${type}`} key={type}>{type}</Link>)}
               </div>
             </li>
             <li>
