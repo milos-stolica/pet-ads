@@ -10,62 +10,74 @@ import { useHistory, useParams } from "react-router-dom";
 import CitiesManager from "../services/CitiesManager";
 import Validator from '../services/Validator';
 
+const initAd = {
+  description: '',
+  type: '',
+  ad_type: '',
+  image_name: 'Choose pet image',
+  city: '',
+  state: '',
+  phone: '',
+  email: '',
+  price: ''
+};
+
 //controller
 function ManageAdPage ({allAds, allStates, types, actions}) {
   const [ad, setAd] = useState(initAd);
   const [file, setFile] = useState(null);
   const [errors, setErrors] = useState({});
-  const [imgUrl, setImgUrl] = useState(emptyString);
+  const [imgUrl, setImgUrl] = useState('');
   const [cities, setCities] = useState([]);
   const { id } = useParams();
   const history = useHistory();
-  
+
   function areAdsLoaded() {
-    return allAds.length !== 0
+    return allAds.length !== 0;
   }
 
   function loadAds() {
     if(!areAdsLoaded()) {
-      actions.loadAds();
+      actions.loadAds().then(statusCode => statusCode >= 400 && history.push(`/error/${statusCode}`));
     }
   }
 
   function loadStates() {
     if(allStates.length === 0) {
-      actions.loadStates();
+      actions.loadStates().then(statusCode => statusCode >= 400 && history.push(`/error/${statusCode}`));
     }
   }
 
   function loadAdTypes() {
     if(types.ads.length === 0) {
-      actions.loadAdTypes();
+      actions.loadAdTypes().then(statusCode => statusCode >= 400 && history.push(`/error/${statusCode}`));
     }
   }
 
   function loadPetTypes() {
     if(types.pets.length === 0) {
-      actions.loadPetTypes();
+      actions.loadPetTypes().then(statusCode => statusCode >= 400 && history.push(`/error/${statusCode}`));
     }
   }
 
+  //TODO ovde si stao trebas da rijesis problem poziva ove metode nakon sto se odradi history push na ads?type=
   function initializeFormFieldValues() {
     if(areAdsLoaded()) {
       const adForUpdate = allAds.find(ad => ad._id === id);
       if(adForUpdate) {
         setAd(adForUpdate);
         setImgUrl(`http://localhost:3001/ads_images/${adForUpdate.ad_type}/${adForUpdate.image_name}`);
-        setCitiesList(adForUpdate.state);
       } else {
         history.push('/ad');
         setAd(initAd);
-        setImgUrl(emptyString);
+        setImgUrl('');
       }
     }
   }
 
   function getFormErrors() {
     const errors = {};
-    if(!Validator.isEmailValid(ad.email)) errors.email = 'This is not valid email address.';
+    /* if(!Validator.isEmailValid(ad.email)) errors.email = 'This is not valid email address.';
     if(!Validator.isPhoneValid(ad.phone)) errors.phone = 'This is not valid phone number.';
     if(ad.ad_type === 'Sell' && !Validator.valueInRange(ad.price, 0)) errors.price = 'Price must be number greater or equal to zero.';
     if(!Validator.onlyLetters(ad.city) || !Validator.lengthInRange(ad.city, 0 , 50)) errors.city = 'This is not valid city name.';
@@ -73,7 +85,7 @@ function ManageAdPage ({allAds, allStates, types, actions}) {
     if(!Validator.typeValid(ad.ad_type, types.ads)) errors.ad_type = 'This is not valid ad type.';
     if(!Validator.typeValid(ad.type, types.pets)) errors.type = 'This pet type is not supported yet.';
     if(ad._id === undefined && !Validator.isImage(file)) errors.file = 'Only images of png, jpeg or webp types are allowed.';
-    if(!Validator.lengthInRange(ad.description)) errors.description = 'Description allow up to 1000 characters.';
+    if(!Validator.lengthInRange(ad.description)) errors.description = 'Description allow up to 1000 characters.'; */
     return errors;
   }
 
@@ -91,8 +103,8 @@ function ManageAdPage ({allAds, allStates, types, actions}) {
     }
   }
 
-  function setCitiesList(stateName) {
-    const state = allStates.find(state => state.name === stateName)
+  function setCitiesList() {
+    const state = allStates.find(state => state.name === ad.state);
     if(state !== undefined) {
       CitiesManager.getCities(state.code, 10000).then(cities => {
         setCities(cities.map(city => city.name));
@@ -102,18 +114,16 @@ function ManageAdPage ({allAds, allStates, types, actions}) {
     }
   }
 
-  useEffect(loadAds, [allAds, id]);
+  useEffect(loadAds, []);
   useEffect(initializeFormFieldValues, [allAds, id]);
   useEffect(loadStates, []);
   useEffect(loadAdTypes, []);
   useEffect(loadPetTypes, []);
+  useEffect(setCitiesList, [allStates, ad.state]);
 
   function handleChange(event) {
     setAd({...ad, [event.target.name]: event.target.files ? event.target.files[0].name : event.target.value});
     trySetFileAndImage(event);
-    if(event.target.name === 'state') {
-      setCitiesList(event.target.value);
-    }
   }
 
   function handleSubmit(event) {
@@ -121,8 +131,9 @@ function ManageAdPage ({allAds, allStates, types, actions}) {
     if(isFormValid()) {
       console.log('Form is valid and will be submitted soon...');
       let func = ad._id !== undefined ? 'updateAd' : 'addAd';
-      actions[func](ad, file);//to do catch bi ovde trebao da bude attachovan na promise koji se vraca iz funkcije
-      history.push(`/ads?type=${ad.ad_type}`);
+      actions[func](ad, file).then(statusCode => {
+        statusCode < 400 ? history.push(`/ads?type=${ad.ad_type}`) : history.push(`/error/${statusCode}`);
+      });
     }
   }
 
@@ -168,18 +179,5 @@ function mapDispatchToProps(dispatch) {
     }
   }
 }
-
-const initAd = {
-  description: '',
-  type: '',
-  ad_type: '',
-  image_name: 'Choose pet image',
-  city: '',
-  state: '',
-  phone: '',
-  email: '',
-  price: ''
-};
-const emptyString = '';
 
 export default connect(mapStateToProps, mapDispatchToProps) (ManageAdPage);

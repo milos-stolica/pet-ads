@@ -1,5 +1,5 @@
 import types from "./actionTypes";
-import AxiosInstance from "../../services/Axios";
+import AxiosInstance, { handleAxiosResponse, handleAxiosError } from "../../services/Axios";
 
 function registerUserSuccess(user) {
   return {
@@ -31,17 +31,28 @@ function getFormData(user, image) {
   return formData;
 }
 
+const config = {
+  headers: {
+    'content-type': 'multipart/form-data'
+  }
+}
+
 export function registerUser(user, image) {
   const formData = getFormData(user, image);
-  const config = {
-    headers: {
-      'content-type': 'multipart/form-data'
-    }
-  }
-  //TODO stavi usera i u local storage
-  return dispatch => {
+  return () => {
     return AxiosInstance.post('/auth/register', formData, config)
-    .then(response => dispatch(registerUserSuccess(response.data)))
-    .catch(err => console.log(err));
+      .then(response => {
+        return handleAxiosResponse(response.status, response.data.user, registerUserSuccess);
+      })
+      .catch(err => {
+        return handleAxiosError(err);
+      })
+  }
+}
+
+export function loadUserFromStorage(user) {
+  return {
+    type: types.LOAD_USER_FROM_STORAGE,
+    user
   }
 }

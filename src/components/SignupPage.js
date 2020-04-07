@@ -3,15 +3,25 @@ import { bindActionCreators } from "redux";
 import { connect } from "react-redux";
 import * as userActions from "../redux/actions/userActions"
 import { Container, Card } from 'react-bootstrap';
+import { useHistory } from "react-router-dom";
 import SignupForm from "./SignupForm";
 import Validator from '../services/Validator';
+
+const initUser = {
+  firstName: '',
+  lastName: '',
+  email: '',
+  password: '',
+  image_name: 'Choose image'
+}
 
 //controler
 function SignupPage ({actions}) {
   const [user, setUser] = useState(initUser);
   const [file, setFile] = useState(null);
-  const [imgUrl, setImgUrl] = useState(emptyString);
+  const [imgUrl, setImgUrl] = useState('');
   const [errors, setErrors] = useState({});
+  const history = useHistory();
 
   function trySetFileAndImage(event) {
     if(event.target.files) {
@@ -45,8 +55,7 @@ function SignupPage ({actions}) {
   function handleSubmit(event) {
     event.preventDefault();
     if(isFormValid()) {
-      console.log('user', user);
-      actions.registerUser(user, file);
+      actions.registerUser(user, file).then(statusCode => statusCode >= 400 && history.push(`/error/${statusCode}`));
     }
   }
 
@@ -67,15 +76,6 @@ function SignupPage ({actions}) {
     </Container>
   );
 }
-
-const initUser = {
-    firstName: '',
-    lastName: '',
-    email: '',
-    password: '',
-    image_name: 'Choose image'
-}
-const emptyString = '';
 
 function mapStateToProps(state) {
   return {};

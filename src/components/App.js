@@ -10,6 +10,7 @@ import PageNotFound from "./PageNotFound";
 import NavBar from "./common/NavBar";
 import AdDetails from "./AdDetails";
 import SignupPage from "./SignupPage";
+import ErrorPage from "./common/ErrorPage";
 
 function App() {
   return (
@@ -22,6 +23,7 @@ function App() {
         <Route path='/ad/details/:id' component={AdDetails} exact />
         <Route path='/ad/:id' component={ManageAdPage}            />
         <Route path='/signup' component={SignupPage}              />
+        <Route path='/error/:code'  component={ErrorPage}         />
         <Route                component={PageNotFound}            />
       </Switch>
     </>

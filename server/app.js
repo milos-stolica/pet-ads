@@ -58,7 +58,6 @@ app.use((req, res, next) => {
 
 // error handler
 app.use((err, req, res, next) => {
-  console.log(err);
   const status = err.status || 500; // If no status is provided, let's assume it's a 500
   return res.status(status).end(`Error status: ${status}`);
 });

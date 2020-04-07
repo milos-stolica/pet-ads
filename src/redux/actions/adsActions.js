@@ -1,5 +1,5 @@
 import types from "./actionTypes";
-import AxiosInstance from "../../services/Axios";
+import AxiosInstance, { handleAxiosResponse, handleAxiosError } from "../../services/Axios";
 
 function loadAdsSuccess(ads) {
   return {
@@ -36,41 +36,38 @@ function getFormData(ad, image) {
   return formData;
 }
 
+const config = {
+  headers: {
+    'content-type': 'multipart/form-data'
+  }
+}
+
 export function loadAds() {
-  return (dispatch) => {
-    AxiosInstance.get('/ads')
-      .then(response => { 
-        if(response.data.length > 0) dispatch(loadAdsSuccess(response.data))
-      })
-      .catch(err => console.log(err));
+  return () => {
+    return AxiosInstance.get('/ads')
+    .then(response => { 
+      if(response.data.length === 0) return response.status;
+      return handleAxiosResponse(response.status, response.data, loadAdsSuccess);
+    })
+    .catch(err => handleAxiosError(err));
   }
 }
 
 export function addAd(ad, image) {
   const formData = getFormData(ad, image);
-  const config = {
-    headers: {
-      'content-type': 'multipart/form-data'
-    }
-  }
-  return dispatch => {
-    AxiosInstance.post('/ads', formData, config)
-    .then(response => dispatch(addAdSuccess(response.data)))
-    .catch(err => console.log(err))
+  return () => {
+    return AxiosInstance.post('/ads', formData, config)
+    .then(response => handleAxiosResponse(response.status, response.data, addAdSuccess))
+    .catch(err => handleAxiosError(err));
   }
 }
 
 export function updateAd(ad, image) {
   const formData = getFormData(ad, image);
   formData.append('id', ad._id);
-  const config = {
-    headers: {
-      'content-type': 'multipart/form-data'
-    }
-  }
-  return dispatch => {
+  return () => {
     return AxiosInstance.put('/ads', formData, config)
-    .then(response => dispatch(updateAdSuccess(response.data)))
-    .catch(err => console.log(err));
+    .then(response => handleAxiosResponse(response.status, response.data, updateAdSuccess))
+    .catch(err => handleAxiosError(err));
   }
 }

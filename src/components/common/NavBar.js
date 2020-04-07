@@ -1,15 +1,16 @@
 import React, { useEffect } from "react";
-import { NavLink, Link } from "react-router-dom";
+import { NavLink, Link, useHistory } from "react-router-dom";
 import { connect } from "react-redux";
 import * as typesActions from "../../redux/actions/typesActions";
 import { bindActionCreators } from "redux";
 
 function NavBar ({adTypes, actions}) {
   const activeStyle = { color: '#007bff' }
+  const history = useHistory();
 
   useEffect(() => {
     if(adTypes.length === 0) {
-      actions.loadAdTypes();
+      actions.loadAdTypes().then(statusCode => statusCode >= 400 && history.push(`/error/${statusCode}`));
     }
   }, []);
 

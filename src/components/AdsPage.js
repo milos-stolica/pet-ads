@@ -4,17 +4,32 @@ import { Container } from 'react-bootstrap';
 import qs from 'query-string';
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
+import { useHistory } from "react-router-dom";
 import * as adsActions from "../redux/actions/adsActions";
+
 //controller
 function AdsPage ({allAds, actions, location}) {
   const [ads, setAds] = useState([]);
+  const history = useHistory();
 
-  useEffect(() => {
-    if(allAds.length === 0) {
-      actions.loadAds()
+  function areAdsLoaded() {
+    return allAds.length !== 0;
+  }
+
+  function loadAds() {
+    if(!areAdsLoaded()) {
+      actions.loadAds().then(statusCode => statusCode >= 400 && history.push(`/error/${statusCode}`));
     }
-    setAds(allAds.filter(ad => ad.ad_type === qs.parse(location.search).type));
-  }, [allAds, actions, location])
+  }
+
+  function setAdsByType() {
+    if(areAdsLoaded()) {
+      setAds(allAds.filter(ad => ad.ad_type === qs.parse(location.search).type));
+    }
+  }
+
+  useEffect(loadAds, [allAds]);
+  useEffect(setAdsByType, [allAds, location]);
 
   return (
     <Container> 

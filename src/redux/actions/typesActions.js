@@ -1,5 +1,5 @@
 import types from "./actionTypes";
-import AxiosInstance from "../../services/Axios";
+import AxiosInstance, { handleAxiosResponse, handleAxiosError } from "../../services/Axios";
 
 function loadAdTypesSuccess(ad_types) {
   return {
@@ -17,17 +17,25 @@ function loadPetTypesSuccess(pet_types) {
 
 export function loadAdTypes() {
   return (dispatch) => {
-    AxiosInstance.get('/types/ads')
-      .then(response =>  dispatch(loadAdTypesSuccess(response.data)))
-      .catch(err => console.log(err));
+    return AxiosInstance.get('/types/ads')
+    .then(response => {
+      return handleAxiosResponse(response.status, response.data, loadAdTypesSuccess);
+    })
+    .catch(err => {
+      return handleAxiosError(err);
+    })
   }
 }
 
 export function loadPetTypes() {
   return (dispatch) => {
-    AxiosInstance.get('/types/pets')
-      .then(response =>  dispatch(loadPetTypesSuccess(response.data)))
-      .catch(err => console.log(err));
+    return AxiosInstance.get('/types/pets')
+      .then(response => {
+        return handleAxiosResponse(response.status, response.data, loadPetTypesSuccess);
+      })
+      .catch(err => {
+        return handleAxiosError(err);
+      })
   }
 }
 

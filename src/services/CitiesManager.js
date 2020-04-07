@@ -4,7 +4,7 @@ export default class CitiesManager {
   static async getCities(stateCode, population) {
     let cities = [];
 
-    const getConfig = function(stateCode, population, page) {
+    const getConfig = function (stateCode, population, page) {
       return {
         "method":"GET",
         "url":`https://countries-cities.p.rapidapi.com/location/country/${stateCode}/city/list`,
@@ -25,7 +25,10 @@ export default class CitiesManager {
       return new Promise((resolve, reject) => {
         axios(config)
         .then(response => resolve(response))
-        .catch(err => reject(err))   
+        .catch(err => {
+          console.log(err);
+          return 500;
+        })   
       });
     };
 

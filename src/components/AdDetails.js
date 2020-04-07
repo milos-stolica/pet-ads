@@ -1,27 +1,53 @@
 import React, {useState, useEffect} from 'react';
 import { Container } from 'react-bootstrap';
-import { useParams } from "react-router-dom";
+import { useParams, useHistory } from "react-router-dom";
 import { bindActionCreators } from "redux";
 import { connect } from "react-redux";
 import Ad from '../components/common/Ad';
 import * as adsActions from "../redux/actions/adsActions";
 
+const initAd = {
+  description: '',
+  type: '',
+  ad_type: '',
+  image_name: '',
+  city: '',
+  state: '',
+  phone: '',
+  email: '',
+  price: ''
+};
+
 //controller
 function AdDetails({allAds, actions}) {
   const [ad, setAd] = useState(initAd);
-  const [imgUrl, setImgUrl] = useState(emptyString);
+  const [imgUrl, setImgUrl] = useState('');
   const { id } = useParams();
+  const history = useHistory();
 
-  useEffect(() => {
-    if(allAds.length === 0) {
-      actions.loadAds();
+  function areAdsLoaded() {
+    return allAds.length !== 0;
+  }
+
+  function loadAds() {
+    if(!areAdsLoaded()) {
+      actions.loadAds().then(statusCode => statusCode >= 400 && history.push(`/error/${statusCode}`));
     }
-    const adDetails = allAds.find(ad => ad._id === id);
-    if(adDetails) {
-      setAd(adDetails);
-      setImgUrl(`http://localhost:3001/ads_images/${adDetails.ad_type}/${adDetails.image_name}`);
+  }
+
+  function trySetAdDetails() {
+    if(areAdsLoaded()){
+      const adDetails = allAds.find(ad => ad._id === id);
+      if(adDetails) {
+        setAd(adDetails);
+        setImgUrl(`http://localhost:3001/ads_images/${adDetails.ad_type}/${adDetails.image_name}`);
+      }
     }
-  }, [allAds, id]);
+  }
+
+  useEffect(loadAds, [allAds]);
+  useEffect(trySetAdDetails, [allAds, id]);
+
   return (
     <Container>
       <h1 className='text-center'>{`${ad.type} - ${ad.state} (${ad.city})`}</h1>
@@ -41,20 +67,6 @@ function AdDetails({allAds, actions}) {
     </Container>
   );
 }
-
-const initAd = {
-  description: '',
-  type: '',
-  ad_type: '',
-  image_name: '',
-  city: '',
-  state: '',
-  phone: '',
-  email: '',
-  price: ''
-};
-
-const emptyString = '';
 
 function mapStateToProps(state) {
   return {
