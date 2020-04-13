@@ -1,7 +1,7 @@
 import React from 'react';
 import { Container } from 'react-bootstrap';
 
-function PageNotFound() {
+function NotFoundPage() {
   return (
     <Container>
       <h3>Page not found</h3>
@@ -9,4 +9,4 @@ function PageNotFound() {
   );
 }
 
-export default PageNotFound;
+export default NotFoundPage;

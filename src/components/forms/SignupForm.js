@@ -1,6 +1,6 @@
 import React from "react";
 import { Form, Button, Col } from "react-bootstrap"
-import ImageSelector from './common/ImageSelector'
+import ImageSelector from '../common/ImageSelector'
 
 //dumb
 function SignupForm (props) {
@@ -24,6 +24,7 @@ function SignupForm (props) {
         <Form.Label>Email</Form.Label>
         <Form.Control value={email} onChange={props.onChange} type="email" placeholder="Enter email" name='email'/>
         {errors.email && <div className='alert alert-danger'>{errors.email}</div>}
+        {errors.addressInUse && <div className='alert alert-danger'>{errors.addressInUse}</div>}
       </Form.Group>
 
       <Form.Group as={Col} controlId="password">

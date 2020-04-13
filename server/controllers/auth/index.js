@@ -17,7 +17,7 @@ function registerUser(req, res, next) {
       const userManager = new UserManagement(req, 'registration');
       const addressAlreadyTaken = await userManager.addressInUse();
       if(addressAlreadyTaken) {
-        return res.json({...response, addressAvailable: false});
+        return res.status(409).json({...response, addressAvailable: false});
       }
       const user = await userManager.saveUser();
       return res.json({...response, user});

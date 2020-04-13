@@ -14,17 +14,21 @@ function getUserObject(user, loggedIn) {
 }
 
 function userReducer(state = initialState.user, action) {
+  const user = action.user ? action.user : {};
+  const loggedIn = action.user && action.user.loggedIn;
   switch(action.type) {
     case types.REGISTER_USER_SUCCESS:
-      localStorage.setItem('user', JSON.stringify(getUserObject(action.user, false)));
-      return {...state, ...getUserObject(action.user, false)};
+      Object.keys(user).length !== 0 && localStorage.setItem('user', JSON.stringify(getUserObject(user, false)));
+      return {...state, ...getUserObject(user, false)};
     case types.LOGIN_USER_SUCCESS:
-      return {...state, ...getUserObject(action.user, true)};
+      localStorage.removeItem('user');
+      localStorage.setItem('user', JSON.stringify(getUserObject(user, true)));
+      return {...state, ...getUserObject(user, true)};
     case types.LOGOUT_USER_SUCCESS:
+      localStorage.removeItem('user');
       return {...state, ...getUserObject({}, false)};
     case types.LOAD_USER_FROM_STORAGE:
-      const loggedIn = action.user && action.user.loggedIn;
-      return {...state, ...getUserObject(action.user, loggedIn)};
+      return {...state, ...getUserObject(user, loggedIn)};
     default:
       return state;
   }

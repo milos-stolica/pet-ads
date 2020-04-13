@@ -3,28 +3,30 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import 'bootstrap/dist/js/bootstrap.min.js';
 import React from 'react';
 import { Route, Switch } from "react-router-dom";
-import AdsPage from "./AdsPage";
-import HomePage from "./HomePage";
-import ManageAdPage from "./ManageAdPage";
-import PageNotFound from "./PageNotFound";
+import AdsPage from "./pages/AdsPage";
+import HomePage from "./pages/HomePage";
+import ManageAdPage from "./pages/ManageAdPage";
+import NotFoundPage from "./pages/NotFoundPage";
 import NavBar from "./common/NavBar";
-import AdDetails from "./AdDetails";
-import SignupPage from "./SignupPage";
+import AdDetailsPage from "./pages/AdDetailsPage";
+import SignupPage from "./pages/SignupPage";
 import ErrorPage from "./common/ErrorPage";
+import SigninPage from "./pages/SigninPage";
 
 function App() {
   return (
     <>
       <NavBar></NavBar>
       <Switch>
-        <Route path='/'       component={HomePage}     exact      />
-        <Route path='/ads'    component={AdsPage}                 />
-        <Route path='/ad'     component={ManageAdPage} exact      />
-        <Route path='/ad/details/:id' component={AdDetails} exact />
-        <Route path='/ad/:id' component={ManageAdPage}            />
-        <Route path='/signup' component={SignupPage}              />
-        <Route path='/error/:code'  component={ErrorPage}         />
-        <Route                component={PageNotFound}            />
+        <Route path='/'               component={HomePage}          exact     />
+        <Route path='/ads'            component={AdsPage}                     />
+        <Route path='/ad'             component={ManageAdPage}      exact     />
+        <Route path='/ad/details/:id' component={AdDetailsPage}     exact     />
+        <Route path='/ad/:id'         component={ManageAdPage}                />
+        <Route path='/signup'         component={SignupPage}                  />
+        <Route path='/signin'         component= {SigninPage}                 />
+        <Route path='/error/:code'    component={ErrorPage}                   />
+        <Route                        component={NotFoundPage}                />
       </Switch>
     </>
   );

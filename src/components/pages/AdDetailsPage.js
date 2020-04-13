@@ -3,8 +3,8 @@ import { Container } from 'react-bootstrap';
 import { useParams, useHistory } from "react-router-dom";
 import { bindActionCreators } from "redux";
 import { connect } from "react-redux";
-import Ad from '../components/common/Ad';
-import * as adsActions from "../redux/actions/adsActions";
+import Ad from '../common/Ad';
+import * as adsActions from "../../redux/actions/adsActions";
 
 const initAd = {
   description: '',
@@ -19,7 +19,7 @@ const initAd = {
 };
 
 //controller
-function AdDetails({allAds, actions}) {
+function AdDetailsPage({allAds, actions}) {
   const [ad, setAd] = useState(initAd);
   const [imgUrl, setImgUrl] = useState('');
   const { id } = useParams();
@@ -82,4 +82,4 @@ function mapDispatchToProps(dispatch) {
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps) (AdDetails);
+export default connect(mapStateToProps, mapDispatchToProps) (AdDetailsPage);

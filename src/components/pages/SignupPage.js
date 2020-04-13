@@ -1,11 +1,12 @@
 import React, {useState} from 'react';
-import { bindActionCreators } from "redux";
-import { connect } from "react-redux";
-import * as userActions from "../redux/actions/userActions"
+import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
+import * as userActions from '../../redux/actions/userActions';
 import { Container, Card } from 'react-bootstrap';
-import { useHistory } from "react-router-dom";
-import SignupForm from "./SignupForm";
-import Validator from '../services/Validator';
+import { useHistory } from 'react-router-dom';
+import SignupForm from '../forms/SignupForm';
+import Validator from '../../services/Validator';
+import Errors from '../../services/Errors';
 
 const initUser = {
   firstName: '',
@@ -55,7 +56,16 @@ function SignupPage ({actions}) {
   function handleSubmit(event) {
     event.preventDefault();
     if(isFormValid()) {
-      actions.registerUser(user, file).then(statusCode => statusCode >= 400 && history.push(`/error/${statusCode}`));
+      actions.registerUser(user, file)
+      .then(statusCode => {
+        statusCode < 400 && history.push('/signin');
+        return statusCode;
+      })
+      .then(statusCode => {
+        statusCode === 409 && setErrors({addressInUse: `${Errors.getErrorExplanation(statusCode).description} ${Errors.getErrorExplanation(statusCode).suggestion}`});
+        return statusCode;
+      })
+      .then(statusCode => statusCode >= 400 && statusCode !== 409 && history.push(`/error/${statusCode}`));
     }
   }
 
@@ -65,7 +75,7 @@ function SignupPage ({actions}) {
       <Card>
         <Card.Body>
           <SignupForm 
-            user={user}  
+            user={user}
             onChange={handleChange} 
             onSubmit={handleSubmit} 
             imageUrl={imgUrl}

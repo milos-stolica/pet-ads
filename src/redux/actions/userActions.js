@@ -23,11 +23,11 @@ function logoutUserSuccess() {
 
 function getFormData(user, image) {
   const formData = new FormData();
-  formData.append('file', image);
-  formData.append('firstName', user.firstName);
-  formData.append('lastName', user.lastName);
-  formData.append('email', user.email);
-  formData.append('password', user.password);
+  if(image) formData.append('file', image);
+  if(user.firstName) formData.append('firstName', user.firstName);
+  if(user.lastName) formData.append('lastName', user.lastName);
+  if(user.email) formData.append('email', user.email);
+  if(user.password) formData.append('password', user.password);
   return formData;
 }
 
@@ -41,12 +41,17 @@ export function registerUser(user, image) {
   const formData = getFormData(user, image);
   return () => {
     return AxiosInstance.post('/auth/register', formData, config)
-      .then(response => {
-        return handleAxiosResponse(response.status, response.data.user, registerUserSuccess);
-      })
-      .catch(err => {
-        return handleAxiosError(err);
-      })
+      .then(response => handleAxiosResponse(response.status, response.data.user, registerUserSuccess))
+      .catch(err => handleAxiosError(err));
+  }
+}
+
+export function loginUser(userCredentials) {
+  const formData = getFormData(userCredentials);
+  return () => {
+    return AxiosInstance.post('/auth/login', formData, config)
+      .then(response => handleAxiosResponse(response.status, response.data.user, loginUserSuccess))
+      .catch(err => handleAxiosError(err));
   }
 }
 

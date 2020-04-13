@@ -2,13 +2,13 @@ import React, {useState, useEffect} from 'react';
 import { Container, Card } from 'react-bootstrap'
 import { bindActionCreators } from "redux";
 import { connect } from "react-redux";
-import ManageAdForm from './ManageAdForm';
-import * as adsActions from "../redux/actions/adsActions";
-import * as statesActions from "../redux/actions/statesActions"
-import * as typesActions from "../redux/actions/typesActions"
+import ManageAdForm from '../forms/ManageAdForm';
+import * as adsActions from "../../redux/actions/adsActions";
+import * as statesActions from "../../redux/actions/statesActions"
+import * as typesActions from "../../redux/actions/typesActions"
 import { useHistory, useParams } from "react-router-dom";
-import CitiesManager from "../services/CitiesManager";
-import Validator from '../services/Validator';
+import CitiesManager from "../../services/CitiesManager";
+import Validator from '../../services/Validator';
 
 const initAd = {
   description: '',
@@ -67,8 +67,9 @@ function ManageAdPage ({allAds, allStates, types, actions}) {
       if(adForUpdate) {
         setAd(adForUpdate);
         setImgUrl(`http://localhost:3001/ads_images/${adForUpdate.ad_type}/${adForUpdate.image_name}`);
+      } else if(id !== undefined) {
+        history.push('/error/404');
       } else {
-        history.push('/ad');
         setAd(initAd);
         setImgUrl('');
       }
@@ -77,7 +78,7 @@ function ManageAdPage ({allAds, allStates, types, actions}) {
 
   function getFormErrors() {
     const errors = {};
-    /* if(!Validator.isEmailValid(ad.email)) errors.email = 'This is not valid email address.';
+    if(!Validator.isEmailValid(ad.email)) errors.email = 'This is not valid email address.';
     if(!Validator.isPhoneValid(ad.phone)) errors.phone = 'This is not valid phone number.';
     if(ad.ad_type === 'Sell' && !Validator.valueInRange(ad.price, 0)) errors.price = 'Price must be number greater or equal to zero.';
     if(!Validator.onlyLetters(ad.city) || !Validator.lengthInRange(ad.city, 0 , 50)) errors.city = 'This is not valid city name.';
@@ -85,7 +86,7 @@ function ManageAdPage ({allAds, allStates, types, actions}) {
     if(!Validator.typeValid(ad.ad_type, types.ads)) errors.ad_type = 'This is not valid ad type.';
     if(!Validator.typeValid(ad.type, types.pets)) errors.type = 'This pet type is not supported yet.';
     if(ad._id === undefined && !Validator.isImage(file)) errors.file = 'Only images of png, jpeg or webp types are allowed.';
-    if(!Validator.lengthInRange(ad.description)) errors.description = 'Description allow up to 1000 characters.'; */
+    if(!Validator.lengthInRange(ad.description)) errors.description = 'Description allow up to 1000 characters.';
     return errors;
   }
 
