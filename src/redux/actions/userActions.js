@@ -55,6 +55,14 @@ export function loginUser(userCredentials) {
   }
 }
 
+export function logoutUser() {
+  return () => {
+    return AxiosInstance.post('/auth/logout')
+      .then(response => handleAxiosResponse(response.status, null, logoutUserSuccess))
+      .catch(err => handleAxiosError(err));
+  }
+}
+
 export function loadUserFromStorage(user) {
   return {
     type: types.LOAD_USER_FROM_STORAGE,

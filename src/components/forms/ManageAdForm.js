@@ -74,12 +74,12 @@ function ManageAdForm (props) {
         <Form.Control value={description} onChange={props.onChange} as="textarea" rows="3" name='description'/>
         {errors.description && <div className='alert alert-danger'>{errors.description}</div>}
       </Form.Group>
-      
+       
+      <Form.Label>Description</Form.Label>
       <ImageSelector imgName={image_name} onChange={props.onChange} url={props.imageUrl} error={errors.file}/>
-
-      <Button variant="primary" type="submit">
-        {_id ? 'Update' : 'Save'}
-      </Button>
+      
+      <Button variant="primary" type="submit">{_id ? 'Update' : 'Save'}</Button>
+      
     </Form>
   );
 }

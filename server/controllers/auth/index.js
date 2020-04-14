@@ -68,6 +68,7 @@ function checkAuthentificated(req, res, next) {
 
 function logoutUser(req, res, next) {
   if(req.cookies.jsonWebToken) {
+    console.log('Clearing token', req.cookies.jsonWebToken);
     res.clearCookie('jsonWebToken');
   }
   return res.json({user : null});

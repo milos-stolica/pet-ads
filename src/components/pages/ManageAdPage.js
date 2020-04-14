@@ -140,7 +140,7 @@ function ManageAdPage ({allAds, allStates, types, actions}) {
 
   return (
     <Container>
-      <h1 className="text-center">{ad._id ? 'Update ad' : 'Add new ad'}</h1>
+      <h1>{ad._id ? 'UPDATE AD' : 'ADD NEW AD'}</h1>
       <Card>
         <Card.Body>
           <ManageAdForm 

@@ -33,9 +33,15 @@ function SignupForm (props) {
         {errors.password && <div className='alert alert-danger'>{errors.password}</div>}
       </Form.Group>
 
-      <ImageSelector imgName={image_name} onChange={props.onChange} url={props.imageUrl} error={errors.file}/>
-     
-      <Button variant="primary" type="submit">Sign up</Button>
+      <Form.Group as={Col} controlId="image">
+        <Form.Label>Image</Form.Label>
+        <ImageSelector imgName={image_name} onChange={props.onChange} url={props.imageUrl} error={errors.file}/>
+      </Form.Group>
+      
+      <Form.Group as={Col} controlId="submit">
+        <Button variant="primary" type="submit">Sign up</Button>
+      </Form.Group>
+      
     </Form>
   );
 }

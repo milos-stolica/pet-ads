@@ -44,7 +44,7 @@ function SigninPage ({actions}) {
 
   return (
     <Container>
-      <h1 className="text-center">Sign in</h1>
+      <h1>SIGN IN</h1>
       <Card>
         <Card.Body>
           <SigninForm 

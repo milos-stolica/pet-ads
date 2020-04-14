@@ -71,7 +71,7 @@ function SignupPage ({actions}) {
 
   return (
     <Container>
-      <h1 className="text-center">Registration</h1>
+      <h1>USER REGISTRATION</h1>
       <Card>
         <Card.Body>
           <SignupForm 

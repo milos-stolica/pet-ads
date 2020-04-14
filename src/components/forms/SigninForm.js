@@ -8,6 +8,7 @@ function SigninForm (props) {
   return(
     <Form onSubmit={props.onSubmit}>
       {errors.wrongCredentials && <div className='alert alert-danger'>{errors.wrongCredentials}</div>}
+
       <Form.Group as={Col} controlId="email">
         <Form.Label>Email</Form.Label>
         <Form.Control value={email} onChange={props.onChange} type="email" placeholder="Enter email" name='email'/>
@@ -17,7 +18,10 @@ function SigninForm (props) {
         <Form.Label>Password</Form.Label>
         <Form.Control value={password} onChange={props.onChange} type="password" placeholder="Enter password" name='password'/>
       </Form.Group>
-      <Button variant="primary" type="submit">Login</Button>
+
+      <Form.Group as={Col} controlId="submit">
+        <Button variant="primary" type="submit">Login</Button>
+      </Form.Group> 
     </Form>
   );
 }
