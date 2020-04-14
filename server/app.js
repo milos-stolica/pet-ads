@@ -32,7 +32,7 @@ mongoose.connect(config.mongoDBConnection, connectionOptions , (err) => {
 
 makeDirectories();
 
-app.use(cors());
+app.use(cors({origin: 'http://localhost:3000', credentials: true}));
 app.use(compression());
 app.use(helmet());
 app.use(cookieParser());

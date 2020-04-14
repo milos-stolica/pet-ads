@@ -38,10 +38,8 @@ function loginUser(req, res, next) {
      if(!user || !jwt) {
        return res.json({ user: null });
      }
-     
-     //options should be enabled in production for security concerns
-     res.cookie('jsonWebToken', jwt, { /* secure: true, httpOnly: true */ });
-     //TODO stao si kod testiranja ove funckije
+     //options should be enabled in production for security concerns (httpOnly, secure)
+     res.cookie('jsonWebToken', jwt);
      return res.json({ user });
    } catch (err) {
      return next(err);
@@ -49,6 +47,7 @@ function loginUser(req, res, next) {
  });
 }
 
+//TODO ovo se ne smije pozivati za svaki request niposto, jer svaki put cupa usera iz baze, bez potrebe + treba usera u memoriju ubaciti
 async function authentificateUser(req, res, next) {
   try {
     req.user = await UserManagement.tryGetUserData(req);
@@ -68,7 +67,6 @@ function checkAuthentificated(req, res, next) {
 
 function logoutUser(req, res, next) {
   if(req.cookies.jsonWebToken) {
-    console.log('Clearing token', req.cookies.jsonWebToken);
     res.clearCookie('jsonWebToken');
   }
   return res.json({user : null});

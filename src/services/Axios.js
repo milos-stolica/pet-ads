@@ -7,6 +7,7 @@ const AxiosInstance = axios.create (
   {
     baseURL,
     timeout,
+    withCredentials: true,
     //because of problems to get response status in catch statement, make all responses are successfully resolved
     validateStatus: () => {
       return true;
