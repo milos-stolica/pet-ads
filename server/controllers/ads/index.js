@@ -48,11 +48,17 @@ const saveAd = (req, res, next) => {
     try {
       const adsManager = new AdsManager(req, 'saving');
       const adPet = await adsManager.save();
-      return res.json(adPet);
+      res.locals.adPet = adPet;
+      return next();
     } catch (err) {
       return next(err);
     }
   });
+}
+
+const sendAd = (req, res, next) => {
+  const {adPet} = res.locals;
+  return res.json(adPet);
 }
 
 const deleteAd = (req, res, next) => {
@@ -63,5 +69,6 @@ module.exports = {
   getAds, 
   updateAd,
   saveAd,
-  deleteAd
+  deleteAd,
+  sendAd
 }

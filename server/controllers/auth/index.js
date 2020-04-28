@@ -20,6 +20,7 @@ function registerUser(req, res, next) {
         return res.status(409).json({...response, addressAvailable: false});
       }
       const user = await userManager.saveUser();
+      user.loggedIn = false;
       return res.json({...response, user});
     } catch (err) {
       return next(err);
@@ -40,6 +41,7 @@ function loginUser(req, res, next) {
      }
      //options should be enabled in production for security concerns (httpOnly, secure)
      res.cookie('jsonWebToken', jwt);
+     user.loggedIn = true;
      return res.json({ user });
    } catch (err) {
      return next(err);
@@ -50,7 +52,7 @@ function loginUser(req, res, next) {
 //TODO ovo se ne smije pozivati za svaki request niposto, jer svaki put cupa usera iz baze, bez potrebe + treba usera u memoriju ubaciti
 async function authentificateUser(req, res, next) {
   try {
-    req.user = await UserManagement.tryGetUserData(req);
+    req.user = await UserManagement.tryGetUserData(req, true);
     return next();
   } catch(err) {
     return next(err);
@@ -61,7 +63,7 @@ function checkAuthentificated(req, res, next) {
   if(req.user) {
     return next();
   } else {
-    return next(createError(401, 'User not logged in.'));
+    return next(createError(401, 'Unauthorized.'));
   }
 }
 

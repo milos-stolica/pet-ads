@@ -23,7 +23,7 @@ const initAd = {
 };
 
 //controller
-function ManageAdPage ({allAds, allStates, types, actions}) {
+function ManageAdPage({allAds, allStates, types, actions}) {
   const [ad, setAd] = useState(initAd);
   const [file, setFile] = useState(null);
   const [errors, setErrors] = useState({});

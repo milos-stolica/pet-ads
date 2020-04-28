@@ -37,6 +37,16 @@ const UserSchema = new mongoose.Schema({
   }
 }, {timestamps: true});
 
+UserSchema.methods.addAd = function (ad) {
+  this.ads.push(ad);
+  this.save();
+}
+
+UserSchema.methods.deleteAd = function (ad) {
+  this.ads = this.ads.filter(adFromDb => adFromDb !== ad);
+  this.save();
+}
+
 const User = mongoose.model('User', UserSchema);
 
 module.exports = User;

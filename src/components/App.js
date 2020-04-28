@@ -12,6 +12,7 @@ import AdDetailsPage from "./pages/AdDetailsPage";
 import SignupPage from "./pages/SignupPage";
 import ErrorPage from "./common/ErrorPage";
 import SigninPage from "./pages/SigninPage";
+import UserProfilePage from "./pages/UserProfilePage";
 
 function App() {
   return (
@@ -25,6 +26,7 @@ function App() {
         <Route path='/ad/:id'         component={ManageAdPage}                />
         <Route path='/signup'         component={SignupPage}                  />
         <Route path='/signin'         component= {SigninPage}                 />
+        <Route path='/user/profile'   component= {UserProfilePage}            />
         <Route path='/error/:code'    component={ErrorPage}                   />
         <Route                        component={NotFoundPage}                />
       </Switch>

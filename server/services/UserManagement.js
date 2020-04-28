@@ -73,7 +73,7 @@ module.exports = class UserManagement {
         if(!user) return reject(createError(400, 'Validation failed'));
         bcrypt.compare(this.req.body.password, user.password)
         .then(correct => {
-          correct ? resolve(projectUser(user)) : resolve(null)
+          correct ? resolve(projectUser(user)) : reject(createError(401, 'Unauthorized'));
         })
         .catch(err => reject(err));
       });
@@ -130,7 +130,7 @@ module.exports = class UserManagement {
     });
   }
 
-  static tryGetUserData(req) {
+  static tryGetUserData(req, shouldProjectUser) {
     return new Promise(async(resolve) => {
       const token = req.cookies.jsonWebToken;
       if(token) {
@@ -140,7 +140,7 @@ module.exports = class UserManagement {
           UserModel.findById(data.sub, (err, user) => {
             if(err) throw err;
             if(!user) return resolve(null);
-            return resolve(projectUser(user));
+            return shouldProjectUser ? resolve(projectUser(user)) : resolve(user);
           });
         } catch (err) {
           throw err;

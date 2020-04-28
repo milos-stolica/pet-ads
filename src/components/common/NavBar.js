@@ -5,7 +5,7 @@ import { connect } from "react-redux";
 import { loadAdTypes as loadTypes } from "../../redux/actions/typesActions";
 import { logoutUser as logout } from '../../redux/actions/userActions';
 import { bindActionCreators } from "redux";
-import './Common.css'
+import './style/Common.css'
 
 function NavBar ({user, adTypes, actions}) {
   const activeStyle = { color: '#007bff' };
@@ -68,10 +68,10 @@ function NavBar ({user, adTypes, actions}) {
                 <li className="nav-item dropdown">
                   <NavLink activeStyle={activeStyle} className="nav-link dropdown-toggle" to="/me" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     <Image className="usertn-navbar" src="https://homepages.cae.wisc.edu/~ece533/images/airplane.png" roundedCircle />
-                    Name
+                    {user.firstName}
                   </NavLink>
                   <div className="dropdown-menu" aria-labelledby="navbarDropdown">
-                    <Link className="dropdown-item" to='/me'>My profile</Link>
+                    <Link className="dropdown-item" to='/user/profile'>My profile</Link>
                     <Link className="dropdown-item" to='/' onClick={signout}>Sign out</Link>
                   </div>
                 </li>
