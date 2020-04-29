@@ -3,14 +3,14 @@ import Ad from './Ad'
 import { Row, Col } from "react-bootstrap";
 
 //dumb
-function AdList ({ads}) {
+function AdList ({ads, lgCol, mdCol}) {
   return (
     <>
       <Row>
         {ads.map(ad => {
           const url = `http://localhost:3001/ads_images/${ad.ad_type}/${ad.image_name}`;
           return (
-            <Col lg={4} md={6} key={ad._id}>
+            <Col lg={lgCol} md={mdCol} key={ad._id}>
               <Ad 
                 id=           {ad._id}
                 key=          {ad._id}
@@ -28,7 +28,7 @@ function AdList ({ads}) {
           );
         })}
       </Row>
-      {ads.length === 0 && <h3>Sorry, there are no ads on this page...</h3>}
+      {ads.length === 0 && <h3>There is no ads yet...</h3>}
     </>
   );
 }

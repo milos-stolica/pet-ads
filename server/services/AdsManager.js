@@ -104,7 +104,8 @@ module.exports = class AdsManager {
       state: this.req.body.state,
       phone: this.req.body.phone,
       email: this.req.body.email,
-      ad_type: this.req.body.ad_type
+      ad_type: this.req.body.ad_type,
+      ownerId: this.req.user._id
     }
     const price = parseFloat(this.req.body.price);
     if(!isNaN(price)) {

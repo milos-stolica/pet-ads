@@ -36,12 +36,6 @@ function ManageAdPage({allAds, allStates, types, actions}) {
     return allAds.length !== 0;
   }
 
-  function loadAds() {
-    if(!areAdsLoaded()) {
-      actions.loadAds().then(statusCode => statusCode >= 400 && history.push(`/error/${statusCode}`));
-    }
-  }
-
   function loadStates() {
     if(allStates.length === 0) {
       actions.loadStates().then(statusCode => statusCode >= 400 && history.push(`/error/${statusCode}`));
@@ -115,7 +109,6 @@ function ManageAdPage({allAds, allStates, types, actions}) {
     }
   }
 
-  useEffect(loadAds, []);
   useEffect(initializeFormFieldValues, [allAds, id]);
   useEffect(loadStates, []);
   useEffect(loadAdTypes, []);
@@ -171,7 +164,6 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
   return {
     actions: {
-      loadAds: bindActionCreators(adsActions.loadAds, dispatch),
       addAd: bindActionCreators(adsActions.addAd, dispatch),
       updateAd: bindActionCreators(adsActions.updateAd, dispatch),
       loadStates: bindActionCreators(statesActions.loadStates, dispatch),

@@ -54,6 +54,11 @@ const AdPetSchema = new mongoose.Schema({
     required: true,
     match: email_regex,
   },
+  ownerId: {
+    type: String,
+    trim: true,
+    required: true
+  },
   price: {
     type: Number,
     trim: true,

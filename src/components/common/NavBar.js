@@ -67,7 +67,7 @@ function NavBar ({user, adTypes, actions}) {
               <>
                 <li className="nav-item dropdown">
                   <NavLink activeStyle={activeStyle} className="nav-link dropdown-toggle" to="/me" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    <Image className="usertn-navbar" src="https://homepages.cae.wisc.edu/~ece533/images/airplane.png" roundedCircle />
+                    <Image className="usertn-navbar mr-1" src={`http://localhost:3001/users_images/${user.image_name}`} roundedCircle />
                     {user.firstName}
                   </NavLink>
                   <div className="dropdown-menu" aria-labelledby="navbarDropdown">

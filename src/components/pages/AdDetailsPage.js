@@ -1,10 +1,8 @@
 import React, {useState, useEffect} from 'react';
 import { Container } from 'react-bootstrap';
-import { useParams, useHistory } from "react-router-dom";
-import { bindActionCreators } from "redux";
+import { useParams } from "react-router-dom";
 import { connect } from "react-redux";
 import Ad from '../common/Ad';
-import * as adsActions from "../../redux/actions/adsActions";
 
 const initAd = {
   description: '',
@@ -19,20 +17,13 @@ const initAd = {
 };
 
 //controller
-function AdDetailsPage({allAds, actions}) {
+function AdDetailsPage({allAds}) {
   const [ad, setAd] = useState(initAd);
   const [imgUrl, setImgUrl] = useState('');
   const { id } = useParams();
-  const history = useHistory();
 
   function areAdsLoaded() {
     return allAds.length !== 0;
-  }
-
-  function loadAds() {
-    if(!areAdsLoaded()) {
-      actions.loadAds().then(statusCode => statusCode >= 400 && history.push(`/error/${statusCode}`));
-    }
   }
 
   function trySetAdDetails() {
@@ -45,7 +36,6 @@ function AdDetailsPage({allAds, actions}) {
     }
   }
 
-  useEffect(loadAds, [allAds]);
   useEffect(trySetAdDetails, [allAds, id]);
 
   return (
@@ -75,11 +65,7 @@ function mapStateToProps(state) {
 }
 
 function mapDispatchToProps(dispatch) {
-  return {
-    actions: {
-      loadAds: bindActionCreators(adsActions.loadAds, dispatch)
-    }
-  }
+  return {}
 }
 
 export default connect(mapStateToProps, mapDispatchToProps) (AdDetailsPage);
