@@ -7,6 +7,7 @@ import { useHistory } from 'react-router-dom';
 import SignupForm from '../forms/SignupForm';
 import Validator from '../../services/Validator';
 import Errors from '../../services/Errors';
+import "./style/Common.css";
 
 const initUser = {
   firstName: '',
@@ -71,8 +72,8 @@ function SignupPage ({actions}) {
 
   return (
     <Container>
-      <h1>USER REGISTRATION</h1>
-      <Card>
+      <h1 className="text-center">User registration</h1>
+      <Card className="card-form">
         <Card.Body>
           <SignupForm 
             user={user}

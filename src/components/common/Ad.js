@@ -17,7 +17,7 @@ function Ad ({id, short_desc, ad_type, pet_type, phone_number, email, price, img
         {ad_type === 'sell' && <ListGroupItem>Price: {price}</ListGroupItem>}
       </ListGroup>
       <Card.Body>
-        <Link className="btn btn-primary mr-3" to={`/ad/${id}`}>Update</Link>
+        <Link className="btn btn-primary mr-3" to={`/ad/new/${id}`}>Update</Link>
         {!short_desc && <Link className="btn btn-primary" to={`/ad/details/${id}`}>Details</Link>}
       </Card.Body>
     </Card>

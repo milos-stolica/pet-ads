@@ -23,7 +23,7 @@ function ImageSelector({imgName, onChange, url, error}) {
       {error && <div className='alert alert-danger'>{error}</div>}
       {url && 
       <Card>
-        <Card.Img variant="top" src={url}/>
+        <Card.Img className="selected-img" variant="top" src={url}/>
       </Card>}
     </>
   );

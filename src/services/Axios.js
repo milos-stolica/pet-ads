@@ -1,7 +1,7 @@
 import axios from "axios";
 import dispatch from "../index";
 const baseURL = 'http://localhost:3001';
-const timeout = 3000;
+const timeout = 10000;
 
 const AxiosInstance = axios.create (
   {

@@ -41,32 +41,40 @@ function NavBar ({user, adTypes, actions}) {
               <NavLink to='/' activeStyle={activeStyle} className="nav-link" exact>HOME <span className="sr-only">(current)</span></NavLink>
             </li>
             <li className="nav-item dropdown">
-              <NavLink activeStyle={activeStyle} className="nav-link dropdown-toggle" to="/ads" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              <NavLink activeStyle={activeStyle} className="nav-link dropdown-toggle" to="/ads" id="adsDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 ADS
               </NavLink>
-              <div className="dropdown-menu" aria-labelledby="navbarDropdown">
+              <div className="dropdown-menu" aria-labelledby="adsDropdown">
                 {adTypes.map(type => <Link className="dropdown-item" to={`/ads?type=${type}`} key={type}>{type}</Link>)}
               </div>
             </li>
-            <li>
-              <NavLink activeStyle={activeStyle} className="nav-link" to="/ad">NEW</NavLink>
+            {user.loggedIn &&
+              <li className="nav-item dropdown">
+              <NavLink activeStyle={activeStyle} className="nav-link dropdown-toggle" to="/new" id="newDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                NEW
+              </NavLink>
+              <div className="dropdown-menu" aria-labelledby="adsDropdown">
+                <Link className="dropdown-item" to="/ad/new">Ad</Link>
+                <Link className="dropdown-item" to="/subscription/new">Subscription</Link>
+              </div>
             </li>
+            } 
           </ul>
           <ul className="navbar-nav mr-0">
             {!user.loggedIn && 
-            <>
-              <li className="nav-item">
-                <NavLink activeStyle={activeStyle} className="nav-link" to="/signin">SIGN IN</NavLink>
-              </li>
-              <li className="nav-item">
-                <NavLink activeStyle={activeStyle} className="nav-link" to="/signup">SIGN UP</NavLink>
-              </li>
-            </>
+              <>
+                <li className="nav-item">
+                  <NavLink activeStyle={activeStyle} className="nav-link" to="/signin">SIGN IN</NavLink>
+                </li>
+                <li className="nav-item">
+                  <NavLink activeStyle={activeStyle} className="nav-link" to="/signup">SIGN UP</NavLink>
+                </li>
+              </>
             }
             {user.loggedIn && 
               <>
                 <li className="nav-item dropdown">
-                  <NavLink activeStyle={activeStyle} className="nav-link dropdown-toggle" to="/me" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  <NavLink activeStyle={activeStyle} className="nav-link dropdown-toggle" to="/user" id="userOptionsDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     <Image className="usertn-navbar mr-1" src={`http://localhost:3001/users_images/${user.image_name}`} roundedCircle />
                     {user.firstName}
                   </NavLink>

@@ -6,6 +6,7 @@ import { Container, Card } from 'react-bootstrap';
 import { useHistory } from "react-router-dom";
 import SigninForm from "../forms/SigninForm";
 import Validator from '../../services/Validator';
+import "./style/Common.css";
 
 const initCredentials = {
   email: '',
@@ -44,8 +45,8 @@ function SigninPage ({actions}) {
 
   return (
     <Container>
-      <h1>SIGN IN</h1>
-      <Card>
+      <h1 className="text-center">Sign in</h1>
+      <Card className="card-form">
         <Card.Body>
           <SigninForm 
             credentials={credentials}  

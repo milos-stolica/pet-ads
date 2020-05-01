@@ -9,6 +9,7 @@ import * as typesActions from "../../redux/actions/typesActions"
 import { useHistory, useParams } from "react-router-dom";
 import CitiesManager from "../../services/CitiesManager";
 import Validator from '../../services/Validator';
+import "./style/Common.css";
 
 const initAd = {
   description: '',
@@ -133,8 +134,8 @@ function ManageAdPage({allAds, allStates, types, actions}) {
 
   return (
     <Container>
-      <h1>{ad._id ? 'UPDATE AD' : 'ADD NEW AD'}</h1>
-      <Card>
+      <h1 className="text-center">{ad._id ? 'Update ad' : 'Add new ad'}</h1>
+      <Card className="card-form">
         <Card.Body>
           <ManageAdForm 
             ad={ad} 
