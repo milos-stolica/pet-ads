@@ -5,9 +5,11 @@ import { connect } from 'react-redux';
 import { loadAdTypes as loadTypes } from '../../redux/actions/typesActions';
 import { logoutUser as logout } from '../../redux/actions/userActions';
 import { bindActionCreators } from 'redux';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faPaw } from '@fortawesome/free-solid-svg-icons';
 
 function NavBar ({user, adTypes, actions}) {
-  const activeStyle = { color: '#007bff' };
+  const activeStyle = { color: '#ffeb4c' };
   const history = useHistory();
 
   function areAdTypesLoaded() {
@@ -28,7 +30,9 @@ function NavBar ({user, adTypes, actions}) {
 
   return (
     <nav className="navbar navbar-expand-lg navbar-dark bg-dark sticky-top">
-      <NavLink to='/' className="navbar-brand" exact>PetAds</NavLink>
+      <NavLink to='/' className="navbar-brand" exact>
+        <FontAwesomeIcon className="icon m-auto" icon={faPaw}></FontAwesomeIcon>
+      </NavLink>
       <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span className="navbar-toggler-icon"></span>
       </button>
@@ -52,8 +56,8 @@ function NavBar ({user, adTypes, actions}) {
               NEW
             </NavLink>
             <div className="dropdown-menu" aria-labelledby="adsDropdown">
-              <Link className="dropdown-item" to="/ad/new">Ad</Link>
-              <Link className="dropdown-item" to="/subscription/new">Subscription</Link>
+              <Link className="dropdown-item" to="/new/ad">Ad</Link>
+              <Link className="dropdown-item" to="/new/subscription">Subscription</Link>
             </div>
           </li>
           } 

@@ -17,7 +17,7 @@ const initAd = {
 };
 
 //controller
-function AdDetailsPage({allAds}) {
+function AdDetailsPage({allAds, userLoggedIn}) {
   const [ad, setAd] = useState(initAd);
   const [imgUrl, setImgUrl] = useState('');
   const { id } = useParams();
@@ -41,26 +41,30 @@ function AdDetailsPage({allAds}) {
   return (
     <Container>
       <h1 className='text-center'>{`${ad.type} - ${ad.state} (${ad.city})`}</h1>
-      <Ad 
-        id=           {ad._id}
-        key=          {ad._id}
-        ad_type=      {ad.ad_type}
-        pet_type=     {ad.type}  
-        phone_number= {ad.phone}  
-        short_desc=   {ad.description}
-        email=        {ad.email}
-        img_url=      {imgUrl}
-        price=        {ad.price}
-        state=        {ad.state}
-        city=         {ad.city}>
-      </Ad>
+      <div className="ad-details m-auto">
+        <Ad 
+          id={ad._id}
+          key={ad._id}
+          ad_type={ad.ad_type}
+          pet_type={ad.type}  
+          phone_number={ad.phone}  
+          short_desc={ad.description}
+          email={ad.email}
+          img_url={imgUrl}
+          price={ad.price}
+          state={ad.state}
+          city={ad.city}
+          shouldAddModificationButtons={userLoggedIn}>
+        </Ad>
+      </div>
     </Container>
   );
 }
 
 function mapStateToProps(state) {
   return {
-    allAds: state.ads
+    allAds: state.ads,
+    userLoggedIn: state.user.loggedIn
   }
 }
 

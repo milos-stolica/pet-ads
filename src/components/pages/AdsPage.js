@@ -23,7 +23,12 @@ function AdsPage ({allAds, location}) {
   return (
     <Container> 
       <h1 className='text-center'>{`Ads - ${qs.parse(location.search).type}`}</h1>
-      <AdList ads={ads} lgCol={4} mdCol={6}></AdList>
+      <AdList 
+        ads={ads} 
+        lgCol={4} 
+        mdCol={6}
+        shouldAddModificationButtons={false}>
+      </AdList>
     </Container>   
   )
 }

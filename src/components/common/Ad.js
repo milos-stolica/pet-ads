@@ -3,7 +3,9 @@ import { Card, ListGroup, ListGroupItem } from 'react-bootstrap';
 import { Link } from "react-router-dom";
 
 //dumb
-function Ad ({id, short_desc, ad_type, pet_type, phone_number, email, price, img_url, state, city, ...props}) {
+function Ad (props) {
+  const {id, short_desc, ad_type, pet_type, phone_number, email, price, img_url, state, city} = props;
+  const {shouldAddModificationButtons} = props
   return (
     <Card className="mb-3">
       <Card.Img variant="top" src={img_url}/>
@@ -17,7 +19,7 @@ function Ad ({id, short_desc, ad_type, pet_type, phone_number, email, price, img
         {ad_type === 'sell' && <ListGroupItem>Price: {price}</ListGroupItem>}
       </ListGroup>
       <Card.Body>
-        <Link className="btn btn-primary mr-3" to={`/ad/new/${id}`}>Update</Link>
+        {shouldAddModificationButtons && <Link className="btn btn-primary mr-3" to={`/new/ad/${id}`}>Update</Link>}
         {!short_desc && <Link className="btn btn-primary" to={`/ad/details/${id}`}>Details</Link>}
       </Card.Body>
     </Card>

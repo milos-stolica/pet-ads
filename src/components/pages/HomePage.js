@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import SelectItemBar from '../home_page_components/SelectItemBar';
+import SelectItemBar from '../common/SelectItemBar';
 import { connect } from 'react-redux';
 import AdList from '../common/AdList';
 import CitiesManager from '../../services/CitiesManager';
@@ -212,7 +212,12 @@ function HomePage ({allAds, allStates, types, location}) {
         color={categoryBarBackground}>
       </SelectItemBar>
       <h6 className="general-info text-center my-3">{generalInfo}</h6>
-      <AdList ads={selectedAds} lgCol={4} mdCol={6}></AdList>
+      <AdList 
+        ads={selectedAds} 
+        lgCol={4} 
+        mdCol={6}
+        shouldAddModificationButtons={false}>
+      </AdList>
     </>
   );
 }

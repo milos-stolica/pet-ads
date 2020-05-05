@@ -51,9 +51,9 @@ function App({actions}) {
       <Switch>
         <Route path='/'               component={HomePage}          exact     />
         <Route path='/ads'            component={AdsPage}                     />
-        <Route path='/ad/new'         component={ManageAdPage}      exact     />
+        <Route path='/new/ad'         component={ManageAdPage}      exact     />
         <Route path='/ad/details/:id' component={AdDetailsPage}     exact     />
-        <Route path='/ad/new/:id'     component={ManageAdPage}                />
+        <Route path='/new/ad/:id'     component={ManageAdPage}                />
         <Route path='/signup'         component={SignupPage}                  />
         <Route path='/signin'         component= {SigninPage}                 />
         <Route path='/user/profile'   component= {UserProfilePage}            />

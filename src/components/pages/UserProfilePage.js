@@ -56,16 +56,21 @@ function UserProfilePage({user, allAds}) {
             <div className="tab-pane fade show active" id="ads" role="tabpanel" aria-labelledby="ads-tab">
               <Row>
                 <Col className="text-right">
-                  <Link className="btn btn-primary float-right" to="/ad/new">Publish new ad</Link>
+                  <Link className="btn btn-primary float-right" to="/new/ad">Publish new ad</Link>
                 </Col>
               </Row>
               <h5>My ads</h5>
-              <AdList ads={ads} lgCol={12} mdCol={12}></AdList>
+              <AdList 
+                ads={ads} 
+                lgCol={12} 
+                mdCol={12}
+                shouldAddModificationButtons={user.loggedIn}>
+              </AdList>
             </div>
             <div className="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="subscriptions-tab">
               <Row>
                 <Col className="text-right">
-                  <Link className="btn btn-danger float-right" to="/subscription/new">New subscription</Link>
+                  <Link className="btn btn-danger float-right" to="/new/subscription">New subscription</Link>
                 </Col>
               </Row>
               <h5>Active subscriptions</h5>

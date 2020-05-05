@@ -41,16 +41,9 @@ function SignupForm (props) {
           <ImageSelector imgName={image_name} onChange={props.onChange} url={props.imageUrl} error={errors.file}/>
         </Form.Group>
       </Form.Row>
-      <Button variant="primary" type="submit">Sign up</Button>
-    </Form>
-    
-      
 
-      
-      
-      
-      
-    
+      <Button className="ml-3" variant="primary" type="submit">Sign up</Button>
+    </Form>
   );
 }
 

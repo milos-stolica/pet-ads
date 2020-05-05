@@ -1,3 +1,20 @@
+/* Common */
+body{
+  background: -webkit-linear-gradient(left, #f084dc, #fabeef);
+}
+p, h6, h5, h4, h3, h2, h1{
+  font-family: Helvetica Narrow, sans-serif;
+}
+.card-form{
+  margin-left: 15%;
+  margin-right: 15%;
+  background: -webkit-linear-gradient(left, #f3f3f3, #f5d2ee);
+}
+.icon{
+  font-size: 50px;
+  display: block;
+}
+
 /* NavBar Component*/
 .user-thumbnail {
   height: 30px;
@@ -6,15 +23,6 @@
 /* ImageSelector Component */
 .selected-img{
   height: 240px;
-}
-
-/* Common */
-body{
-  background: -webkit-linear-gradient(left, #3931af, #00c6ff);
-}
-.card-form{
-  margin-left: 15%;
-  margin-right: 15%;
 }
 
 /* UserProfilePage Component*/
@@ -106,13 +114,13 @@ Button.selected-item{
   color: #ffeb4c !important;
 }
 
-.icon{
-  font-size: 60px;
-  display: block;
-}
-
 .dropdown-menu-scroll{
   height: 300px;
   width: 200px;
   overflow: scroll;
+}
+
+/* AdDetailsPage Component */
+.ad-details{
+  width: 70%;
 }
