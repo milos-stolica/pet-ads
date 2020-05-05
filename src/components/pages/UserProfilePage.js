@@ -1,9 +1,8 @@
 import React, {useState, useEffect} from 'react';
-import { Container, Row, Col } from 'react-bootstrap'
-import { connect } from "react-redux";
-import { Link } from "react-router-dom";
+import { Container, Row, Col } from 'react-bootstrap';
+import { connect } from 'react-redux';
+import { Link } from 'react-router-dom';
 import AdList from '../common/AdList';
-import './style/UserProfilePage.css';
 
 function UserProfilePage({user, allAds}) {
   //theme from https://bootsnipp.com/tags/profile?page=2

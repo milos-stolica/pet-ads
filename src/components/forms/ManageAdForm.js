@@ -1,7 +1,6 @@
-import React from "react";
-import { Form, Button, Col } from "react-bootstrap";
+import React from 'react';
+import { Form, Button, Col } from 'react-bootstrap';
 import ImageSelector from '../common/ImageSelector';
-import './style/Common.css';
 
 //dumb
 function ManageAdForm (props) {

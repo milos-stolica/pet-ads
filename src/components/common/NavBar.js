@@ -1,11 +1,10 @@
-import React, { useEffect } from "react";
-import { NavLink, Link, useHistory } from "react-router-dom";
-import { Image } from 'react-bootstrap'
-import { connect } from "react-redux";
-import { loadAdTypes as loadTypes } from "../../redux/actions/typesActions";
+import React, { useEffect } from 'react';
+import { NavLink, Link, useHistory } from 'react-router-dom';
+import { Image } from 'react-bootstrap';
+import { connect } from 'react-redux';
+import { loadAdTypes as loadTypes } from '../../redux/actions/typesActions';
 import { logoutUser as logout } from '../../redux/actions/userActions';
-import { bindActionCreators } from "redux";
-import './style/Common.css'
+import { bindActionCreators } from 'redux';
 
 function NavBar ({user, adTypes, actions}) {
   const activeStyle = { color: '#007bff' };
@@ -28,67 +27,65 @@ function NavBar ({user, adTypes, actions}) {
   useEffect(loadAdTypes, []);
 
   return (
-    <>
-      <nav className="navbar navbar-expand-lg navbar-dark bg-dark sticky-top mb-3">
-        <NavLink to='/' className="navbar-brand" exact>PetAds</NavLink>
-        <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-          <span className="navbar-toggler-icon"></span>
-        </button>
+    <nav className="navbar navbar-expand-lg navbar-dark bg-dark sticky-top">
+      <NavLink to='/' className="navbar-brand" exact>PetAds</NavLink>
+      <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span className="navbar-toggler-icon"></span>
+      </button>
 
-        <div className="collapse navbar-collapse" id="navbarSupportedContent">
-          <ul className="navbar-nav mr-auto">
-            <li className="nav-item active">
-              <NavLink to='/' activeStyle={activeStyle} className="nav-link" exact>HOME <span className="sr-only">(current)</span></NavLink>
-            </li>
+      <div className="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul className="navbar-nav mr-auto">
+          <li className="nav-item active">
+            <NavLink to='/' activeStyle={activeStyle} className="nav-link" exact>HOME <span className="sr-only">(current)</span></NavLink>
+          </li>
+          <li className="nav-item dropdown">
+            <NavLink activeStyle={activeStyle} className="nav-link dropdown-toggle" to="/ads" id="adsDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              ADS
+            </NavLink>
+            <div className="dropdown-menu" aria-labelledby="adsDropdown">
+              {adTypes.map(type => <Link className="dropdown-item" to={`/ads?type=${type}`} key={type}>{type}</Link>)}
+            </div>
+          </li>
+          {user.loggedIn &&
             <li className="nav-item dropdown">
-              <NavLink activeStyle={activeStyle} className="nav-link dropdown-toggle" to="/ads" id="adsDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                ADS
-              </NavLink>
-              <div className="dropdown-menu" aria-labelledby="adsDropdown">
-                {adTypes.map(type => <Link className="dropdown-item" to={`/ads?type=${type}`} key={type}>{type}</Link>)}
-              </div>
-            </li>
-            {user.loggedIn &&
+            <NavLink activeStyle={activeStyle} className="nav-link dropdown-toggle" to="/new" id="newDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              NEW
+            </NavLink>
+            <div className="dropdown-menu" aria-labelledby="adsDropdown">
+              <Link className="dropdown-item" to="/ad/new">Ad</Link>
+              <Link className="dropdown-item" to="/subscription/new">Subscription</Link>
+            </div>
+          </li>
+          } 
+        </ul>
+        <ul className="navbar-nav mr-0">
+          {!user.loggedIn && 
+            <>
+              <li className="nav-item">
+                <NavLink activeStyle={activeStyle} className="nav-link" to="/signin">SIGN IN</NavLink>
+              </li>
+              <li className="nav-item">
+                <NavLink activeStyle={activeStyle} className="nav-link" to="/signup">SIGN UP</NavLink>
+              </li>
+            </>
+          }
+          {user.loggedIn && 
+            <>
               <li className="nav-item dropdown">
-              <NavLink activeStyle={activeStyle} className="nav-link dropdown-toggle" to="/new" id="newDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                NEW
-              </NavLink>
-              <div className="dropdown-menu" aria-labelledby="adsDropdown">
-                <Link className="dropdown-item" to="/ad/new">Ad</Link>
-                <Link className="dropdown-item" to="/subscription/new">Subscription</Link>
-              </div>
-            </li>
-            } 
-          </ul>
-          <ul className="navbar-nav mr-0">
-            {!user.loggedIn && 
-              <>
-                <li className="nav-item">
-                  <NavLink activeStyle={activeStyle} className="nav-link" to="/signin">SIGN IN</NavLink>
-                </li>
-                <li className="nav-item">
-                  <NavLink activeStyle={activeStyle} className="nav-link" to="/signup">SIGN UP</NavLink>
-                </li>
-              </>
-            }
-            {user.loggedIn && 
-              <>
-                <li className="nav-item dropdown">
-                  <NavLink activeStyle={activeStyle} className="nav-link dropdown-toggle" to="/user" id="userOptionsDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    <Image className="usertn-navbar mr-1" src={`http://localhost:3001/users_images/${user.image_name}`} roundedCircle />
-                    {user.firstName}
-                  </NavLink>
-                  <div className="dropdown-menu" aria-labelledby="navbarDropdown">
-                    <Link className="dropdown-item" to='/user/profile'>My profile</Link>
-                    <Link className="dropdown-item" to='/' onClick={signout}>Sign out</Link>
-                  </div>
-                </li>
-              </>
-            }
-          </ul>
-        </div>
-      </nav>
-    </>
+                <NavLink activeStyle={activeStyle} className="nav-link dropdown-toggle" to="/user" id="userOptionsDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  <Image className="user-thumbnail mr-1" src={`http://localhost:3001/users_images/${user.image_name}`} roundedCircle />
+                  {user.firstName}
+                </NavLink>
+                <div className="dropdown-menu" aria-labelledby="navbarDropdown">
+                  <Link className="dropdown-item" to='/user/profile'>My profile</Link>
+                  <Link className="dropdown-item" to='/' onClick={signout}>Sign out</Link>
+                </div>
+              </li>
+            </>
+          }
+        </ul>
+      </div>
+    </nav>
   );
 }
 

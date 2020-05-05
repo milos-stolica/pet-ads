@@ -7,7 +7,6 @@ import { useHistory } from 'react-router-dom';
 import SignupForm from '../forms/SignupForm';
 import Validator from '../../services/Validator';
 import Errors from '../../services/Errors';
-import "./style/Common.css";
 
 const initUser = {
   firstName: '',

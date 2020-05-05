@@ -1,6 +1,23 @@
+/* NavBar Component*/
+.user-thumbnail {
+  height: 30px;
+}
+
+/* ImageSelector Component */
+.selected-img{
+  height: 240px;
+}
+
+/* Common */
 body{
   background: -webkit-linear-gradient(left, #3931af, #00c6ff);
 }
+.card-form{
+  margin-left: 15%;
+  margin-right: 15%;
+}
+
+/* UserProfilePage Component*/
 .user-profile{
   padding: 3%;
   margin-top: 3%;
@@ -65,4 +82,37 @@ body{
 }
 .tab-content{
   margin-top: -17%;
+}
+
+.home-img{
+  height: 500px;
+  width: 100%;
+}
+.general-info{
+  color:white;
+}
+
+/* SelectItemBar Component */
+.bar-item{
+  font-size: large;
+  font-weight: 600;
+  color: white;
+  text-decoration: none !important;
+}
+.bar-item:hover{
+  color: black;
+}
+Button.selected-item{
+  color: #ffeb4c !important;
+}
+
+.icon{
+  font-size: 60px;
+  display: block;
+}
+
+.dropdown-menu-scroll{
+  height: 300px;
+  width: 200px;
+  overflow: scroll;
 }

@@ -1,6 +1,6 @@
 (function() {
-  const pet_types = ['Dog', 'Cat', 'Rabbit', 'Fish', 'Snake', 'Hamster'];
-  const ad_types = ['Sell', 'Buy', 'Found', 'Lost', 'Seen'];
+  const pet_types = ['Dog', 'Cat', 'Rabbit', 'Fish', 'Parrot', 'Hamster'];
+  const ad_types = ['For sale', 'Look for', 'Found', 'Lost', 'Seen'];
   const allowedImageTypes = ['image/jpeg', 'image/png', 'image/webp'];
   
   const mongodbObjectId = /^[0-9a-fA-F]{24}$/;

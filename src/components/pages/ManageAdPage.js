@@ -1,15 +1,12 @@
 import React, {useState, useEffect} from 'react';
-import { Container, Card } from 'react-bootstrap'
-import { bindActionCreators } from "redux";
-import { connect } from "react-redux";
+import { Container, Card } from 'react-bootstrap';
+import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
 import ManageAdForm from '../forms/ManageAdForm';
-import * as adsActions from "../../redux/actions/adsActions";
-import * as statesActions from "../../redux/actions/statesActions"
-import * as typesActions from "../../redux/actions/typesActions"
-import { useHistory, useParams } from "react-router-dom";
-import CitiesManager from "../../services/CitiesManager";
+import * as adsActions from '../../redux/actions/adsActions';
+import { useHistory, useParams } from 'react-router-dom';
+import CitiesManager from '../../services/CitiesManager';
 import Validator from '../../services/Validator';
-import "./style/Common.css";
 
 const initAd = {
   description: '',
@@ -37,25 +34,6 @@ function ManageAdPage({allAds, allStates, types, actions}) {
     return allAds.length !== 0;
   }
 
-  function loadStates() {
-    if(allStates.length === 0) {
-      actions.loadStates().then(statusCode => statusCode >= 400 && history.push(`/error/${statusCode}`));
-    }
-  }
-
-  function loadAdTypes() {
-    if(types.ads.length === 0) {
-      actions.loadAdTypes().then(statusCode => statusCode >= 400 && history.push(`/error/${statusCode}`));
-    }
-  }
-
-  function loadPetTypes() {
-    if(types.pets.length === 0) {
-      actions.loadPetTypes().then(statusCode => statusCode >= 400 && history.push(`/error/${statusCode}`));
-    }
-  }
-
-  //TODO ovde si stao trebas da rijesis problem poziva ove metode nakon sto se odradi history push na ads?type=
   function initializeFormFieldValues() {
     if(areAdsLoaded()) {
       const adForUpdate = allAds.find(ad => ad._id === id);
@@ -111,9 +89,6 @@ function ManageAdPage({allAds, allStates, types, actions}) {
   }
 
   useEffect(initializeFormFieldValues, [allAds, id]);
-  useEffect(loadStates, []);
-  useEffect(loadAdTypes, []);
-  useEffect(loadPetTypes, []);
   useEffect(setCitiesList, [allStates, ad.state]);
 
   function handleChange(event) {
@@ -167,9 +142,6 @@ function mapDispatchToProps(dispatch) {
     actions: {
       addAd: bindActionCreators(adsActions.addAd, dispatch),
       updateAd: bindActionCreators(adsActions.updateAd, dispatch),
-      loadStates: bindActionCreators(statesActions.loadStates, dispatch),
-      loadAdTypes: bindActionCreators(typesActions.loadAdTypes, dispatch),
-      loadPetTypes: bindActionCreators(typesActions.loadPetTypes, dispatch)
     }
   }
 }

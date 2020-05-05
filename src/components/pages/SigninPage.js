@@ -1,12 +1,11 @@
 import React, {useState} from 'react';
-import { bindActionCreators } from "redux";
-import { connect } from "react-redux";
-import * as userActions from "../../redux/actions/userActions"
+import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
+import * as userActions from '../../redux/actions/userActions';
 import { Container, Card } from 'react-bootstrap';
-import { useHistory } from "react-router-dom";
-import SigninForm from "../forms/SigninForm";
+import { useHistory } from 'react-router-dom';
+import SigninForm from '../forms/SigninForm';
 import Validator from '../../services/Validator';
-import "./style/Common.css";
 
 const initCredentials = {
   email: '',

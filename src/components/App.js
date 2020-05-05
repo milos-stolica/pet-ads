@@ -1,6 +1,7 @@
 import 'jquery/src/jquery';
 import "bootstrap/dist/css/bootstrap.min.css";
 import 'bootstrap/dist/js/bootstrap.min.js';
+import '../style/App.css';
 import React, {useEffect} from 'react';
 import { Route, Switch } from "react-router-dom";
 import AdsPage from "./pages/AdsPage";
@@ -14,6 +15,8 @@ import ErrorPage from "./common/ErrorPage";
 import SigninPage from "./pages/SigninPage";
 import UserProfilePage from "./pages/UserProfilePage";
 import { loadAds } from "../redux/actions/adsActions";
+import * as typesActions from "../redux/actions/typesActions";
+import { loadStates } from "../redux/actions/statesActions";
 import { useHistory } from "react-router-dom";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
@@ -25,7 +28,22 @@ function App({actions}) {
     actions.loadAdsFromServer().then(statusCode => statusCode >= 400 && history.push(`/error/${statusCode}`));
   }
 
+  function loadAdTypes() {
+    actions.loadAdTypes().then(statusCode => statusCode >= 400 && history.push(`/error/${statusCode}`));
+  }
+
+  function loadPetTypes() {
+    actions.loadPetTypes().then(statusCode => statusCode >= 400 && history.push(`/error/${statusCode}`));
+  }
+
+  function loadStates() {
+    actions.loadStates().then(statusCode => statusCode >= 400 && history.push(`/error/${statusCode}`));
+  }
+
   useEffect(initializeAdsList, []);
+  useEffect(loadAdTypes, []);
+  useEffect(loadPetTypes, []);
+  useEffect(loadStates, []);
 
   return (
     <>
@@ -53,7 +71,10 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
   return {
     actions: {
-      loadAdsFromServer: bindActionCreators(loadAds, dispatch)
+      loadAdsFromServer: bindActionCreators(loadAds, dispatch),
+      loadAdTypes: bindActionCreators(typesActions.loadAdTypes, dispatch),
+      loadPetTypes: bindActionCreators(typesActions.loadPetTypes, dispatch),
+      loadStates: bindActionCreators(loadStates, dispatch)
     }
   }
 }
