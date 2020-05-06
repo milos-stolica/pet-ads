@@ -1,8 +1,9 @@
 import React, {useState, useEffect} from 'react';
 import { Container } from 'react-bootstrap';
-import { useParams } from "react-router-dom";
-import { connect } from "react-redux";
+import { useParams } from 'react-router-dom';
+import { connect } from 'react-redux';
 import Ad from '../common/Ad';
+import { isNotEmpty } from '../../utils/arraysHelper';
 
 const initAd = {
   description: '',
@@ -22,12 +23,8 @@ function AdDetailsPage({allAds, userLoggedIn}) {
   const [imgUrl, setImgUrl] = useState('');
   const { id } = useParams();
 
-  function areAdsLoaded() {
-    return allAds.length !== 0;
-  }
-
   function trySetAdDetails() {
-    if(areAdsLoaded()){
+    if(isNotEmpty(allAds)){
       const adDetails = allAds.find(ad => ad._id === id);
       if(adDetails) {
         setAd(adDetails);

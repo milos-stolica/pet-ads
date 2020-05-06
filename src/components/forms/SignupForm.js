@@ -42,7 +42,7 @@ function SignupForm (props) {
         </Form.Group>
       </Form.Row>
 
-      <Button className="ml-3" variant="primary" type="submit">Sign up</Button>
+      <Button className="ml-3 button-success" type="submit">Sign up</Button>
     </Form>
   );
 }

@@ -7,6 +7,7 @@ import * as adsActions from '../../redux/actions/adsActions';
 import { useHistory, useParams } from 'react-router-dom';
 import CitiesManager from '../../services/CitiesManager';
 import Validator from '../../services/Validator';
+import { isNotEmpty } from '../../utils/arraysHelper';
 
 const initAd = {
   description: '',
@@ -30,15 +31,11 @@ function ManageAdPage({allAds, allStates, types, actions}) {
   const { id } = useParams();
   const history = useHistory();
 
-  function areAdsLoaded() {
-    return allAds.length !== 0;
-  }
-
   function initializeFormFieldValues() {
-    if(areAdsLoaded()) {
+    if(isNotEmpty(allAds)) {
       const adForUpdate = allAds.find(ad => ad._id === id);
       if(adForUpdate) {
-        setAd(adForUpdate);
+        setAd({...adForUpdate, image_name: 'Choose another picture'});
         setImgUrl(`http://localhost:3001/ads_images/${adForUpdate.ad_type}/${adForUpdate.image_name}`);
       } else if(id !== undefined) {
         history.push('/error/404');
@@ -53,7 +50,7 @@ function ManageAdPage({allAds, allStates, types, actions}) {
     const errors = {};
     if(!Validator.isEmailValid(ad.email)) errors.email = 'This is not valid email address.';
     if(!Validator.isPhoneValid(ad.phone)) errors.phone = 'This is not valid phone number.';
-    if(ad.ad_type === 'Sell' && !Validator.valueInRange(ad.price, 0)) errors.price = 'Price must be number greater or equal to zero.';
+    if(ad.ad_type === 'For sale' && !Validator.valueInRange(ad.price, 0)) errors.price = 'Price must be number greater or equal to zero.';
     if(!Validator.onlyLetters(ad.city) || !Validator.lengthInRange(ad.city, 0 , 50)) errors.city = 'This is not valid city name.';
     if(!Validator.onlyLetters(ad.state) || !Validator.lengthInRange(ad.state, 0 , 50)) errors.state = 'This is not valid state name.';
     if(!Validator.typeValid(ad.ad_type, types.ads)) errors.ad_type = 'This is not valid ad type.';

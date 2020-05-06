@@ -23,7 +23,7 @@ module.exports = class AdsManager {
     && Validator.lengthInRange(this.req.body.phone, 0, 50) && Validator.lengthInRange(this.req.body.city, 0, 50) && Validator.lengthInRange(this.req.body.state, 0, 50)
     && Validator.lengthInRange(this.req.body.description);
 
-    if(valid && this.req.body.ad_type === 'Sell' && !Validator.valueInRange(this.req.body.price, 0)) {
+    if(valid && this.req.body.ad_type === 'For sale' && !Validator.valueInRange(this.req.body.price, 0)) {
       valid = false;
     }
     return valid;

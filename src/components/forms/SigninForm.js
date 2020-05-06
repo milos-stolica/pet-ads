@@ -20,7 +20,7 @@ function SigninForm (props) {
       </Form.Group>
 
       <Form.Group as={Col} controlId="submit">
-        <Button variant="primary" type="submit">Login</Button>
+        <Button className="button-success" type="submit">Login</Button>
       </Form.Group> 
     </Form>
   );

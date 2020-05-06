@@ -1,32 +1,20 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { NavLink, Link, useHistory } from 'react-router-dom';
 import { Image } from 'react-bootstrap';
 import { connect } from 'react-redux';
-import { loadAdTypes as loadTypes } from '../../redux/actions/typesActions';
 import { logoutUser as logout } from '../../redux/actions/userActions';
 import { bindActionCreators } from 'redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPaw } from '@fortawesome/free-solid-svg-icons';
 
+//controller
 function NavBar ({user, adTypes, actions}) {
   const activeStyle = { color: '#ffeb4c' };
   const history = useHistory();
 
-  function areAdTypesLoaded() {
-    return adTypes.length !== 0;
-  }
-
-  function loadAdTypes() {
-    if(!areAdTypesLoaded()) {
-      actions.loadAdTypes().then(statusCode => statusCode >= 400 && history.push(`/error/${statusCode}`));
-    }
-  }
-
   function signout() {
     actions.logoutUser().then(statusCode => statusCode >= 400 && history.push(`/error/${statusCode}`));
   }
-
-  useEffect(loadAdTypes, []);
 
   return (
     <nav className="navbar navbar-expand-lg navbar-dark bg-dark sticky-top">
@@ -103,7 +91,6 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
   return {
     actions: {
-      loadAdTypes: bindActionCreators(loadTypes, dispatch),
       logoutUser: bindActionCreators(logout, dispatch),
     }
   }

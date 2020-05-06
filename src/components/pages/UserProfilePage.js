@@ -3,22 +3,18 @@ import { Container, Row, Col } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import AdList from '../common/AdList';
+import {conditionalCallbackExecution as trySetState} from '../../utils/conditionalCallbackCall';
+import { isNotEmpty } from '../../utils/arraysHelper';
 
 function UserProfilePage({user, allAds}) {
   //theme from https://bootsnipp.com/tags/profile?page=2
   const [ads, setAds] = useState([]);
 
-  function areAdsLoaded() {
-    return allAds.length !== 0;
+  function setUserAds() {
+    trySetState(isNotEmpty(allAds), setAds, allAds.filter(ad => ad.ownerId === user._id));
   }
 
-  function populateUserAds() {
-    if(areAdsLoaded()) {
-        setAds(allAds.filter(ad => ad.ownerId === user._id))
-    }
-  }
-
-  useEffect(populateUserAds, [allAds]);
+  useEffect(setUserAds, [allAds]);
 
   return (
     <Container className="user-profile">
@@ -31,10 +27,10 @@ function UserProfilePage({user, allAds}) {
             <h5>{`${user.firstName} ${user.lastName}`}</h5>
             <ul className="nav nav-tabs" role="tablist">
               <li className="nav-item">
-                <a className="nav-link active" id="ads-tab" data-toggle="tab" href="#ads" role="tab" aria-controls="ads" aria-selected="true">Manage ads</a>
+                <a className="nav-link active tab-nav" id="ads-tab" data-toggle="tab" href="#ads" role="tab" aria-controls="ads" aria-selected="true">Manage ads</a>
               </li>
               <li className="nav-item">
-                <a className="nav-link" id="subscriptions-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="false">Subscriptions</a>
+                <a className="nav-link tab-nav" id="subscriptions-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="false">Subscriptions</a>
               </li>
             </ul>
           </div>
@@ -56,7 +52,7 @@ function UserProfilePage({user, allAds}) {
             <div className="tab-pane fade show active" id="ads" role="tabpanel" aria-labelledby="ads-tab">
               <Row>
                 <Col className="text-right">
-                  <Link className="btn btn-primary float-right" to="/new/ad">Publish new ad</Link>
+                  <Link className="btn button-success float-right" to="/new/ad">Publish new ad</Link>
                 </Col>
               </Row>
               <h5>My ads</h5>

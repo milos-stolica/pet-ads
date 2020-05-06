@@ -16,11 +16,11 @@ function Ad (props) {
       <ListGroup className="list-group-flush">
         <ListGroupItem>Phone: {phone_number}</ListGroupItem>
         <ListGroupItem>Email: {email}</ListGroupItem>
-        {ad_type === 'sell' && <ListGroupItem>Price: {price}</ListGroupItem>}
+        {ad_type === 'For sale' && <ListGroupItem>Price: {price}</ListGroupItem>}
       </ListGroup>
       <Card.Body>
-        {shouldAddModificationButtons && <Link className="btn btn-primary mr-3" to={`/new/ad/${id}`}>Update</Link>}
-        {!short_desc && <Link className="btn btn-primary" to={`/ad/details/${id}`}>Details</Link>}
+        {shouldAddModificationButtons && <Link className="btn button-success mr-3" to={`/new/ad/${id}`}>Update</Link>}
+        {!short_desc && <Link className="btn button-success" to={`/ad/details/${id}`}>Details</Link>}
       </Card.Body>
     </Card>
   );

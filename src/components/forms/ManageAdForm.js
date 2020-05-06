@@ -30,7 +30,7 @@ function ManageAdForm (props) {
             </Form.Group>
           </Form.Row>
 
-          {ad_type === 'Sell' && <Form.Group controlId="price">
+          {ad_type === 'For sale' && <Form.Group controlId="price">
             <Form.Label>Price</Form.Label>
             <Form.Control value={price} onChange={props.onChange} name='price'></Form.Control>
             {errors.price && <div className='alert alert-danger'>{errors.price}</div>}
@@ -84,7 +84,7 @@ function ManageAdForm (props) {
         </Form.Group>
       </Form.Row>
       
-      <Button variant="primary" type="submit">{_id ? 'Update' : 'Save'}</Button>  
+      <Button className="button-success" type="submit">{_id ? 'Update' : 'Save'}</Button>  
     </Form>
   );
 }

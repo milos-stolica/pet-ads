@@ -1,11 +1,11 @@
-import React/* , {useEffect, useState} */ from 'react';
+import React from 'react';
 import { Card } from 'react-bootstrap';
 
 //dumb
 function ImageSelector({imgName, onChange, url, error}) {
   return (
     <>
-      <div className="input-group mb-3">
+      <div className="input-group">
         <div className="custom-file">
           <input
             type="file"

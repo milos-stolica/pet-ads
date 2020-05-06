@@ -4,6 +4,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import * as icons from '@fortawesome/free-solid-svg-icons';
 import Dropdown from './Dropdown';
 
+//dumb
 function SelectItemBar (props) {
   const {barItems, activeItem, handleSelection} = props;
   const {dropdown1, dropdown1Active, handleDropdown1Selection} = props;

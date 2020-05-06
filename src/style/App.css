@@ -1,14 +1,33 @@
 /* Common */
 body{
-  background: -webkit-linear-gradient(left, #f084dc, #fabeef);
+  background: -webkit-linear-gradient(left, #373f47, #5e5e75);
 }
 p, h6, h5, h4, h3, h2, h1{
   font-family: Helvetica Narrow, sans-serif;
 }
+h1{
+  color:#ffeb4c;
+}
+.alert-danger{
+  background-color: rgba(255, 0, 0, 0.89);
+  color: white;
+}
+.button-success{
+  background-color: #383d42 !important;
+  border: none !important;
+  color: white !important;
+  box-shadow: none !important;
+}
+.button-success:hover{
+  background-color: #212529 !important;
+  color: white !important;
+}
+
 .card-form{
   margin-left: 15%;
   margin-right: 15%;
-  background: -webkit-linear-gradient(left, #f3f3f3, #f5d2ee);
+  background: -webkit-linear-gradient(left, #f3f3f3, #d8e094);
+  border: none !important;
 }
 .icon{
   font-size: 50px;
@@ -91,13 +110,19 @@ p, h6, h5, h4, h3, h2, h1{
 .tab-content{
   margin-top: -17%;
 }
-
 .home-img{
   height: 500px;
   width: 100%;
 }
 .general-info{
   color:white;
+}
+.tab-nav{
+  color: black !important;
+}
+.tab-nav.active{
+  color: #f3d915 !important;
+  border-bottom: 2px solid black !important;
 }
 
 /* SelectItemBar Component */
@@ -108,7 +133,7 @@ p, h6, h5, h4, h3, h2, h1{
   text-decoration: none !important;
 }
 .bar-item:hover{
-  color: black;
+  color: blanchedalmond;
 }
 Button.selected-item{
   color: #ffeb4c !important;

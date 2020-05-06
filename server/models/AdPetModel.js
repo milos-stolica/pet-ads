@@ -8,7 +8,6 @@ const AdPetSchema = new mongoose.Schema({
   description: {
     type: String,
     trim: true,
-    required: true,
   },
   type: {
     type: String,
