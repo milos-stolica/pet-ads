@@ -18,7 +18,7 @@ module.exports = class AdsManager {
       return false;
     }
 
-    let valid = Validator.adTypeValid(this.req.body.ad_type) && Validator.onlyLetters(this.req.body.city) && Validator.onlyLetters(this.req.body.state)
+    let valid = Validator.adTypeValid(this.req.body.ad_type) && Validator.hasNotNumberOrSpecialCh(this.req.body.city) && Validator.hasNotNumberOrSpecialCh(this.req.body.state)
     && Validator.isPhoneValid(this.req.body.phone) && Validator.isEmailValid(this.req.body.email) && Validator.petTypeValid(this.req.body.type)
     && Validator.lengthInRange(this.req.body.phone, 0, 50) && Validator.lengthInRange(this.req.body.city, 0, 50) && Validator.lengthInRange(this.req.body.state, 0, 50)
     && Validator.lengthInRange(this.req.body.description);

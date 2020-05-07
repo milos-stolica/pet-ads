@@ -40,8 +40,8 @@ module.exports = class UserManagement {
         return false;
       }
   
-      this.valid = Validator.isEmailValid(this.req.body.email) && Validator.onlyLetters(this.req.body.firstName) && Validator.lengthInRange(this.req.body.firstName, 0, 50)
-      && Validator.onlyLetters(this.req.body.lastName) && Validator.lengthInRange(this.req.body.lastName, 0, 50)
+      this.valid = Validator.isEmailValid(this.req.body.email) && Validator.hasNotNumberOrSpecialCh(this.req.body.firstName) && Validator.lengthInRange(this.req.body.firstName, 0, 50)
+      && Validator.hasNotNumberOrSpecialCh(this.req.body.lastName) && Validator.lengthInRange(this.req.body.lastName, 0, 50)
       && Validator.isPasswordValid(this.req.body.password);
   
       return this.valid;

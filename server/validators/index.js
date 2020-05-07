@@ -1,4 +1,4 @@
-(function({phone_regex, email_regex, password_regex, only_letters_regex, ad_types, pet_types}) {
+(function({phone_regex, email_regex, password_regex, all_expect_num_and_spec_ch, ad_types, pet_types}) {
   module.exports = class Validator {
     static isEmailValid(email) {
       return email_regex.test(email);
@@ -12,8 +12,8 @@
       return phone_regex.test(phone);
     }
 
-    static onlyLetters(string) {
-      return only_letters_regex.test(string);
+    static hasNotNumberOrSpecialCh(string) {
+      return all_expect_num_and_spec_ch.test(string);
     }
 
     static lengthInRange(string, minLength = 0, maxLength = 1000) {

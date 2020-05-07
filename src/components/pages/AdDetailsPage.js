@@ -18,7 +18,7 @@ const initAd = {
 };
 
 //controller
-function AdDetailsPage({allAds, userLoggedIn}) {
+function AdDetailsPage({allAds, user}) {
   const [ad, setAd] = useState(initAd);
   const [imgUrl, setImgUrl] = useState('');
   const { id } = useParams();
@@ -51,7 +51,7 @@ function AdDetailsPage({allAds, userLoggedIn}) {
           price={ad.price}
           state={ad.state}
           city={ad.city}
-          shouldAddModificationButtons={userLoggedIn}>
+          shouldAddModificationButtons={user.loggedIn && user._id === ad.ownerId}>
         </Ad>
       </div>
     </Container>
@@ -61,7 +61,7 @@ function AdDetailsPage({allAds, userLoggedIn}) {
 function mapStateToProps(state) {
   return {
     allAds: state.ads,
-    userLoggedIn: state.user.loggedIn
+    user: state.user
   }
 }
 

@@ -7,7 +7,7 @@
   const email_regex = /^(([^<>()[\].,;:\s@"]+(\.[^<>()[\].,;:\s@"]+)*)|(".+"))@(([^<>()[\].,;:\s@"]+\.)+[^<>()[\].,;:\s@"]{2,})$/i;
   const password_regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])(?=.{8,})/;
   const phone_regex = /^(\+)*[0-9]+$/;
-  const only_letters_regex = /^[a-zA-Z ]+$/;
+  const all_expect_num_and_spec_ch = /^[^`~,.<>;':"/[\]|{}()=_+\-)!?(0-9)]*$/;
 
   const maxImageLength = 8 * 1024 * 1024;
   const maxNumberOfFormParts = 20;
@@ -20,7 +20,7 @@
     email_regex,
     password_regex,
     phone_regex,
-    only_letters_regex,
+    all_expect_num_and_spec_ch,
     allowedImageTypes,
     maxImageLength,
     maxNumberOfFormParts, 

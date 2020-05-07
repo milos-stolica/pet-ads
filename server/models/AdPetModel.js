@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const { pet_types, ad_types, phone_regex, email_regex, only_letters_regex } = require('../enums_regex');
+const { pet_types, ad_types, phone_regex, email_regex, all_expect_num_and_spec_ch } = require('../enums_regex');
 
 mongoose.set('useCreateIndex', true);
 mongoose.set('useFindAndModify', false);
@@ -30,14 +30,14 @@ const AdPetSchema = new mongoose.Schema({
     type: String,
     trim: true,
     required: true,
-    match: only_letters_regex,
+    match: all_expect_num_and_spec_ch,
     maxlength: 50
   },
   state: {
     type: String,
     trim: true,
     required: true,
-    match: only_letters_regex,
+    match: all_expect_num_and_spec_ch,
     maxlength: 50
   },
   phone: {

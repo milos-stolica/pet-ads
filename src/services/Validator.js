@@ -2,7 +2,7 @@
 const email_regex = /^(([^<>()[\].,;:\s@"]+(\.[^<>()[\].,;:\s@"]+)*)|(".+"))@(([^<>()[\].,;:\s@"]+\.)+[^<>()[\].,;:\s@"]{2,})$/i;
 const password_regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])(?=.{8,})/;
 const phone_regex = /^(\+)*[0-9]+$/;
-const only_letters_regex = /^[a-zA-Z ]+$/;
+const all_expect_num_and_spec_ch = /^[^`~,.<>;':"/[\]|{}()=_+\-)!?(0-9)]*$/;
 const allowedImageTypes = ['image/jpeg', 'image/png', 'image/webp'];
 
 export default class Validator {
@@ -18,8 +18,8 @@ export default class Validator {
     return phone_regex.test(phone);
   }
 
-  static onlyLetters(string) {
-    return only_letters_regex.test(string);
+  static hasNotNumberOrSpecialCh(string) {
+    return all_expect_num_and_spec_ch.test(string);
   }
 
   static lengthInRange(string, minLength = 0, maxLength = 1000) {

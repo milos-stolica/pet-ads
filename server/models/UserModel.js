@@ -1,19 +1,19 @@
 const mongoose = require('mongoose');
-const { email_regex, only_letters_regex } = require('../enums_regex');
+const { email_regex, all_expect_num_and_spec_ch } = require('../enums_regex');
 
 const UserSchema = new mongoose.Schema({
   firstName: {
     type: String,
     trim: true,
     required: true,
-    match: only_letters_regex,
+    match: all_expect_num_and_spec_ch,
     maxlength: 50
   },
   lastName: {
     type: String,
     trim: true,
     required: true,
-    match: only_letters_regex,
+    match: all_expect_num_and_spec_ch,
     maxlength: 50
   },
   email: {

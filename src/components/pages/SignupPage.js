@@ -35,8 +35,8 @@ function SignupPage ({actions}) {
   function getFormErrors() {
     const errors = {};
     if(!Validator.isEmailValid(user.email)) errors.email = 'This is not valid email address.';
-    if(!Validator.onlyLetters(user.firstName) || !Validator.lengthInRange(user.firstName, 0 , 50)) errors.firstName = 'This is not valid name.';
-    if(!Validator.onlyLetters(user.lastName) || !Validator.lengthInRange(user.lastName, 0 , 50)) errors.lastName = 'This is not valid lastname.';
+    if(!Validator.hasNotNumberOrSpecialCh(user.firstName) || !Validator.lengthInRange(user.firstName, 0 , 50)) errors.firstName = 'This is not valid name.';
+    if(!Validator.hasNotNumberOrSpecialCh(user.lastName) || !Validator.lengthInRange(user.lastName, 0 , 50)) errors.lastName = 'This is not valid lastname.';
     if(!Validator.isPasswordValid(user.password)) errors.password = 'Password is not strong enough.'
     if(!Validator.isImage(file)) errors.file = 'Only images of png, jpeg or webp types are allowed.';
     return errors;

@@ -51,8 +51,8 @@ function ManageAdPage({allAds, allStates, types, actions}) {
     if(!Validator.isEmailValid(ad.email)) errors.email = 'This is not valid email address.';
     if(!Validator.isPhoneValid(ad.phone)) errors.phone = 'This is not valid phone number.';
     if(ad.ad_type === 'For sale' && !Validator.valueInRange(ad.price, 0)) errors.price = 'Price must be number greater or equal to zero.';
-    if(!Validator.onlyLetters(ad.city) || !Validator.lengthInRange(ad.city, 0 , 50)) errors.city = 'This is not valid city name.';
-    if(!Validator.onlyLetters(ad.state) || !Validator.lengthInRange(ad.state, 0 , 50)) errors.state = 'This is not valid state name.';
+    if(!Validator.hasNotNumberOrSpecialCh(ad.city) || !Validator.lengthInRange(ad.city, 0 , 50)) errors.city = 'This is not valid city name.';
+    if(!Validator.hasNotNumberOrSpecialCh(ad.state) || !Validator.lengthInRange(ad.state, 0 , 50)) errors.state = 'This is not valid state name.';
     if(!Validator.typeValid(ad.ad_type, types.ads)) errors.ad_type = 'This is not valid ad type.';
     if(!Validator.typeValid(ad.type, types.pets)) errors.type = 'This pet type is not supported yet.';
     if(ad._id === undefined && !Validator.isImage(file)) errors.file = 'Only images of png, jpeg or webp types are allowed.';
