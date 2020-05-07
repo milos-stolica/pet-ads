@@ -15,6 +15,7 @@ const jwtVerify = util.promisify(jsonWebToken.verify);
 const projectUser = (user) => {
   return {
     ads: user.ads,
+    subscriptions: user.subscriptions,
     _id: user._id,
     firstName: user.firstName,
     lastName: user.lastName,
@@ -149,5 +150,11 @@ module.exports = class UserManagement {
         return resolve(null);
       }
     });
+  }
+
+   static async doesUserHasPermision(req, manipulationType, resourceId) {
+    const user = await this.tryGetUserData(req, true);
+    if(manipulationType === 'adManipulation') return user.ads.contains(resourceId);
+    if(manipulationType === 'subscriptionManipulation') return user.subscriptions.contains(resourceId);
   }
 }

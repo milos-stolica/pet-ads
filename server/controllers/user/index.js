@@ -11,6 +11,18 @@ async function updateUserAds(req, res, next) {
   }
 }
 
+async function updateUserSubscriptions(req, res, next) {
+  try {
+    const user = await UserManagement.tryGetUserData(req, false);
+    const {savedSubscription} = res.locals;
+    await user.addSubscription(savedSubscription._id);
+    next();
+  } catch (err) {
+    return next(err);
+  }
+}
+
 module.exports = {
-  updateUserAds
+  updateUserAds,
+  updateUserSubscriptions
 }

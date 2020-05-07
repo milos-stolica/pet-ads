@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const { pet_types, ad_types, all_expect_num_and_spec_ch } = require('../enums_regex');
+const { pet_types, ad_types, email_regex, all_expect_num_and_spec_ch } = require('../enums_regex');
 
 const SubscriptionSchema = new mongoose.Schema({
   petType: {
@@ -27,9 +27,20 @@ const SubscriptionSchema = new mongoose.Schema({
     required: true,
     match: all_expect_num_and_spec_ch,
     maxlength: 50
+  },
+  email: {
+    type: String,
+    trim: true,
+    required: true,
+    match: email_regex,
+  },
+  ownerId: {
+    type: String,
+    trim: true,
+    required: true
   }
 }, {timestamps: true});
 
-const AdPet = mongoose.model('Subscription', SubscriptionSchema);
+const Subscription = mongoose.model('Subscription', SubscriptionSchema);
 
-module.exports = AdPet;
+module.exports = Subscription;

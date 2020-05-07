@@ -34,6 +34,9 @@ const UserSchema = new mongoose.Schema({
   },
   ads: {
     type: Array
+  },
+  subscriptions: {
+    type: Array
   }
 }, {timestamps: true});
 
@@ -42,8 +45,18 @@ UserSchema.methods.addAd = function (ad) {
   this.save();
 }
 
+UserSchema.methods.addSubscription = function (subscription) {
+  this.subscriptions.push(subscription);
+  this.save();
+}
+
 UserSchema.methods.deleteAd = function (ad) {
   this.ads = this.ads.filter(adFromDb => adFromDb !== ad);
+  this.save();
+}
+
+UserSchema.methods.deleteSubscription = function (subscription) {
+  this.subscriptions = this.subscriptions.filter(subscriptionFromDb => subscriptionFromDb !== subscription);
   this.save();
 }
 
