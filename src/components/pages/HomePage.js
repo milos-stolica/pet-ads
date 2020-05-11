@@ -4,10 +4,12 @@ import { connect } from 'react-redux';
 import AdList from '../common/AdList';
 import {conditionalCallbackExecution as trySetState} from '../../utils/conditionalCallbackCall';
 import { isNotEmpty, filterByCriteriums } from '../../utils/arraysHelper';
-import { addIconsToPetTypes, populateCitiesDropdown } from '../../utils/homeAndAdsPageHelper'
+import { populateCitiesDropdown } from '../../utils/homeAndAdsPageHelper';
+import { addIconsToPetTypes } from '../../utils/iconsHelper';
+import Spinner from '../common/Spinner';
 
 //controller
-function HomePage ({allAds, allStates, types}) {
+function HomePage ({allAds, allStates, types, loading}) {
   const [categoryBarItems, setCategoryBarItems] = useState([]);
   const [activeCategory, setActiveCategory] = useState('All categories');
 
@@ -27,19 +29,33 @@ function HomePage ({allAds, allStates, types}) {
   const categoryBarBackground = '#212529', petTypeBarBackground = '#373f47';
 
   function handleCategoryChange(event) {
-    const filteringCriteriums = { ad_type: event.currentTarget.name, city: activeCity, state: activeState, type: activePetType };
+    const filteringCriteriums = { 
+      ...(event.currentTarget.name !== 'All categories' && {ad_type: event.currentTarget.name}),
+      ...(activeCity !== 'All cities' && {city: activeCity}),  
+      ...(activeState !== 'All states' && {state: activeState}),  
+      ...(activePetType !== 'All types' && {type: activePetType}),  
+    };
     setSelectedAds(filterByCriteriums(allAds, filteringCriteriums));
     setActiveCategory(event.currentTarget.name);
   }
 
   function handlePetTypeChange(event) {
-    const filteringCriteriums = { type: event.currentTarget.name, state: activeState, city: activeCity, ad_type: activeCategory };
+    const filteringCriteriums = { 
+      ...(event.currentTarget.name !== 'All types' && {type: event.currentTarget.name}), 
+      ...(activeState !== 'All states' && {state: activeState}), 
+      ...(activeCity !== 'All cities' && {city: activeCity}), 
+      ...(activeCategory !== 'All categories' && {ad_type: activeCategory})
+    };
     setSelectedAds(filterByCriteriums(allAds, filteringCriteriums));
     setActivePetType(event.currentTarget.name);
   }
 
   function handleStateChange(event) {
-    const filteringCriteriums = { state: event.currentTarget.name, type: activePetType, ad_type: activeCategory };
+    const filteringCriteriums = { 
+      ...(event.currentTarget.name !== 'All states' && {state: event.currentTarget.name}), 
+      ...(activePetType !== 'All types' && {type: activePetType}),
+      ...(activeCategory !== 'All categories' && {ad_type: activeCategory}) 
+    };
     setSelectedAds(filterByCriteriums(allAds, filteringCriteriums));
     setActiveState(event.currentTarget.name);
     populateCitiesDropdown(event.currentTarget.name, allStates, setCitiesDropdownItems);
@@ -47,7 +63,12 @@ function HomePage ({allAds, allStates, types}) {
   }
 
   function handleCityChange(event) {
-    const filteringCriteriums = { city: event.currentTarget.name, state: activeState, type: activePetType, ad_type: activeCategory };
+    const filteringCriteriums = { 
+      ...(event.currentTarget.name !== 'All cities' && {city: event.currentTarget.name}),  
+      ...(activeState !== 'All states' && {state: activeState}), 
+      ...(activePetType !== 'All types' && {type: activePetType}),
+      ...(activeCategory !== 'All categories' && {ad_type: activeCategory})  
+    };
     setSelectedAds(filterByCriteriums(allAds, filteringCriteriums));
     setActiveCity(event.currentTarget.name);
   }
@@ -82,31 +103,36 @@ function HomePage ({allAds, allStates, types}) {
   return (
     <>
       <img className="home-img" src="http://localhost:3001/other_images/orange-tabby-cat-beside-fawn-short-coated-puppy-46024.jpg" alt="Pets"></img>
-      <SelectItemBar
-        barItems={petTypeBarItems} 
-        handleSelection={handlePetTypeChange} 
-        activeItem={activePetType} 
-        color={petTypeBarBackground}>
-      </SelectItemBar>
-      <SelectItemBar 
-        barItems={categoryBarItems}
-        handleSelection={handleCategoryChange} 
-        activeItem={activeCategory}
-        dropdown1 = {statesDropdownItems}
-        dropdown1Active = {activeState} 
-        handleDropdown1Selection = {handleStateChange}
-        dropdown2 = {citiesDropdownItems}
-        dropdown2Active = {activeCity} 
-        handleDropdown2Selection = {handleCityChange}
-        color={categoryBarBackground}>
-      </SelectItemBar>
-      <h6 className="general-info text-center my-3">{generalInfo}</h6>
-      <AdList 
-        ads={selectedAds} 
-        lgCol={4} 
-        mdCol={6}
-        shouldAddModificationButtons={false}>
-      </AdList>
+      {loading ?
+       <Spinner></Spinner> : (
+         <>
+          <SelectItemBar
+            barItems={petTypeBarItems} 
+            handleSelection={handlePetTypeChange} 
+            activeItem={activePetType} 
+            color={petTypeBarBackground}>
+          </SelectItemBar>
+          <SelectItemBar 
+            barItems={categoryBarItems}
+            handleSelection={handleCategoryChange} 
+            activeItem={activeCategory}
+            dropdown1 = {statesDropdownItems}
+            dropdown1Active = {activeState} 
+            handleDropdown1Selection = {handleStateChange}
+            dropdown2 = {citiesDropdownItems}
+            dropdown2Active = {activeCity} 
+            handleDropdown2Selection = {handleCityChange}
+            color={categoryBarBackground}>
+          </SelectItemBar>
+          <h6 className="general-info text-center my-3">{generalInfo}</h6>
+          <AdList 
+            ads={selectedAds} 
+            lgCol={4} 
+            mdCol={6}
+            shouldAddModificationButtons={false}>
+          </AdList>
+         </>
+       )}
     </>
   );
 }
@@ -115,14 +141,13 @@ function mapStateToProps(state) {
   return {
     allAds: state.ads,
     types: state.types,
-    allStates: state.states
-  }
+    allStates: state.states,
+    loading: state.apisInProgress > 0
+  };
 }
 
 function mapDispatchToProps(dispatch) {
-  return {
-    actions: {}
-  }
+  return {};
 }
 
 export default connect(mapStateToProps, mapDispatchToProps) (HomePage);

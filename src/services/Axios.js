@@ -1,4 +1,5 @@
 import axios from "axios";
+import { decrementAPIsInProgress } from '../redux/actions/apisInProgressActions';
 import dispatch from "../index";
 const baseURL = 'http://localhost:3001';
 const timeout = 10000;
@@ -13,16 +14,20 @@ const AxiosInstance = axios.create (
       return true;
     }
   }
-)
+);
 
 export default AxiosInstance;
 
 export function handleAxiosResponse(status, data, action) {
-  if(status < 400) dispatch(action(data));
+  if(status < 400) {
+    dispatch(action(data));
+  }
+  dispatch(decrementAPIsInProgress());
   return status;
 }
 
 export function handleAxiosError(err) {
+  dispatch(decrementAPIsInProgress());
   console.log(err);
   return 500;
 }

@@ -3,7 +3,7 @@
     static upload(fieldName) {
       return multer({
         fileFilter: function(req, file, cb) {
-          if(constants.allowedImageTypes.find(type => type === file.mimetype) != undefined) {
+          if(constants.allowedImageTypes.find(type => type === file.mimetype) !== undefined) {
             return cb(null, true);
           }
           return cb(new multer.MulterError('LIMIT_UNEXPECTED_FILE','Trying to upload file that is not image'), false);
@@ -31,6 +31,19 @@
         return createError(500, 'Unknown error while uploading using multer');
       }
       return null;
+    }
+
+    static parseFormData(upload) {
+      return (req, res, next) => {
+        if(!(req.method === 'POST' || req.method === 'PUT' || req.method === 'PATCH' || req.method === 'DELETE')) return next();
+        upload(req, res, (err) => {
+          if(err) {
+            return next(MulterUploader.handleError(err));
+          }
+          req.resourceId = req.body ? req.body.id : undefined;
+          return next();
+        });
+      }
     }
 
   }

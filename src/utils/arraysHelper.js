@@ -6,7 +6,7 @@ export function isNotEmpty(array) {
 export function filterByCriteriums(array, criteriums) {
   return array.filter(object => {
     for(let criterium in criteriums) {
-      if(!(object[criterium] === criteriums[criterium] || criteriums[criterium].indexOf('All') !== -1)) return false;
+      if(!(object[criterium] === criteriums[criterium])) return false;
     }
     return true;
   });

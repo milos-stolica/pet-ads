@@ -152,9 +152,9 @@ module.exports = class UserManagement {
     });
   }
 
-   static async doesUserHasPermision(req, manipulationType, resourceId) {
+  static async doesUserHasPermision(req, manipulationType) {
     const user = await this.tryGetUserData(req, true);
-    if(manipulationType === 'adManipulation') return user.ads.contains(resourceId);
-    if(manipulationType === 'subscriptionManipulation') return user.subscriptions.contains(resourceId);
+    if(manipulationType === 'adManipulation') return user.ads.includes(req.resourceId);
+    if(manipulationType === 'subscriptionManipulation') return user.subscriptions.includes(req.resourceId);
   }
 }

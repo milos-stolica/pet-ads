@@ -1,7 +1,4 @@
-const MulterUploader = require('../../services/MulterUploader');
 const AdsManager = require('../../services/AdsManager');
-
-const upload = MulterUploader.upload('file');
 
 const getAds = async(req, res, next) => {
   const id = req.query.id
@@ -25,35 +22,25 @@ const getAds = async(req, res, next) => {
   }
 }
 
-const updateAd = (req, res, next) => {
-  upload(req, res, async(err) => {
-    if(err) {
-      return next(MulterUploader.handleError(err));
-    }
-    try {
-      const adsManager = new AdsManager(req, 'updating');
-      const ad = await adsManager.update();
-      res.json(ad);
-    } catch (err) {
-      next(err);
-    }
-  });
+const updateAd = async (req, res, next) => {
+  try {
+    const adsManager = new AdsManager(req, 'updating');
+    const ad = await adsManager.update();
+    res.json(ad);
+  } catch (err) {
+    next(err);
+  }
 }
 
-const saveAd = (req, res, next) => {
-  upload(req, res, async (err) => {
-    if(err) {
-      return next(MulterUploader.handleError(err));
-    }
-    try {
-      const adsManager = new AdsManager(req, 'saving');
-      const adPet = await adsManager.save();
-      res.locals.adPet = adPet;
-      return next();
-    } catch (err) {
-      return next(err);
-    }
-  });
+const saveAd = async (req, res, next) => {
+  try {
+    const adsManager = new AdsManager(req, 'saving');
+    const savedAd = await adsManager.save();
+    res.locals.adPet = savedAd;
+    return next();
+  } catch (err) {
+    return next(err);
+  }
 }
 
 const sendAd = (req, res, next) => {
@@ -61,8 +48,15 @@ const sendAd = (req, res, next) => {
   return res.json(adPet);
 }
 
-const deleteAd = (req, res, next) => {
-
+const deleteAd = async (req, res, next) => {
+  try {
+    const adsManager = new AdsManager(req, 'deleting');
+    const deletedAd = await adsManager.delete();
+    res.locals.adPet = deletedAd;
+    return next();
+  } catch (err) {
+    return next(err);
+  }
 }
 
 module.exports = {

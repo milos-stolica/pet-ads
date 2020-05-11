@@ -1,7 +1,4 @@
-const MulterUploader = require('../../services/MulterUploader');
 const SubscriptionManager = require('../../services/SubscriptionManager');
-
-const upload = MulterUploader.upload('file');
 
 const getSubscriptionsForUser = async(req, res, next) => {
   const subscriptionManager = new SubscriptionManager(req);
@@ -13,35 +10,25 @@ const getSubscriptionsForUser = async(req, res, next) => {
   }
 }
 
-const updateSubscription = (req, res, next) => {
-  upload(req, res, async(err) => {
-    if(err) {
-      return next(MulterUploader.handleError(err));
-    }
-    try {
-      const subscriptionManager = new SubscriptionManager(req);
-      const updatedSubscription = await subscriptionManager.update();
-      res.json(updatedSubscription);
-    } catch (err) {
-      next(err);
-    }
-  });
+const updateSubscription = async (req, res, next) => {
+  try {
+    const subscriptionManager = new SubscriptionManager(req);
+    const updatedSubscription = await subscriptionManager.update();
+    res.json(updatedSubscription);
+  } catch (err) {
+    next(err);
+  }
 }
 
-const saveSubscription = (req, res, next) => {
-  upload(req, res, async (err) => {
-    if(err) {
-      return next(MulterUploader.handleError(err));
-    }
-    try {
-      const subscritpionManager = new SubscriptionManager(req);
-      const savedSubscription = await subscritpionManager.save();
-      res.locals.savedSubscription = savedSubscription;
-      return next();
-    } catch (err) {
-      return next(err);
-    }
-  });
+const saveSubscription = async (req, res, next) => {
+  try {
+    const subscritpionManager = new SubscriptionManager(req);
+    const savedSubscription = await subscritpionManager.save();
+    res.locals.savedSubscription = savedSubscription;
+    return next();
+  } catch (err) {
+    return next(err);
+  }
 }
 
 const sendSubscription = (req, res, next) => {

@@ -1,5 +1,6 @@
 import types from "./actionTypes";
 import AxiosInstance, { handleAxiosResponse, handleAxiosError } from "../../services/Axios";
+import { incrementAPIsInProgress } from './apisInProgressActions';
 
 function loadAdTypesSuccess(ad_types) {
   return {
@@ -17,25 +18,19 @@ function loadPetTypesSuccess(pet_types) {
 
 export function loadAdTypes() {
   return (dispatch) => {
+    dispatch(incrementAPIsInProgress());
     return AxiosInstance.get('/types/ads')
-    .then(response => {
-      return handleAxiosResponse(response.status, response.data, loadAdTypesSuccess);
-    })
-    .catch(err => {
-      return handleAxiosError(err);
-    })
+    .then(response => handleAxiosResponse(response.status, response.data, loadAdTypesSuccess))
+    .catch(err => handleAxiosError(err));
   }
 }
 
 export function loadPetTypes() {
   return (dispatch) => {
+    dispatch(incrementAPIsInProgress());
     return AxiosInstance.get('/types/pets')
-      .then(response => {
-        return handleAxiosResponse(response.status, response.data, loadPetTypesSuccess);
-      })
-      .catch(err => {
-        return handleAxiosError(err);
-      })
+      .then(response => handleAxiosResponse(response.status, response.data, loadPetTypesSuccess))
+      .catch(err => handleAxiosError(err));
   }
 }
 

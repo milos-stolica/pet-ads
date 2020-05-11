@@ -1,5 +1,6 @@
 import types from "./actionTypes";
 import AxiosInstance, { handleAxiosResponse, handleAxiosError } from "../../services/Axios";
+import { incrementAPIsInProgress, decrementAPIsInProgress } from './apisInProgressActions';
 
 function loadAdsSuccess(ads) {
   return {
@@ -18,6 +19,13 @@ function addAdSuccess(ad) {
 function updateAdSuccess(ad) {
   return {
     type: types.UPDATE_AD_SUCCESS,
+    ad
+  }
+}
+
+function deleteAdSuccess(ad) {
+  return {
+    type: types.DELETE_AD_SUCCESS,
     ad
   }
 }
@@ -43,10 +51,14 @@ const config = {
 }
 
 export function loadAds() {
-  return () => {
+  return (dispatch) => {
+    dispatch(incrementAPIsInProgress());
     return AxiosInstance.get('/ads')
     .then(response => { 
-      if(response.data.length === 0) return response.status;
+      if(response.data.length === 0) {
+        dispatch(decrementAPIsInProgress());
+        return response.status;
+      }
       return handleAxiosResponse(response.status, response.data, loadAdsSuccess);
     })
     .catch(err => handleAxiosError(err));
@@ -55,7 +67,8 @@ export function loadAds() {
 
 export function addAd(ad, image) {
   const formData = getFormData(ad, image);
-  return () => {
+  return (dispatch) => {
+    dispatch(incrementAPIsInProgress());
     return AxiosInstance.post('/ads', formData, config)
     .then(response => handleAxiosResponse(response.status, response.data, addAdSuccess))
     .catch(err => handleAxiosError(err));
@@ -65,9 +78,19 @@ export function addAd(ad, image) {
 export function updateAd(ad, image) {
   const formData = getFormData(ad, image);
   formData.append('id', ad._id);
-  return () => {
+  return (dispatch) => {
+    dispatch(incrementAPIsInProgress());
     return AxiosInstance.put('/ads', formData, config)
     .then(response => handleAxiosResponse(response.status, response.data, updateAdSuccess))
+    .catch(err => handleAxiosError(err));
+  }
+}
+
+export function deleteAd(id) {
+  return (dispatch) => {
+    dispatch(incrementAPIsInProgress());
+    return AxiosInstance.delete(`/ads/${id}`)
+    .then(response => handleAxiosResponse(response.status, response.data, deleteAdSuccess))
     .catch(err => handleAxiosError(err));
   }
 }

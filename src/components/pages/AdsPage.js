@@ -5,10 +5,12 @@ import qs from 'query-string';
 import { connect } from "react-redux";
 import {conditionalCallbackExecution as trySetState} from '../../utils/conditionalCallbackCall';
 import { isNotEmpty, filterByCriteriums } from '../../utils/arraysHelper';
-import { addIconsToPetTypes, populateCitiesDropdown } from '../../utils/homeAndAdsPageHelper';
+import { populateCitiesDropdown } from '../../utils/homeAndAdsPageHelper';
+import { addIconsToPetTypes } from '../../utils/iconsHelper';
+import Spinner from '../common/Spinner';
 
 //controller
-function AdsPage ({allAds, allStates, types, location}) {
+function AdsPage ({allAds, allStates, types, loading, location}) {
   const adsCategory = qs.parse(location.search).type;
   
   const [activeCategory, setActiveCategory] = useState(adsCategory);
@@ -29,13 +31,22 @@ function AdsPage ({allAds, allStates, types, location}) {
   const petTypeBarBackground = '#212529';
 
   function handlePetTypeChange(event) {
-    const filteringCriteriums = { type: event.currentTarget.name, state: activeState, city: activeCity, ad_type: activeCategory};
+    const filteringCriteriums = { 
+      ...(event.currentTarget.name !== 'All types' && {type: event.currentTarget.name}), 
+      ...(activeState !== 'All states' && {state: activeState}), 
+      ...(activeCity !== 'All cities' && {city: activeCity}), 
+      ad_type: activeCategory
+    };
     setSelectedAds(filterByCriteriums(allAds, filteringCriteriums));
     setActivePetType(event.currentTarget.name);
   }
 
   function handleStateChange(event) {
-    const filteringCriteriums = { state: event.currentTarget.name, type: activePetType, ad_type: activeCategory};
+    const filteringCriteriums = { 
+      ...(event.currentTarget.name !== 'All states' && {state: event.currentTarget.name}), 
+      ...(activePetType !== 'All types' && {type: activePetType}), 
+      ad_type: activeCategory
+    };
     setSelectedAds(filterByCriteriums(allAds, filteringCriteriums));
     setActiveState(event.currentTarget.name);
     populateCitiesDropdown(event.currentTarget.name, allStates, setCitiesDropdownItems);
@@ -43,7 +54,12 @@ function AdsPage ({allAds, allStates, types, location}) {
   }
 
   function handleCityChange(event) {
-    const filteringCriteriums = { city: event.currentTarget.name, state: activeState, type: activePetType, ad_type: activeCategory};
+    const filteringCriteriums = { 
+      ...(event.currentTarget.name !== 'All cities' && {city: event.currentTarget.name}), 
+      ...(activeState !== 'All states' && {state: activeState}),
+      ...(activePetType !== 'All types' && {type: activePetType}),
+      ad_type: activeCategory
+    };
     setSelectedAds(filterByCriteriums(allAds, filteringCriteriums));
     setActiveCity(event.currentTarget.name);
   }
@@ -61,7 +77,7 @@ function AdsPage ({allAds, allStates, types, location}) {
   }
 
   function initSelectedAds() {
-    const filteringCriteriums = { city: activeCity, state: activeState, type: activePetType, ad_type: activeCategory};
+    const filteringCriteriums = { ad_type: activeCategory };
     trySetState(isNotEmpty(allAds), setSelectedAds, filterByCriteriums(allAds, filteringCriteriums));
   }
 
@@ -78,25 +94,30 @@ function AdsPage ({allAds, allStates, types, location}) {
 
   return (
     <>
-      <SelectItemBar 
-        barItems={petTypeBarItems}
-        handleSelection={handlePetTypeChange} 
-        activeItem={activePetType}
-        dropdown1 = {statesDropdownItems}
-        dropdown1Active = {activeState} 
-        handleDropdown1Selection = {handleStateChange}
-        dropdown2 = {citiesDropdownItems}
-        dropdown2Active = {activeCity} 
-        handleDropdown2Selection = {handleCityChange}
-        color={petTypeBarBackground}>
-      </SelectItemBar>
-      <h6 className="general-info text-center my-3">{generalInfo}</h6>
-      <AdList 
-        ads={selectedAds} 
-        lgCol={4} 
-        mdCol={6}
-        shouldAddModificationButtons={false}>
-      </AdList>
+      {loading ?
+       <Spinner></Spinner> : (
+        <>
+          <SelectItemBar 
+            barItems={petTypeBarItems}
+            handleSelection={handlePetTypeChange} 
+            activeItem={activePetType}
+            dropdown1 = {statesDropdownItems}
+            dropdown1Active = {activeState} 
+            handleDropdown1Selection = {handleStateChange}
+            dropdown2 = {citiesDropdownItems}
+            dropdown2Active = {activeCity} 
+            handleDropdown2Selection = {handleCityChange}
+            color={petTypeBarBackground}>
+          </SelectItemBar>
+          <h6 className="general-info text-center my-3">{generalInfo}</h6>
+          <AdList 
+            ads={selectedAds} 
+            lgCol={4} 
+            mdCol={6}
+            shouldAddModificationButtons={false}>
+          </AdList>
+        </>
+       )}
     </>  
   )
 }
@@ -105,12 +126,13 @@ function mapStateToProps(state) {
   return {
     allAds: state.ads,
     types: state.types,
-    allStates: state.states
-  }
+    allStates: state.states,
+    loading: state.apisInProgress > 0
+  };
 }
 
 function mapDispatchToProps(dispatch) {
-  return {}
+  return {};
 }
 
 export default connect(mapStateToProps, mapDispatchToProps) (AdsPage);

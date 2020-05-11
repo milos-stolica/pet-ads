@@ -1,9 +1,12 @@
 import React, {useState, useEffect} from 'react';
 import { Container } from 'react-bootstrap';
 import { useParams } from 'react-router-dom';
+import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import Ad from '../common/Ad';
+import InfoCard from '../common/InfoCard';
 import { isNotEmpty } from '../../utils/arraysHelper';
+import { deleteAd } from '../../redux/actions/adsActions';
+import Spinner from '../common/Spinner';
 
 const initAd = {
   description: '',
@@ -18,7 +21,7 @@ const initAd = {
 };
 
 //controller
-function AdDetailsPage({allAds, user}) {
+function AdDetailsPage({allAds, user, actions, loading}) {
   const [ad, setAd] = useState(initAd);
   const [imgUrl, setImgUrl] = useState('');
   const { id } = useParams();
@@ -33,27 +36,40 @@ function AdDetailsPage({allAds, user}) {
     }
   }
 
+  function deleteAdById(id) {
+    return function handleDelete(event) {
+      actions.deleteAd(id);
+    };
+  }
+
   useEffect(trySetAdDetails, [allAds, id]);
 
   return (
     <Container>
-      <h1 className='text-center'>{`${ad.type} - ${ad.state} (${ad.city})`}</h1>
-      <div className="ad-details m-auto">
-        <Ad 
-          id={ad._id}
-          key={ad._id}
-          ad_type={ad.ad_type}
-          pet_type={ad.type}  
-          phone_number={ad.phone}  
-          short_desc={ad.description}
-          email={ad.email}
-          img_url={imgUrl}
-          price={ad.price}
-          state={ad.state}
-          city={ad.city}
-          shouldAddModificationButtons={user.loggedIn && user._id === ad.ownerId}>
-        </Ad>
-      </div>
+      {loading ? 
+        <Spinner></Spinner> : (
+          <>
+            <h1 className='text-center'>{`${ad.type} - ${ad.state} (${ad.city})`}</h1>
+            <div className="ad-details m-auto">
+              <InfoCard
+                id={ad._id}
+                key={ad._id}
+                imgUrl={imgUrl}
+                title={`${ad.type} - ${ad.state} (${ad.city})`}
+                description={ad.description}
+                information={
+                  [{name: 'Phone', value: ad.phone}, 
+                  {name: 'Email', value: ad.email}, 
+                  {name: 'Price', value: ad.price}]
+                }
+                links={
+                  [{name: 'Update', address: user.loggedIn && user._id === ad.ownerId && `/new/ad/${ad._id}`},
+                  {name: 'Delete', action: user.loggedIn && user._id === ad.ownerId && deleteAdById, class: 'btn-danger'}]
+                }>
+              </InfoCard>
+            </div>
+          </>
+      )}
     </Container>
   );
 }
@@ -61,12 +77,17 @@ function AdDetailsPage({allAds, user}) {
 function mapStateToProps(state) {
   return {
     allAds: state.ads,
-    user: state.user
-  }
+    user: state.user,
+    loading: state.apisInProgress > 0
+  };
 }
 
 function mapDispatchToProps(dispatch) {
-  return {}
+  return {
+    actions: {
+      deleteAd: bindActionCreators(deleteAd, dispatch)
+    }
+  };
 }
 
 export default connect(mapStateToProps, mapDispatchToProps) (AdDetailsPage);

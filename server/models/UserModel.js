@@ -51,7 +51,7 @@ UserSchema.methods.addSubscription = function (subscription) {
 }
 
 UserSchema.methods.deleteAd = function (ad) {
-  this.ads = this.ads.filter(adFromDb => adFromDb !== ad);
+  this.ads = this.ads.filter(adFromDb => adFromDb.toString() !== ad.toString());
   this.save();
 }
 

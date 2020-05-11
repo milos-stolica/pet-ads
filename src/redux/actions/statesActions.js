@@ -1,6 +1,7 @@
 import axios from "axios";
 import types from "./actionTypes";
 import { handleAxiosResponse, handleAxiosError } from "../../services/Axios";
+import { incrementAPIsInProgress } from './apisInProgressActions';
 
 function loadStatesSuccess(states) {
   return {
@@ -25,7 +26,8 @@ const config = {
 }
 
 export function loadStates() {
-  return () => {
+  return (dispatch) => {
+    dispatch(incrementAPIsInProgress());
     return axios.get('https://ajayakv-rest-countries-v1.p.rapidapi.com/rest/v1/all', config)
     .then(response => {
       const statesData = extractStatesNameAndCode(response.data);

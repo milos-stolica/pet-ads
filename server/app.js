@@ -5,6 +5,7 @@ const mongoose = require('mongoose');
 const adsRouter = require('./routes/ads');
 const typesRouter = require('./routes/types');
 const authRouter = require('./routes/auth');
+const subscriptionsRouter = require('./routes/subscriptions');
 const createError = require('http-errors');
 const compression = require('compression');
 const cookieParser = require('cookie-parser');
@@ -12,7 +13,7 @@ const helmet = require('helmet');
 const path = require('path');
 const { makeDirectories } = require('./utils');
 const { authentificateUser } = require('./controllers/auth');
-
+const MulterUploader = require('./services/MulterUploader');
 
 const app = express();
 //to do zasto ne moze da se skloni x-powered-by heder
@@ -38,6 +39,9 @@ app.use(helmet());
 app.use(cookieParser());
 app.use(authentificateUser);
 
+const upload = MulterUploader.upload('file');
+app.use('*', MulterUploader.parseFormData(upload));
+
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.get('/favicon.ico', (req, res) => res.sendStatus(204));
@@ -49,6 +53,7 @@ app.get('/', (req, res) => {
 app.use('/ads', adsRouter);
 app.use('/types', typesRouter);
 app.use('/auth', authRouter);
+app.use('/subscriptions', subscriptionsRouter);
 
 // catch 404 and forward to error handler
 app.use((req, res, next) => {
@@ -58,6 +63,7 @@ app.use((req, res, next) => {
 
 // error handler
 app.use((err, req, res, next) => {
+  console.log(err);
   const status = err.status || 500; // If no status is provided, let's assume it's a 500
   return res.status(status).end(`Error status: ${status}`);
 });

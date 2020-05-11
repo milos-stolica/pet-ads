@@ -23,6 +23,18 @@ h1{
   color: white !important;
 }
 
+.btn-danger {
+  color: #fff !important;
+  background-color: #dc3545 !important;
+  border-color: #dc3545 !important;
+}
+
+.btn-danger:hover {
+  color: #fff !important;
+  background-color: #c82333 !important;
+  border-color: #bd2130 !important;
+}
+
 .card-form{
   margin-left: 15%;
   margin-right: 15%;
@@ -148,4 +160,47 @@ Button.selected-item{
 /* AdDetailsPage Component */
 .ad-details{
   width: 70%;
+}
+
+/*Spinner Component*/
+/* via https://projects.lukehaas.me/css-loaders/ */
+.loader,.loader:after {
+  border-radius: 50%;
+  width: 10em;
+  height: 10em;
+}
+.loader {
+  margin: 60px auto;
+  font-size: 10px;
+  position: relative;
+  text-indent: -9999em;
+  border-top: 1.1em solid rgba(255, 151, 0, 0.2);
+  border-right: 1.1em solid rgba(255, 151, 0, 0.2);
+  border-bottom: 1.1em solid rgba(255, 151, 0, 0.2);
+  border-left: 1.1em solid#f3d915;
+  -webkit-transform: translateZ(0);
+  -ms-transform: translateZ(0);
+  transform: translateZ(0);
+  -webkit-animation: load8 1.1s infinite linear;
+  animation: load8 1.1s infinite linear;
+}
+@-webkit-keyframes load8 {
+  0% {
+    -webkit-transform: rotate(0deg);
+    transform: rotate(0deg);
+  }
+  100% {
+    -webkit-transform: rotate(360deg);
+    transform: rotate(360deg);
+  }
+}
+@keyframes load8 {
+  0% {
+    -webkit-transform: rotate(0deg);
+    transform: rotate(0deg);
+  }
+  100% {
+    -webkit-transform: rotate(360deg);
+    transform: rotate(360deg);
+  }
 }

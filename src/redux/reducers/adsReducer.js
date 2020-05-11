@@ -9,6 +9,8 @@ function adsReducer(state = initialState.ads, action) {
       return [...state, action.ad];
     case types.UPDATE_AD_SUCCESS:
       return state.map(ad => ad._id === action.ad._id ? action.ad : ad);
+    case types.DELETE_AD_SUCCESS:
+      return state.filter(ad => ad._id !== action.ad._id);
     default:
       return state;
   }

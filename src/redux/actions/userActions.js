@@ -1,5 +1,6 @@
 import types from "./actionTypes";
 import AxiosInstance, { handleAxiosResponse, handleAxiosError } from "../../services/Axios";
+import { incrementAPIsInProgress } from './apisInProgressActions';
 
 function registerUserSuccess(user) {
   return {
@@ -39,7 +40,8 @@ const config = {
 
 export function registerUser(user, image) {
   const formData = getFormData(user, image);
-  return () => {
+  return (dispatch) => {
+    dispatch(incrementAPIsInProgress());
     return AxiosInstance.post('/auth/register', formData, config)
       .then(response => handleAxiosResponse(response.status, response.data.user, registerUserSuccess))
       .catch(err => handleAxiosError(err));
@@ -48,7 +50,8 @@ export function registerUser(user, image) {
 
 export function loginUser(userCredentials) {
   const formData = getFormData(userCredentials);
-  return () => {
+  return (dispatch) => {
+    dispatch(incrementAPIsInProgress());
     return AxiosInstance.post('/auth/login', formData, config)
       .then(response => handleAxiosResponse(response.status, response.data.user, loginUserSuccess))
       .catch(err => handleAxiosError(err));
@@ -56,7 +59,8 @@ export function loginUser(userCredentials) {
 }
 
 export function logoutUser() {
-  return () => {
+  return (dispatch) => {
+    dispatch(incrementAPIsInProgress());
     return AxiosInstance.post('/auth/logout')
       .then(response => handleAxiosResponse(response.status, null, logoutUserSuccess))
       .catch(err => handleAxiosError(err));

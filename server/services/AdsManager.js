@@ -39,6 +39,8 @@ module.exports = class AdsManager {
 
   //TODO izbrisati cijenu ako se tip oglasa promijeni sa sell na neki drugi
   async update() {
+    if(!this.valid) return Promise.reject(createError(400, 'Validation failed'));
+
     const shouldUpdateImageOrLocation = (ad) => {
       return this.req.file || (ad.ad_type !== this.req.body.ad_type);
     }
@@ -48,9 +50,9 @@ module.exports = class AdsManager {
         const ad = await AdPetModel.findById(this.req.body.id);
         if(!shouldUpdateImageOrLocation(ad)) Promise.resolve(false);
         if(this.req.file) {
-          //delete previously saved image and save new one
-          ImageController.deleteImage(path.join(__dirname, '../public', 'ads_images', ad.ad_type, ad.image_name));
+          //save new one and delete previously saved image
           await this.imgSaver.saveImage();
+          await ImageController.deleteImage(path.join(__dirname, '../public', 'ads_images', ad.ad_type, ad.image_name));
         } else if (ad.ad_type !== this.req.body.ad_type){
           //only destination for image is changed
           const oldPath = path.join(__dirname, '../public', 'ads_images', ad.ad_type, ad.image_name);
@@ -63,32 +65,35 @@ module.exports = class AdsManager {
       }
     }
 
-    if(this.valid) {
-      try {
-        const ad = this.constructAd();
-        const [updatedAd, ] = await Promise.all([AdPetModel.findOneAndUpdate({ _id: this.req.body.id }, ad, { new: true }), tryUpdateImage()]);
-        return Promise.resolve(updatedAd);
-      } catch (err) {
-        return Promise.reject(err);
-      }
-    } else {
-      return Promise.reject(createError(400, 'Validation failed'));
-    }
+    try {
+      const ad = this.constructAd();
+      const [updatedAd, ] = await Promise.all([AdPetModel.findOneAndUpdate({ _id: this.req.body.id }, ad, { new: true }), tryUpdateImage()]);
+      return Promise.resolve(updatedAd);
+    } catch (err) {
+      return Promise.reject(err);
+    }   
   }
 
   async save() {
-    if(this.valid) {
-      try {
-        const ad = this.constructAd();
-        const adPetDoc = new AdPetModel(ad);
-        const [adPet, ] = await Promise.all([adPetDoc.save(), this.saveImage()]);
-        return Promise.resolve(adPet);
-      } catch (err) {
-        return Promise.reject(err);
-      }
-    } else {
-      return Promise.reject(createError(400, 'Validation failed'));
+    if(!this.valid) return Promise.reject(createError(400, 'Validation failed'));
+    try {
+      const ad = this.constructAd();
+      const adPetDoc = new AdPetModel(ad);
+      const [adPet, ] = await Promise.all([adPetDoc.save(), this.saveImage()]);
+      return Promise.resolve(adPet);
+    } catch (err) {
+      return Promise.reject(err);
     }
+  }
+
+  async delete() {
+    if(!this.req.params.id) return Promise.reject(createError(400, 'Bad request'));
+    try {
+      const deleted = await AdPetModel.findOneAndDelete(this.req.params.id);
+      return Promise.resolve(deleted);
+    } catch (err) {
+      Promise.reject(err);
+    }  
   }
 
   saveImage() {

@@ -5,5 +5,7 @@ export default {
     ads: [],
     pets: []
   },
-  user: {}
+  user: {},
+  userSubscriptions: [],
+  apisInProgress: 0
 }
