@@ -23,6 +23,13 @@ function updateSubscriptionsSuccess(subscription) {
   }
 }
 
+function deleteSubscriptionSuccess(subscription) {
+  return {
+    type: types.DELETE_SUBSCRIPTION_SUCCESS,
+    subscription
+  }
+}
+
 function getFormData(subscription) {
   const formData = new FormData();
   formData.append('petType', subscription.petType);
@@ -70,6 +77,15 @@ export function updateSubscription(subscription) {
     dispatch(incrementAPIsInProgress());
     return AxiosInstance.put('/subscriptions', formData, config)
     .then(response => handleAxiosResponse(response.status, response.data, updateSubscriptionsSuccess))
+    .catch(err => handleAxiosError(err));
+  }
+}
+
+export function deleteSubscription(id) {
+  return (dispatch) => {
+    dispatch(incrementAPIsInProgress());
+    return AxiosInstance.delete(`/subscriptions/${id}`)
+    .then(response => handleAxiosResponse(response.status, response.data, deleteSubscriptionSuccess))
     .catch(err => handleAxiosError(err));
   }
 }

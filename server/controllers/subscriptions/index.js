@@ -24,7 +24,18 @@ const saveSubscription = async (req, res, next) => {
   try {
     const subscritpionManager = new SubscriptionManager(req);
     const savedSubscription = await subscritpionManager.save();
-    res.locals.savedSubscription = savedSubscription;
+    res.locals.subscription = savedSubscription;
+    return next();
+  } catch (err) {
+    return next(err);
+  }
+}
+
+const deleteSubscription = async (req, res, next) => {
+  try {
+    const subscriptionManager = new SubscriptionManager(req);
+    const deletedSubscription = await subscriptionManager.delete();
+    res.locals.subscription = deletedSubscription;
     return next();
   } catch (err) {
     return next(err);
@@ -32,12 +43,8 @@ const saveSubscription = async (req, res, next) => {
 }
 
 const sendSubscription = (req, res, next) => {
-  const {savedSubscription} = res.locals;
-  return res.json(savedSubscription);
-}
-
-const deleteSubscription = (req, res, next) => {
-
+  const { subscription } = res.locals;
+  return res.json(subscription);
 }
 
 module.exports = {

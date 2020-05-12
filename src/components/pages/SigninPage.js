@@ -16,6 +16,7 @@ const initCredentials = {
 function SigninPage ({actions}) {
   const [credentials, setCredentials] = useState(initCredentials);
   const [errors, setErrors] = useState({});
+  const [signingIn, setSigningIn] = useState(false);
   const history = useHistory();
 
   function getFormErrors() {
@@ -37,8 +38,12 @@ function SigninPage ({actions}) {
   function handleSubmit(event) {
     event.preventDefault();
     if(isFormValid()) {
+      setSigningIn(true);
       actions.loginUser(credentials)
-      .then(statusCode => (statusCode < 400 && history.push('/')) || (statusCode >= 400 && setErrors({wrongCredentials: 'Wrong credentials.'})));
+      .then(statusCode => {
+         setSigningIn(false);
+         (statusCode < 400 && history.push('/')) || (statusCode >= 400 && setErrors({wrongCredentials: 'Wrong credentials.'}));
+      })
     }
   }
 
@@ -51,7 +56,8 @@ function SigninPage ({actions}) {
             credentials={credentials}  
             onChange={handleChange} 
             onSubmit={handleSubmit} 
-            errors={errors}>
+            errors={errors}
+            signingIn={signingIn}>
           </SigninForm>
         </Card.Body>
       </Card>

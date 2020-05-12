@@ -6,6 +6,7 @@ import ImageSelector from '../common/ImageSelector';
 function ManageAdForm (props) {
   const { description, type, ad_type, image_name, city, state, phone, email, price, _id } = props.ad;
   const { errors, states, cities, petTypes, adTypes } = props;
+  const { actionInProgress } = props;
   return (
     <Form onSubmit={props.onSubmit}>
       <Form.Row>
@@ -84,7 +85,12 @@ function ManageAdForm (props) {
         </Form.Group>
       </Form.Row>
       
-      <Button className="button-success" type="submit">{_id ? 'Update' : 'Save'}</Button>  
+      <Button 
+        className="button-success" 
+        disabled={actionInProgress}
+        type="submit">
+        {_id ? (actionInProgress ? 'Updating...' : 'Update') : (actionInProgress ? 'Saving...' : 'Save')}
+      </Button>  
     </Form>
   );
 }

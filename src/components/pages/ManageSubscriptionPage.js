@@ -8,7 +8,6 @@ import { useHistory, useParams } from 'react-router-dom';
 import CitiesManager from '../../services/CitiesManager';
 import Validator from '../../services/Validator';
 import { isNotEmpty } from '../../utils/arraysHelper';
-import Spinner from '../common/Spinner';
 
 const initSubscription = {
   adType: '',
@@ -18,10 +17,11 @@ const initSubscription = {
 };
 
 //controller
-function ManageSubscriptionPage({userSubscriptions, allStates, types, loading, actions}) {
+function ManageSubscriptionPage({userSubscriptions, allStates, types, actions}) {
   const [subscription, setSubscription] = useState(initSubscription);
   const [errors, setErrors] = useState({});
   const [cities, setCities] = useState([]);
+  const [actionInProgress, setActionInProgress] = useState(false);
   const { id } = useParams();
   const history = useHistory();
 
@@ -74,36 +74,32 @@ function ManageSubscriptionPage({userSubscriptions, allStates, types, loading, a
   function handleSubmit(event) {
     event.preventDefault();
     if(isFormValid()) {
-      console.log('Form is valid and will be submitted soon...');
-      let func = subscription._id !== undefined ? 'updateSubscription' : 'addSubscription';
-      actions[func](subscription).then(statusCode => {
-        statusCode < 400 ? history.push(`/user/profile`) : history.push(`/error/${statusCode}`);
-      });
+      setActionInProgress(true);
+        let func = subscription._id !== undefined ? 'updateSubscription' : 'addSubscription';
+        actions[func](subscription).then(statusCode => {
+          statusCode < 400 ? history.push(`/user/profile`) : history.push(`/error/${statusCode}`);
+        });
     }
   }
 
   return (
     <Container>
-      {loading ? 
-        <Spinner></Spinner> : (
-          <>
-            <h1 className="text-center">{subscription._id ? 'Update subscription' : 'Add new subscription'}</h1>
-            <Card className="card-form">
-              <Card.Body>
-                <ManageSubscriptionForm 
-                  subscription={subscription} 
-                  states={allStates.map(state => state.name)} 
-                  cities={cities}
-                  petTypes={types.pets}
-                  adTypes={types.ads} 
-                  onChange={handleChange} 
-                  onSubmit={handleSubmit} 
-                  errors={errors}>
-                </ManageSubscriptionForm>
-              </Card.Body>
-            </Card>
-          </>
-        )}
+      <h1 className="text-center">{subscription._id ? 'Update subscription' : 'Add new subscription'}</h1>
+      <Card className="card-form">
+        <Card.Body>
+          <ManageSubscriptionForm 
+            subscription={subscription} 
+            states={allStates.map(state => state.name)} 
+            cities={cities}
+            petTypes={types.pets}
+            adTypes={types.ads} 
+            onChange={handleChange} 
+            onSubmit={handleSubmit} 
+            errors={errors}
+            actionInProgress={actionInProgress}>
+          </ManageSubscriptionForm>
+        </Card.Body>
+      </Card>
     </Container>
   );
 }
@@ -112,8 +108,7 @@ function mapStateToProps(state) {
   return {
     userSubscriptions: state.userSubscriptions,
     allStates: state.states,
-    types: state.types,
-    loading: state.apisInProgress > 0
+    types: state.types
   }
 }
 

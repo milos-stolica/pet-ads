@@ -5,7 +5,7 @@ import ImageSelector from '../common/ImageSelector';
 //dumb
 function SignupForm (props) {
   const { firstName, lastName, email, password, image_name } = props.user;
-  const errors = props.errors;
+  const { errors, signingUp } = props;
   return (
     <Form onSubmit={props.onSubmit}>
       <Form.Row>
@@ -42,7 +42,12 @@ function SignupForm (props) {
         </Form.Group>
       </Form.Row>
 
-      <Button className="ml-3 button-success" type="submit">Sign up</Button>
+      <Button 
+        className="ml-3 button-success" 
+        disabled={signingUp}
+        type="submit">
+        {signingUp ? 'Signing up...' : 'Sign up'}
+      </Button>
     </Form>
   );
 }

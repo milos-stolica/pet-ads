@@ -5,6 +5,7 @@ import { Form, Button, Col } from 'react-bootstrap';
 function ManageSubscriptionForm (props) {
   const { petType, adType, city, state, _id } = props.subscription;
   const { errors, states, cities, petTypes, adTypes } = props;
+  const { actionInProgress } = props;
   return (
     <Form onSubmit={props.onSubmit}>
       <Form.Row>
@@ -47,7 +48,12 @@ function ManageSubscriptionForm (props) {
           {errors.city && <div className='alert alert-danger'>{errors.city}</div>}
         </Form.Group>  
       </Form.Row>
-      <Button className="button-success" type="submit">{_id ? 'Update' : 'Save'}</Button>  
+      <Button 
+        className="button-success" 
+        disabled={actionInProgress} 
+        type="submit">
+        {_id ? (actionInProgress ? 'Updating...' : 'Update') : (actionInProgress ? 'Saving...' : 'Save')}
+      </Button>  
     </Form>
   );
 }

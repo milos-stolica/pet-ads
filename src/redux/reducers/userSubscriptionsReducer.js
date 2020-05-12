@@ -9,6 +9,8 @@ function userSubscriptionsReducer(state = initialState.userSubscriptions, action
       return [...state, action.subscription];
     case types.UPDATE_SUBSCRIPTION_SUCCESS:
       return state.map(subscription => subscription._id === action.subscription._id ? action.subscription : subscription);
+    case types.DELETE_SUBSCRIPTION_SUCCESS:
+      return state.filter(subscription => subscription._id !== action.subscription._id);
     default:
       return state;
   }

@@ -11,8 +11,19 @@ router.param('id', (req, res, next, id) => {
 
 router.route('/')
 .get(getAds)
-.put(checkAuthentificated, checkUserPermissions('adManipulation'), updateAd)
-.post(checkAuthentificated, saveAd, updateUserAds('addAd'), sendAd);
-router.delete('/:id', checkAuthentificated, checkUserPermissions('adManipulation'), deleteAd, updateUserAds('deleteAd'), sendAd);
+.put(
+  checkAuthentificated, 
+  checkUserPermissions('adManipulation'), 
+  updateAd)
+.post(
+  checkAuthentificated, 
+  saveAd, updateUserAds('addAd'), 
+  sendAd);
+router.delete('/:id', 
+  checkAuthentificated, 
+  checkUserPermissions('adManipulation'), 
+  deleteAd, 
+  updateUserAds('deleteAd'), 
+  sendAd);
 
 module.exports = router;

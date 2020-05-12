@@ -8,7 +8,6 @@ import { useHistory, useParams } from 'react-router-dom';
 import CitiesManager from '../../services/CitiesManager';
 import Validator from '../../services/Validator';
 import { isNotEmpty } from '../../utils/arraysHelper';
-import Spinner from '../common/Spinner';
 
 const initAd = {
   description: '',
@@ -23,12 +22,13 @@ const initAd = {
 };
 
 //controller
-function ManageAdPage({allAds, allStates, types, loading, actions}) {
+function ManageAdPage({allAds, allStates, types, actions}) {
   const [ad, setAd] = useState(initAd);
   const [file, setFile] = useState(null);
   const [errors, setErrors] = useState({});
   const [imgUrl, setImgUrl] = useState('');
   const [cities, setCities] = useState([]);
+  const [actionInProgress, setActionInProgress] = useState(false);
   const { id } = useParams();
   const history = useHistory();
 
@@ -97,9 +97,10 @@ function ManageAdPage({allAds, allStates, types, loading, actions}) {
   function handleSubmit(event) {
     event.preventDefault();
     if(isFormValid()) {
-      console.log('Form is valid and will be submitted soon...');
+      setActionInProgress(true);
       let func = ad._id !== undefined ? 'updateAd' : 'addAd';
       actions[func](ad, file).then(statusCode => {
+        setActionInProgress(false);
         statusCode < 400 ? history.push(`/ads?type=${ad.ad_type}`) : history.push(`/error/${statusCode}`);
       });
     }
@@ -107,27 +108,23 @@ function ManageAdPage({allAds, allStates, types, loading, actions}) {
 
   return (
     <Container>
-      {loading ? 
-      <Spinner></Spinner> : (
-        <>
-          <h1 className="text-center">{ad._id ? 'Update ad' : 'Add new ad'}</h1>
-          <Card className="card-form">
-            <Card.Body>
-              <ManageAdForm 
-                ad={ad} 
-                imageUrl={imgUrl} 
-                states={allStates.map(state => state.name)} 
-                cities={cities}
-                petTypes={types.pets}
-                adTypes={types.ads} 
-                onChange={handleChange} 
-                onSubmit={handleSubmit} 
-                errors={errors}>
-              </ManageAdForm>
-            </Card.Body>
-          </Card>
-        </>
-      )}
+      <h1 className="text-center">{ad._id ? 'Update ad' : 'Add new ad'}</h1>
+      <Card className="card-form">
+        <Card.Body>
+          <ManageAdForm 
+            ad={ad} 
+            imageUrl={imgUrl} 
+            states={allStates.map(state => state.name)} 
+            cities={cities}
+            petTypes={types.pets}
+            adTypes={types.ads} 
+            onChange={handleChange} 
+            onSubmit={handleSubmit} 
+            errors={errors}
+            actionInProgress={actionInProgress}>
+          </ManageAdForm>
+        </Card.Body>
+      </Card>
     </Container>
   );
 }
@@ -136,8 +133,7 @@ function mapStateToProps(state) {
   return {
     allAds: state.ads,
     allStates: state.states,
-    types: state.types,
-    loading: state.apisInProgress > 0
+    types: state.types
   }
 }
 

@@ -4,7 +4,7 @@ import { Form, Button, Col } from 'react-bootstrap';
 //dumb
 function SigninForm (props) {
   const { email, password } = props.credentials;
-  const errors = props.errors;
+  const { errors, signingIn } = props;
   return(
     <Form onSubmit={props.onSubmit}>
       {errors.wrongCredentials && <div className='alert alert-danger'>{errors.wrongCredentials}</div>}
@@ -20,7 +20,12 @@ function SigninForm (props) {
       </Form.Group>
 
       <Form.Group as={Col} controlId="submit">
-        <Button className="button-success" type="submit">Login</Button>
+        <Button 
+          className="button-success" 
+          disabled={signingIn}
+          type="submit">
+          {signingIn ? 'Signing in...' : 'Sign in'}
+        </Button>
       </Form.Group> 
     </Form>
   );

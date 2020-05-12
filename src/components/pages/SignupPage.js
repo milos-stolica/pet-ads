@@ -22,6 +22,7 @@ function SignupPage ({actions}) {
   const [file, setFile] = useState(null);
   const [imgUrl, setImgUrl] = useState('');
   const [errors, setErrors] = useState({});
+  const [signingUp, setSigningUp] = useState(false);
   const history = useHistory();
 
   function trySetFileAndImage(event) {
@@ -56,8 +57,10 @@ function SignupPage ({actions}) {
   function handleSubmit(event) {
     event.preventDefault();
     if(isFormValid()) {
+      setSigningUp(true);
       actions.registerUser(user, file)
       .then(statusCode => {
+        setSigningUp(false);
         statusCode < 400 && history.push('/signin');
         return statusCode;
       })
@@ -79,7 +82,8 @@ function SignupPage ({actions}) {
             onChange={handleChange} 
             onSubmit={handleSubmit} 
             imageUrl={imgUrl}
-            errors={errors}>
+            errors={errors}
+            signingUp={signingUp}>
           </SignupForm>
         </Card.Body>
       </Card>

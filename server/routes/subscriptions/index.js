@@ -10,9 +10,23 @@ router.param('id', (req, res, next, id) => {
 });
 
 router.route('/')
-.get(checkAuthentificated, getSubscriptionsForUser)
-.put(checkAuthentificated, checkUserPermissions('subscriptionManipulation'), updateSubscription)
-.post(checkAuthentificated, saveSubscription, updateUserSubscriptions, sendSubscription)
-router.delete('/:id', checkAuthentificated, checkUserPermissions('subscriptionManipulation'), deleteSubscription);
+.get(
+  checkAuthentificated, 
+  getSubscriptionsForUser)
+.put(
+  checkAuthentificated, 
+  checkUserPermissions('subscriptionManipulation'), 
+  updateSubscription)
+.post(
+  checkAuthentificated, 
+  saveSubscription, 
+  updateUserSubscriptions('addSubscription'), 
+  sendSubscription)
+router.delete('/:id', 
+  checkAuthentificated, 
+  checkUserPermissions('subscriptionManipulation'), 
+  deleteSubscription,
+  updateUserSubscriptions('deleteSubscription'),
+  sendSubscription);
 
 module.exports = router;

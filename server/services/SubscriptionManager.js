@@ -52,6 +52,16 @@ module.exports = class SubscriptionManager {
       return Promise.reject(createError(400, 'Validation failed'));
     }
   }
+  
+  async delete() {
+    if(!this.req.params.id) return Promise.reject(createError(400, 'Bad request'));
+    try {
+      const deleted = await SubscriptionModel.findOneAndDelete(this.req.params.id);
+      return Promise.resolve(deleted);
+    } catch (err) {
+      Promise.reject(err);
+    }  
+  }
 
   //TODO make this inaccessable out of this class
   constructSubscription() {

@@ -6,6 +6,7 @@ import { Link } from 'react-router-dom';
 import AdList from '../common/AdList';
 import InfoCard from '../common/InfoCard';
 import { deleteAd } from '../../redux/actions/adsActions';
+import { deleteSubscription } from '../../redux/actions/userSubscriptionsActions';
 import Spinner from '../common/Spinner';
 
 //controller
@@ -14,6 +15,12 @@ function UserProfilePage({user, userAds, actions, userSubscriptions, loading}) {
   function deleteAdById(id) {
     return function handleDelete(event) {
       actions.deleteAd(id);
+    };
+  }
+
+  function deleteSubscriptionById(id) {
+    return function handleDelete(event) {
+      actions.deleteSubscription(id);
     };
   }
 
@@ -79,11 +86,13 @@ function UserProfilePage({user, userAds, actions, userSubscriptions, loading}) {
                   {userSubscriptions && userSubscriptions.map(subscription => {
                     return(
                       <InfoCard
+                        id={subscription._id}
                         key={subscription._id}
                         title={`${subscription.petType} - ${subscription.adType}`}
                         information={[{name: 'State', value: subscription.state},
                                       {name: 'City', value: subscription.city}]}
-                        links={[{name: 'Update', address: `/new/subscription/${subscription._id}`}]}>
+                        links={[{name: 'Update', address: `/new/subscription/${subscription._id}`},
+                                {name: 'Delete', action: deleteSubscriptionById, class: 'btn-danger'} ]}>
                       </InfoCard>
                     );
                   })}
@@ -109,7 +118,8 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
   return {
     actions: {
-      deleteAd: bindActionCreators(deleteAd, dispatch)
+      deleteAd: bindActionCreators(deleteAd, dispatch),
+      deleteSubscription: bindActionCreators(deleteSubscription, dispatch)
     }
   };
 }
