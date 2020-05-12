@@ -52,7 +52,8 @@ module.exports = class AdsManager {
         if(this.req.file) {
           //save new one and delete previously saved image
           await this.imgSaver.saveImage();
-          await ImageController.deleteImage(path.join(__dirname, '../public', 'ads_images', ad.ad_type, ad.image_name));
+          const adDirectory = ad.ad_type !== this.req.body.ad_type ? this.req.body.ad_type : ad.ad_type;
+          await ImageController.deleteImage(path.join(__dirname, '../public', 'ads_images', adDirectory, ad.image_name));
         } else if (ad.ad_type !== this.req.body.ad_type){
           //only destination for image is changed
           const oldPath = path.join(__dirname, '../public', 'ads_images', ad.ad_type, ad.image_name);

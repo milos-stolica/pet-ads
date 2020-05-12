@@ -30,9 +30,9 @@ function deleteAdSuccess(ad) {
   }
 }
 
-function getFormData(ad, image) {
+function getFormData(ad) {
   const formData = new FormData();
-  formData.append('file', image);
+  formData.append('file', ad.imageFile);
   formData.append('description', ad.description);
   formData.append('type', ad.type);
   formData.append('city', ad.city);
@@ -65,8 +65,8 @@ export function loadAds() {
   }
 }
 
-export function addAd(ad, image) {
-  const formData = getFormData(ad, image);
+export function addAd(ad) {
+  const formData = getFormData(ad);
   return (dispatch) => {
     dispatch(incrementAPIsInProgress());
     return AxiosInstance.post('/ads', formData, config)
@@ -75,8 +75,8 @@ export function addAd(ad, image) {
   }
 }
 
-export function updateAd(ad, image) {
-  const formData = getFormData(ad, image);
+export function updateAd(ad) {
+  const formData = getFormData(ad);
   formData.append('id', ad._id);
   return (dispatch) => {
     dispatch(incrementAPIsInProgress());
