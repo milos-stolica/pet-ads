@@ -1,6 +1,5 @@
 const express = require('express');
 const config = require('./config');
-const cors = require('cors');
 const mongoose = require('mongoose');
 const adsRouter = require('./routes/ads');
 const typesRouter = require('./routes/types');
@@ -16,7 +15,6 @@ const { authentificateUser } = require('./controllers/auth');
 const MulterUploader = require('./services/MulterUploader');
 
 const app = express();
-//to do zasto ne moze da se skloni x-powered-by heder
 
 const connectionOptions = {
   useNewUrlParser : true, 
@@ -33,7 +31,7 @@ mongoose.connect(config.mongoDBConnection, connectionOptions , (err) => {
 
 makeDirectories();
 
-app.use(cors({origin: 'http://localhost:3000', credentials: true}));
+//app.use(cors({origin: 'http://localhost:3000', credentials: true}));
 app.use(compression());
 app.use(helmet());
 app.use(cookieParser());
@@ -46,14 +44,15 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.get('/favicon.ico', (req, res) => res.sendStatus(204));
 
-app.get('/', (req, res) => {
-  return res.send(`<h1>Welcome to Pet Ads APIs center</h1>`);
-})
-
 app.use('/ads', adsRouter);
 app.use('/types', typesRouter);
 app.use('/auth', authRouter);
 app.use('/subscriptions', subscriptionsRouter);
+
+app.use(express.static(path.join(__dirname, '../', 'build')));
+app.get('*', (req, res) => {
+  res.sendFile(path.resolve(__dirname, '../', 'build', 'index.html'));
+});
 
 // catch 404 and forward to error handler
 app.use((req, res, next) => {
