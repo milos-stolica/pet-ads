@@ -1,6 +1,9 @@
 import types from "./actionTypes";
 import AxiosInstance, { handleAxiosResponse, handleAxiosError } from "../../services/Axios";
-import { incrementAPIsInProgress, decrementAPIsInProgress } from './apisInProgressActions';
+import { incrementAPIsInProgress, 
+         decrementAPIsInProgress, 
+         loadingUserSubscriptionsStarted, 
+         loadingUserSubscriptionsFinished } from './apisInProgressActions';
 
 function loadSubscriptionsSuccess(subscriptions) {
   return {
@@ -48,15 +51,20 @@ const config = {
 export function loadSubscriptions() {
   return (dispatch) => {
     dispatch(incrementAPIsInProgress());
+    dispatch(loadingUserSubscriptionsStarted());
     return AxiosInstance.get('/subscriptions')
     .then(response => { 
+      dispatch(loadingUserSubscriptionsFinished());
       if(response.data.length === 0) {
         dispatch(decrementAPIsInProgress());
         return response.status;
       }
       return handleAxiosResponse(response.status, response.data, loadSubscriptionsSuccess);
     })
-    .catch(err => handleAxiosError(err));
+    .catch(err => {
+      dispatch(loadingUserSubscriptionsFinished());
+      handleAxiosError(err);
+    });
   }
 }
 

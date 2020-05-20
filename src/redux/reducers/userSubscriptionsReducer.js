@@ -6,7 +6,7 @@ function userSubscriptionsReducer(state = initialState.userSubscriptions, action
     case types.LOAD_SUBSCRIPTIONS_SUCCESS:
       return action.subscriptions;
     case types.ADD_SUBSCRIPTION_SUCCESS:
-      return [...state, action.subscription];
+      return [action.subscription, ...state];
     case types.UPDATE_SUBSCRIPTION_SUCCESS:
       return state.map(subscription => subscription._id === action.subscription._id ? action.subscription : subscription);
     case types.DELETE_SUBSCRIPTION_SUCCESS:

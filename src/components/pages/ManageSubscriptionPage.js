@@ -8,33 +8,53 @@ import { useHistory, useParams } from 'react-router-dom';
 import CitiesManager from '../../services/CitiesManager';
 import Validator from '../../services/Validator';
 import { isNotEmpty } from '../../utils/arraysHelper';
+import Spinner from '../common/Spinner';
+import { toast } from 'react-toastify';
 
-const initSubscription = {
-  adType: '',
-  petType: '',
-  city: 'All cities',
-  state: 'All states'
-};
 
 //controller
-function ManageSubscriptionPage({userSubscriptions, allStates, types, actions}) {
-  const [subscription, setSubscription] = useState(initSubscription);
+function ManageSubscriptionPage({userSubscriptions, allStates, types, loading, actions}) {
+  const { id } = useParams();
+  const history = useHistory();
+  const initializator = getStateValues();
+
+  const [subscription, setSubscription] = useState(initializator.getSubscriptionData());
   const [errors, setErrors] = useState({});
   const [cities, setCities] = useState([]);
   const [actionInProgress, setActionInProgress] = useState(false);
-  const { id } = useParams();
-  const history = useHistory();
 
-  function initializeFormFieldValues() {
-    if(isNotEmpty(userSubscriptions)) {
+  function getStateValues() {
+    const initSubscriptionData = {
+      adType: '',
+      petType: '',
+      city: 'All cities',
+      state: 'All states'
+    };
+
+    function getInitialSubscriptionData() {
+      if(!isNotEmpty(userSubscriptions)) return initSubscriptionData;
       const subscriptionForUpdate = userSubscriptions.find(subscription => subscription._id === id);
       if(subscriptionForUpdate) {
-        setSubscription(subscriptionForUpdate);
-      } else if(id !== undefined) {
-        history.push('/error/404');
+        return subscriptionForUpdate;
       } else {
-        setSubscription(initSubscription);
+        return initSubscriptionData;
       }
+    }
+
+    return {
+      getSubscriptionData: getInitialSubscriptionData,
+      initSubscription: initSubscriptionData
+    }
+  }
+
+  function initializeFormValuesOnReload() {
+    setSubscription(initializator.getSubscriptionData());
+  }
+
+  function handleNonExistingSubscriptionId() {
+    if(id !== undefined && isNotEmpty(userSubscriptions)) {
+      const subscription = userSubscriptions.find(subscription => subscription._id === id);
+      !subscription && history.push('/error/404');
     }
   }
 
@@ -64,9 +84,6 @@ function ManageSubscriptionPage({userSubscriptions, allStates, types, actions}) 
     }
   }
 
-  useEffect(initializeFormFieldValues, [userSubscriptions, id]);
-  useEffect(setCitiesList, [allStates, subscription.state]);
-
   function handleChange(event) {
     setSubscription({...subscription, [event.target.name]: event.target.value});
   }
@@ -75,31 +92,42 @@ function ManageSubscriptionPage({userSubscriptions, allStates, types, actions}) 
     event.preventDefault();
     if(isFormValid()) {
       setActionInProgress(true);
-        let func = subscription._id !== undefined ? 'updateSubscription' : 'addSubscription';
+        let func = subscription._id ? 'updateSubscription' : 'addSubscription';
         actions[func](subscription).then(statusCode => {
-          statusCode < 400 ? history.push(`/user/profile`) : history.push(`/error/${statusCode}`);
+          setActionInProgress(false);
+          statusCode < 400 ? history.push(`/user/profile?showTab=subscriptions`) : history.push(`/error/${statusCode}`);
+          toast.success(`Subscription successfully ${func === 'updateSubscription' ? 'updated' : 'saved.'}.`);
         });
     }
   }
 
+  useEffect(handleNonExistingSubscriptionId, [userSubscriptions, id]);
+  useEffect(initializeFormValuesOnReload, [userSubscriptions, id]);
+  useEffect(setCitiesList, [allStates, subscription.state]);
+
   return (
     <Container>
-      <h1 className="text-center">{subscription._id ? 'Update subscription' : 'Add new subscription'}</h1>
-      <Card className="card-form">
-        <Card.Body>
-          <ManageSubscriptionForm 
-            subscription={subscription} 
-            states={allStates.map(state => state.name)} 
-            cities={cities}
-            petTypes={types.pets}
-            adTypes={types.ads} 
-            onChange={handleChange} 
-            onSubmit={handleSubmit} 
-            errors={errors}
-            actionInProgress={actionInProgress}>
-          </ManageSubscriptionForm>
-        </Card.Body>
-      </Card>
+      {loading ? 
+        <Spinner></Spinner> : (
+        <>
+          <h1 className="text-center">{subscription._id ? 'Update subscription' : 'Add new subscription'}</h1>
+          <Card className="card-form">
+            <Card.Body>
+              <ManageSubscriptionForm 
+                subscription={subscription} 
+                states={allStates.map(state => state.name)} 
+                cities={cities}
+                petTypes={types.pets}
+                adTypes={types.ads} 
+                onChange={handleChange} 
+                onSubmit={handleSubmit} 
+                errors={errors}
+                actionInProgress={actionInProgress}>
+              </ManageSubscriptionForm>
+            </Card.Body>
+          </Card>
+        </>
+      )}
     </Container>
   );
 }
@@ -108,7 +136,8 @@ function mapStateToProps(state) {
   return {
     userSubscriptions: state.userSubscriptions,
     allStates: state.states,
-    types: state.types
+    types: state.types,
+    loading: state.axiosActionsInProgress.loadingUserSubscriptions
   }
 }
 

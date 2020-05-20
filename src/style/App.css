@@ -22,27 +22,32 @@ h1{
   background-color: #212529 !important;
   color: white !important;
 }
-
 .btn-danger {
   color: #fff !important;
   background-color: #dc3545 !important;
   border-color: #dc3545 !important;
 }
-
 .btn-danger:hover {
   color: #fff !important;
   background-color: #c82333 !important;
   border-color: #bd2130 !important;
 }
-
 .card-form{
   margin-left: 15%;
   margin-right: 15%;
   background: -webkit-linear-gradient(left, #f3f3f3, #d8e094);
   border: none !important;
 }
+.card-info{
+  background: -webkit-linear-gradient(left, #f3f3f3, #d8e094);
+}
 .icon{
   font-size: 50px;
+  display: block;
+}
+
+.icon-small{
+  font-size: 40px;
   display: block;
 }
 
@@ -203,4 +208,29 @@ Button.selected-item{
     -webkit-transform: rotate(360deg);
     transform: rotate(360deg);
   }
+}
+
+/* InfoCard Component */
+.image-text {
+  position: absolute;
+  padding: 2%;
+  top: 0%;
+  right: 0%;
+  left: 0%;
+  background:-webkit-linear-gradient(left, #f3f3f3, #d8e094)
+}
+.info-card-date{
+  position: absolute;
+  top: 1%;
+  right: 3%;
+  color: rgba(0, 0, 0, 0.4);
+  font-style: italic;
+  font-size: small;
+}
+.image-container{
+  position: relative;
+  text-align: left;
+  color: rgba(0, 0, 0, 0.4);
+  font-style: italic;
+  font-size: small;
 }

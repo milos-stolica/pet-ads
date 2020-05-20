@@ -19,11 +19,11 @@ function userReducer(state = initialState.user, action) {
     case types.LOAD_USER_FROM_STORAGE:
       return user;
     case types.ADD_AD_SUCCESS:
-      ads = [...state.ads, action.ad._id];
+      ads = [action.ad._id, ...state.ads];
       localStorage.setItem('user', JSON.stringify({...userLS, ads}));
       return {...state, ads};
     case types.ADD_SUBSCRIPTION_SUCCESS:
-      subscriptions = [...state.subscriptions, action.subscription._id];
+      subscriptions = [action.subscription._id, ...state.subscriptions];
       localStorage.setItem('user', JSON.stringify({...userLS, subscriptions}));
       return {...state, subscriptions};
     case types.DELETE_AD_SUCCESS:

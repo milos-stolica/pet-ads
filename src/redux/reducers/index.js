@@ -12,7 +12,7 @@ const rootReducer = combineReducers({
   user: userReducer,
   types: typesReducer,
   userSubscriptions: userSubscriptionsReducer,
-  apisInProgress: apisInProgressReducer
+  axiosActionsInProgress: apisInProgressReducer
 });
 
 export default rootReducer;

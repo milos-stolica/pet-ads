@@ -7,5 +7,9 @@ export default {
   },
   user: {},
   userSubscriptions: [],
-  apisInProgress: 0
+  axiosActionsInProgress: {
+    apisInProgress: 0,
+    loadingUserSubscriptions: false,
+    loadingAds: false
+  }
 }

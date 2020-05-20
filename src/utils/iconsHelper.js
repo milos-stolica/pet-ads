@@ -1,5 +1,6 @@
 export function addIconsToPetTypes(petTypes) {
   const typesWithIcons = [];
+  if(!petTypes) return [];
   petTypes.forEach(type => {
     switch (type) {
       case 'All types':

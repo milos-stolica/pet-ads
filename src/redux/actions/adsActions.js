@@ -1,6 +1,9 @@
 import types from "./actionTypes";
 import AxiosInstance, { handleAxiosResponse, handleAxiosError } from "../../services/Axios";
-import { incrementAPIsInProgress, decrementAPIsInProgress } from './apisInProgressActions';
+import { incrementAPIsInProgress, 
+         decrementAPIsInProgress,
+         loadingAdsStarted,
+         loadingAdsFinished } from './apisInProgressActions';
 
 function loadAdsSuccess(ads) {
   return {
@@ -53,15 +56,20 @@ const config = {
 export function loadAds() {
   return (dispatch) => {
     dispatch(incrementAPIsInProgress());
+    dispatch(loadingAdsStarted());
     return AxiosInstance.get('/ads')
     .then(response => { 
+      dispatch(loadingAdsFinished());
       if(response.data.length === 0) {
         dispatch(decrementAPIsInProgress());
         return response.status;
       }
       return handleAxiosResponse(response.status, response.data, loadAdsSuccess);
     })
-    .catch(err => handleAxiosError(err));
+    .catch(err => {
+      dispatch(loadingAdsFinished());
+      handleAxiosError(err);
+    });
   }
 }
 

@@ -21,14 +21,14 @@ module.exports = class SubscriptionManager {
   }
 
   getSubscriptionsForUser() {
-    return SubscriptionModel.find({ownerId: this.req.user._id});
+    return SubscriptionModel.find({ownerId: this.req.user._id}).sort({updatedAt: -1}).lean();
   }
 
   async update() {
     if(this.valid) {
       try {
         const subscription = this.constructSubscription();
-        const updatedSubscription = await SubscriptionModel.findOneAndUpdate({ _id: this.req.body.id }, subscription, { new: true });
+        const updatedSubscription = await SubscriptionModel.findByIdAndUpdate(this.req.body.id, subscription, { new: true });
         return Promise.resolve(updatedSubscription);
       } catch (err) {
         return Promise.reject(err);
@@ -56,7 +56,7 @@ module.exports = class SubscriptionManager {
   async delete() {
     if(!this.req.params.id) return Promise.reject(createError(400, 'Bad request'));
     try {
-      const deleted = await SubscriptionModel.findOneAndDelete(this.req.params.id);
+      const deleted = await SubscriptionModel.findByIdAndDelete(this.req.params.id);
       return Promise.resolve(deleted);
     } catch (err) {
       Promise.reject(err);

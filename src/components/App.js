@@ -22,6 +22,8 @@ import { loadSubscriptions } from '../redux/actions/userSubscriptionsActions';
 import { useHistory } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 function App({user, actions}) {
   const history = useHistory();
@@ -57,6 +59,7 @@ function App({user, actions}) {
 
   return (
     <>
+      <ToastContainer autoClose={3000} hideProgressBar></ToastContainer>
       <NavBar></NavBar>
       <Switch>
         <Route path='/'                     component={HomePage}               exact/>

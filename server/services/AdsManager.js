@@ -30,7 +30,7 @@ module.exports = class AdsManager {
   }
 
   getAds() {
-    return AdPetModel.find();
+    return AdPetModel.find().sort({updatedAt: -1}).lean();
   }
 
   getAdById() {
@@ -68,7 +68,7 @@ module.exports = class AdsManager {
 
     try {
       const ad = this.constructAd();
-      const [updatedAd, ] = await Promise.all([AdPetModel.findOneAndUpdate({ _id: this.req.body.id }, ad, { new: true }), tryUpdateImage()]);
+      const [updatedAd, ] = await Promise.all([AdPetModel.findByIdAndUpdate(this.req.body.id, ad, { new: true }), tryUpdateImage()]);
       return Promise.resolve(updatedAd);
     } catch (err) {
       return Promise.reject(err);
@@ -90,7 +90,7 @@ module.exports = class AdsManager {
   async delete() {
     if(!this.req.params.id) return Promise.reject(createError(400, 'Bad request'));
     try {
-      const deleted = await AdPetModel.findOneAndDelete(this.req.params.id);
+      const deleted = await AdPetModel.findByIdAndDelete(this.req.params.id);
       return Promise.resolve(deleted);
     } catch (err) {
       Promise.reject(err);

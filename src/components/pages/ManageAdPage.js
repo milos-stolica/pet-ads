@@ -8,10 +8,12 @@ import { useHistory, useParams } from 'react-router-dom';
 import CitiesManager from '../../services/CitiesManager';
 import Validator from '../../services/Validator';
 import { isNotEmpty } from '../../utils/arraysHelper';
+import Spinner from '../common/Spinner';
+import { toast } from 'react-toastify';
 
 //controller
 function ManageAdPage(props) {
-  const { allAds, allStates, types, userEmail } = props;
+  const { allAds, allStates, types, userEmail, loading } = props;
   const { actions } = props;
   const { id } = useParams();
   const history = useHistory();
@@ -46,8 +48,6 @@ function ManageAdPage(props) {
       const adForUpdate = allAds.find(ad => ad._id === id);
       if(adForUpdate) {
         return adForUpdate;
-      } else if(id !== undefined) {
-        history.push('/error/404');
       } else {
         return initAdData;
       }
@@ -61,8 +61,6 @@ function ManageAdPage(props) {
           imageName: 'Choose another picture', 
           imageUrl: `http://localhost:3001/ads_images/${adForUpdate.ad_type}/${adForUpdate.image_name}` 
         };
-      } else if(id !== undefined) {
-        history.push('/error/404');
       } else {
         return initImageData;
       }
@@ -78,6 +76,13 @@ function ManageAdPage(props) {
   function initializeFormValuesOnReload() {
     setAd(initializator.getAdData());
     setImageData(initializator.getImageData());
+  }
+
+  function handleNonExistingAdId() {
+    if(id !== undefined && isNotEmpty(allAds)) {
+      const ad = allAds.find(ad => ad._id === id);
+      !ad && history.push('/error/404');
+    }
   }
 
   function setCitiesList() {
@@ -128,37 +133,44 @@ function ManageAdPage(props) {
     event.preventDefault();
     if(isFormValid()) {
       setActionInProgress(true);
-      let func = ad._id !== undefined ? 'updateAd' : 'addAd';
+      let func = ad._id ? 'updateAd' : 'addAd';
       actions[func](ad).then(statusCode => {
         setActionInProgress(false);
-        statusCode < 400 ? history.push(`/ads?type=${ad.ad_type}`) : history.push(`/error/${statusCode}`);
+        statusCode < 400 ? history.push('/user/profile?showTab=ads') : history.push(`/error/${statusCode}`);
+        toast.success(`Ad successfully ${func === 'updateAd' ? 'updated' : 'saved.'}.`);
       });
     }
   }
 
+  useEffect(handleNonExistingAdId, [allAds, id]);
   useEffect(initializeFormValuesOnReload, [allAds, id]);
   useEffect(setCitiesList, [ad.state]);
-
+  
   return (
     <Container>
-      <h1 className="text-center">{ad._id ? 'Update ad' : 'Add new ad'}</h1>
-      <Card className="card-form">
-        <Card.Body>
-          <ManageAdForm 
-            ad={ad} 
-            onAdTextFieldChange={handleAdTextFieldChange} 
-            onAdImageFileChange={handleAdImageFileChange}
-            onSubmit={handleSubmit} 
-            adImageData = {imageData}
-            states={allStates.map(state => state.name)} 
-            cities={cities}
-            petTypes={types.pets}
-            adTypes={types.ads} 
-            errors={errors}
-            actionInProgress={actionInProgress}>
-          </ManageAdForm>
-        </Card.Body>
-      </Card>
+      {loading ?
+        <Spinner></Spinner> : (
+        <>
+          <h1 className="text-center">{ad._id ? 'Update ad' : 'Add new ad'}</h1>
+          <Card className="card-form">
+            <Card.Body>
+              <ManageAdForm 
+                ad={ad} 
+                onAdTextFieldChange={handleAdTextFieldChange} 
+                onAdImageFileChange={handleAdImageFileChange}
+                onSubmit={handleSubmit} 
+                adImageData = {imageData}
+                states={allStates.map(state => state.name)} 
+                cities={cities}
+                petTypes={types.pets}
+                adTypes={types.ads} 
+                errors={errors}
+                actionInProgress={actionInProgress}>
+              </ManageAdForm>
+            </Card.Body>
+          </Card>
+        </>
+      )}
     </Container>
   );
 }
@@ -168,7 +180,8 @@ function mapStateToProps(state) {
     allAds: state.ads,
     allStates: state.states,
     types: state.types,
-    userEmail: state.user.email
+    userEmail: state.user.email,
+    loading: state.axiosActionsInProgress.loadingAds
   }
 }
 

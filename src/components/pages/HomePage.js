@@ -105,34 +105,37 @@ function HomePage ({allAds, allStates, types, loading}) {
       <img className="home-img" src="http://localhost:3001/other_images/orange-tabby-cat-beside-fawn-short-coated-puppy-46024.jpg" alt="Pets"></img>
       {loading ?
        <Spinner></Spinner> : (
-         <>
-          <SelectItemBar
-            barItems={petTypeBarItems} 
-            handleSelection={handlePetTypeChange} 
-            activeItem={activePetType} 
-            color={petTypeBarBackground}>
-          </SelectItemBar>
-          <SelectItemBar 
-            barItems={categoryBarItems}
-            handleSelection={handleCategoryChange} 
-            activeItem={activeCategory}
-            dropdown1 = {statesDropdownItems}
-            dropdown1Active = {activeState} 
-            handleDropdown1Selection = {handleStateChange}
-            dropdown2 = {citiesDropdownItems}
-            dropdown2Active = {activeCity} 
-            handleDropdown2Selection = {handleCityChange}
-            color={categoryBarBackground}>
-          </SelectItemBar>
-          <h6 className="general-info text-center my-3">{generalInfo}</h6>
-          <AdList 
-            ads={selectedAds} 
-            lgCol={4} 
-            mdCol={6}
-            shouldAddModificationButtons={false}>
-          </AdList>
-         </>
-       )}
+       <>
+        <SelectItemBar
+          barItems={petTypeBarItems} 
+          handleSelection={handlePetTypeChange} 
+          activeItem={activePetType} 
+          color={petTypeBarBackground}>
+        </SelectItemBar>
+        <SelectItemBar 
+          barItems={categoryBarItems}
+          handleSelection={handleCategoryChange} 
+          activeItem={activeCategory}
+          dropdown1 = {statesDropdownItems}
+          dropdown1Active = {activeState} 
+          handleDropdown1Selection = {handleStateChange}
+          dropdown2 = {citiesDropdownItems}
+          dropdown2Active = {activeCity} 
+          handleDropdown2Selection = {handleCityChange}
+          color={categoryBarBackground}>
+        </SelectItemBar>
+        <h6 className="general-info text-center my-3">{generalInfo}</h6>
+        <AdList 
+          ads={selectedAds} 
+          lgCol={4} 
+          mdCol={6}
+          petTypes={types.pets}
+          shouldAddModificationButtons={false}
+          showPrice={activeCategory === 'For sale'}
+          showImage={activeCategory === 'For sale'}>
+        </AdList>
+       </>
+      )}
     </>
   );
 }
@@ -142,7 +145,7 @@ function mapStateToProps(state) {
     allAds: state.ads,
     types: state.types,
     allStates: state.states,
-    loading: state.apisInProgress > 0
+    loading: state.axiosActionsInProgress.apisInProgress > 0
   };
 }
 
