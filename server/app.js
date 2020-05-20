@@ -1,5 +1,5 @@
 const express = require('express');
-const config = require('./config');
+//const config = require('./config');
 const mongoose = require('mongoose');
 const adsRouter = require('./routes/ads');
 const typesRouter = require('./routes/types');
@@ -21,7 +21,7 @@ const connectionOptions = {
   useUnifiedTopology: true
 };
 
-mongoose.connect(process.env.MONGO_CONNECTION || config.mongoDBConnection, connectionOptions , (err) => {
+mongoose.connect(process.env.MONGO_CONNECTION /* || config.mongoDBConnection */, connectionOptions , (err) => {
   if(err) {
     console.log(err);
   } else {
