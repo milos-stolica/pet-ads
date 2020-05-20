@@ -7,7 +7,7 @@ const { saltRounds } = require('../enums_regex');
 const path = require('path');
 const ImageController = require('./ImageController');
 const jsonWebToken = require('jsonwebtoken');
-const { secret } = require('../config');
+//const { secret } = require('../config');
 
 const hashPassword = util.promisify(bcrypt.hash);
 const jwtSign = util.promisify(jsonWebToken.sign);
@@ -136,7 +136,7 @@ module.exports = class UserManagement {
       const token = req.cookies.jsonWebToken;
       if(token) {
         try {
-          const data = await jwtVerify(token, secret);
+          const data = await jwtVerify(token, process.env.SECRET || 'secret');
           if(!data) return resolve(null);
           UserModel.findById(data.sub, (err, user) => {
             if(err) throw err;
