@@ -85,7 +85,7 @@ module.exports = class UserManagement {
     try {
       this.user = await this.tryGetUserData();
       if(!this.user) return null;
-      const token = await jwtSign({}, secret, { subject: `${this.user._id}` });
+      const token = await jwtSign({}, process.env.SECRET || secret, { subject: `${this.user._id}` });
       return token;
     } catch(err) {
       throw err;

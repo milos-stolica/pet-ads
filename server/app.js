@@ -21,7 +21,7 @@ const connectionOptions = {
   useUnifiedTopology: true
 };
 
-mongoose.connect(config.mongoDBConnection, connectionOptions , (err) => {
+mongoose.connect(process.env.MONGO_CONNECTION || config.mongoDBConnection, connectionOptions , (err) => {
   if(err) {
     console.log(err);
   } else {
@@ -67,6 +67,6 @@ app.use((err, req, res, next) => {
   return res.status(status).end(`Error status: ${status}`);
 });
 
-app.listen(config.port, () => {
-  console.log(`Server listening on port ${config.port}`);
+app.listen(3001, () => {
+  console.log(`Server listening...`);
 });
