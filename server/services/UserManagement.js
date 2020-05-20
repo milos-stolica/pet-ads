@@ -1,7 +1,7 @@
 const UserModel = require('../models/UserModel');
 const Validator = require('../validators');
 const createError = require('http-errors');
-const bcrypt = require('bcrypt');
+const bcrypt = require('bcryptjs');
 const util = require('util');
 const { saltRounds } = require('../enums_regex');
 const path = require('path');
