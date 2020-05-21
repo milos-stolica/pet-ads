@@ -58,7 +58,7 @@ function AdDetailsPage(props) {
       const adDetails = allAds.find(ad => ad._id === id);
       if(adDetails) {
         setAd(adDetails);
-        setImgUrl(`${host}/${adDetails.ad_type}/${adDetails.image_name}`);
+        setImgUrl(`${host}/ads_images/${adDetails.ad_type}/${adDetails.image_name}`);
       }
     }
   }
