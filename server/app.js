@@ -13,8 +13,12 @@ const path = require('path');
 const { makeDirectories } = require('./utils');
 const { authentificateUser } = require('./controllers/auth');
 const MulterUploader = require('./services/MulterUploader');
+const fs = require('fs');
 
 const app = express();
+
+const publicDirPath = path.join(__dirname, 'public');
+fs.existsSync(publicDirPath) || fs.mkdirSync(publicDirPath);
 
 const connectionOptions = {
   useNewUrlParser : true, 
