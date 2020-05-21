@@ -20,6 +20,11 @@ const app = express();
 const publicDirPath = path.join(__dirname, 'public');
 fs.existsSync(publicDirPath) || fs.mkdirSync(publicDirPath);
 
+const adsImagesDirPath = path.join(__dirname, 'public', 'ads_images');
+fs.existsSync(adsImagesDirPath) || fs.mkdirSync(adsImagesDirPath);
+
+makeDirectories();
+
 const connectionOptions = {
   useNewUrlParser : true, 
   useUnifiedTopology: true
@@ -33,7 +38,6 @@ mongoose.connect(process.env.MONGOCONN, connectionOptions , (err) => {
   }
 });
 
-makeDirectories();
 
 app.use(compression());
 app.use(helmet());
