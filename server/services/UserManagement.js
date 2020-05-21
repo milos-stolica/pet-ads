@@ -85,7 +85,7 @@ module.exports = class UserManagement {
     try {
       this.user = await this.tryGetUserData();
       if(!this.user) return null;
-      const token = await jwtSign({}, process.env.SECRET || secret, { subject: `${this.user._id}` });
+      const token = await jwtSign({}, process.env.SECRET, { subject: `${this.user._id}` });
       return token;
     } catch(err) {
       throw err;
@@ -136,7 +136,7 @@ module.exports = class UserManagement {
       const token = req.cookies.jsonWebToken;
       if(token) {
         try {
-          const data = await jwtVerify(token, process.env.SECRET || 'secret');
+          const data = await jwtVerify(token, process.env.SECRET);
           if(!data) return resolve(null);
           UserModel.findById(data.sub, (err, user) => {
             if(err) throw err;

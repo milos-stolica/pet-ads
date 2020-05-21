@@ -21,7 +21,7 @@ const connectionOptions = {
   useUnifiedTopology: true
 };
 
-mongoose.connect(process.env.MONGO_CONNECTION /* || config.mongoDBConnection */, connectionOptions , (err) => {
+mongoose.connect(process.env.MONGO_CONNECTION, connectionOptions , (err) => {
   if(err) {
     console.log(err);
   } else {
@@ -31,7 +31,6 @@ mongoose.connect(process.env.MONGO_CONNECTION /* || config.mongoDBConnection */,
 
 makeDirectories();
 
-//app.use(cors({origin: 'http://localhost:3000', credentials: true}));
 app.use(compression());
 app.use(helmet());
 app.use(cookieParser());
