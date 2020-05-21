@@ -21,7 +21,7 @@ const connectionOptions = {
   useUnifiedTopology: true
 };
 
-mongoose.connect(process.env.MONGO_CONNECTION, connectionOptions , (err) => {
+mongoose.connect(process.env.MONGOCONN, connectionOptions , (err) => {
   if(err) {
     console.log(err);
   } else {
