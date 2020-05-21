@@ -13,7 +13,7 @@ function AdList (props) {
   const petTypes2Icons = addIconsToPetTypes(petTypes);
 
   function getImageURL(adType, imageName) {
-    return showImage ? `${host}/${adType}/${imageName}` : '';
+    return showImage ? `${host}/ads_images/${adType}/${imageName}` : '';
   }
 
   function getAdTitle(petType, state, city) {
