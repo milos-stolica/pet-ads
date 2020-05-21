@@ -3,6 +3,7 @@ import InfoCard from './InfoCard';
 import { Row, Col } from 'react-bootstrap';
 import { addIconsToPetTypes } from "../../utils/iconsHelper";
 import { getFormatedDateTimeFromISOTime } from '../../utils/dateTimeFormater';
+import { host } from '../../utils/constants';
 
 //dumb
 function AdList (props) {
@@ -12,7 +13,7 @@ function AdList (props) {
   const petTypes2Icons = addIconsToPetTypes(petTypes);
 
   function getImageURL(adType, imageName) {
-    return showImage ? `http://localhost:3001/ads_images/${adType}/${imageName}` : '';
+    return showImage ? `${host}/${adType}/${imageName}` : '';
   }
 
   function getAdTitle(petType, state, city) {

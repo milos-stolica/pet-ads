@@ -9,6 +9,7 @@ import { getFormatedDateTimeFromISOTime } from '../../utils/dateTimeFormater';
 import { deleteAd } from '../../redux/actions/adsActions';
 import Spinner from '../common/Spinner';
 import { toast } from 'react-toastify';
+import { host } from '../../utils/constants'
 
 const initAd = {
   description: '',
@@ -57,7 +58,7 @@ function AdDetailsPage(props) {
       const adDetails = allAds.find(ad => ad._id === id);
       if(adDetails) {
         setAd(adDetails);
-        setImgUrl(`http://localhost:3001/ads_images/${adDetails.ad_type}/${adDetails.image_name}`);
+        setImgUrl(`${host}/${adDetails.ad_type}/${adDetails.image_name}`);
       }
     }
   }

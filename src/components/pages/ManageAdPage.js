@@ -8,6 +8,7 @@ import { useHistory, useParams } from 'react-router-dom';
 import CitiesManager from '../../services/CitiesManager';
 import Validator from '../../services/Validator';
 import { isNotEmpty } from '../../utils/arraysHelper';
+import { host } from '../../utils/constants'
 import Spinner from '../common/Spinner';
 import { toast } from 'react-toastify';
 
@@ -59,7 +60,7 @@ function ManageAdPage(props) {
       if(adForUpdate) {
         return { 
           imageName: 'Choose another picture', 
-          imageUrl: `http://localhost:3001/ads_images/${adForUpdate.ad_type}/${adForUpdate.image_name}` 
+          imageUrl: `${host}/ads_images/${adForUpdate.ad_type}/${adForUpdate.image_name}` 
         };
       } else {
         return initImageData;

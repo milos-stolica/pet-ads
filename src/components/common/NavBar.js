@@ -6,6 +6,7 @@ import { logoutUser as logout } from '../../redux/actions/userActions';
 import { bindActionCreators } from 'redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPaw } from '@fortawesome/free-solid-svg-icons';
+import { host } from '../../utils/constants'
 
 //controller
 function NavBar ({user, adTypes, actions}) {
@@ -65,7 +66,7 @@ function NavBar ({user, adTypes, actions}) {
             <>
               <li className="nav-item dropdown">
                 <NavLink activeStyle={activeStyle} className="nav-link dropdown-toggle" to="/user" id="userOptionsDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                  <Image className="user-thumbnail mr-1" src={`http://localhost:3001/users_images/${user.image_name}`} roundedCircle />
+                  <Image className="user-thumbnail mr-1" src={`${host}/users_images/${user.image_name}`} roundedCircle />
                   {user.firstName}
                 </NavLink>
                 <div className="dropdown-menu" aria-labelledby="navbarDropdown">

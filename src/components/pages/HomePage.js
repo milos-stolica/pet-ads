@@ -6,6 +6,7 @@ import {conditionalCallbackExecution as trySetState} from '../../utils/condition
 import { isNotEmpty, filterByCriteriums } from '../../utils/arraysHelper';
 import { populateCitiesDropdown } from '../../utils/homeAndAdsPageHelper';
 import { addIconsToPetTypes } from '../../utils/iconsHelper';
+import { host } from '../../utils/constants'
 import Spinner from '../common/Spinner';
 
 //controller
@@ -102,7 +103,7 @@ function HomePage ({allAds, allStates, types, loading}) {
 
   return (
     <>
-      <img className="home-img" src="http://localhost:3001/other_images/orange-tabby-cat-beside-fawn-short-coated-puppy-46024.jpg" alt="Pets"></img>
+      <img className="home-img" src={`${ host }/other_images/orange-tabby-cat-beside-fawn-short-coated-puppy-46024.jpg`} alt="Pets"></img>
       {loading ?
        <Spinner></Spinner> : (
        <>

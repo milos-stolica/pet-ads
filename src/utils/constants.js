@@ -1,0 +1,1 @@
+export const host = 'http://ec2-3-18-105-147.us-east-2.compute.amazonaws.com';

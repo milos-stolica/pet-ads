@@ -10,7 +10,8 @@ import { deleteAd } from '../../redux/actions/adsActions';
 import { deleteSubscription } from '../../redux/actions/userSubscriptionsActions';
 import Spinner from '../common/Spinner';
 import { getFormatedDateTimeFromISOTime } from '../../utils/dateTimeFormater';
-import { addIconsToPetTypes } from "../../utils/iconsHelper";
+import { addIconsToPetTypes } from '../../utils/iconsHelper';
+import { host } from '../../utils/constants'
 import { toast } from 'react-toastify';
 
 //controller
@@ -70,7 +71,7 @@ function UserProfilePage(props) {
     <Container className="user-profile">
       <Row>
         <Col md={4} className="profile-img">
-          <img src={`http://localhost:3001/users_images/${user.image_name}`} alt="User profile"/>
+          <img src={`${host}/users_images/${user.image_name}`} alt="User profile"/>
         </Col>
         <Col md={6}>
           <div className="profile-head">
