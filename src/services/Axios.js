@@ -1,7 +1,7 @@
 import axios from "axios";
 import { decrementAPIsInProgress } from '../redux/actions/apisInProgressActions';
 import dispatch from "../index";
-const baseURL = 'http://localhost:3001';
+const baseURL = 'http://ec2-3-18-105-147.us-east-2.compute.amazonaws.com';
 const timeout = 10000;
 
 const AxiosInstance = axios.create (
