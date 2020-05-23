@@ -45,7 +45,12 @@ h1{
   font-size: 50px;
   display: block;
 }
-
+/* @media only screen and (max-width: 900px) {
+  .icon{
+    font-size: small;
+    display: block;
+  }
+} */
 .icon-small{
   font-size: 40px;
   display: block;
@@ -131,6 +136,12 @@ h1{
   height: 500px;
   width: 100%;
 }
+@media only screen and (max-width: 900px) {
+  .home-img{
+    height: 30%;
+    width: 100%;
+  }
+}
 .general-info{
   color:white;
 }
@@ -149,6 +160,12 @@ h1{
   color: white;
   text-decoration: none !important;
 }
+/* @media only screen and (max-width: 900px) {
+  .bar-item{
+    font-size: small;
+    font-weight: 400;
+  }
+} */
 .bar-item:hover{
   color: blanchedalmond;
 }

@@ -108,12 +108,14 @@ function HomePage ({allAds, allStates, types, loading}) {
        <Spinner></Spinner> : (
        <>
         <SelectItemBar
+          name={'petTypeSelection'}
           barItems={petTypeBarItems} 
           handleSelection={handlePetTypeChange} 
           activeItem={activePetType} 
           color={petTypeBarBackground}>
         </SelectItemBar>
         <SelectItemBar 
+          name={'categorySelection'}
           barItems={categoryBarItems}
           handleSelection={handleCategoryChange} 
           activeItem={activeCategory}

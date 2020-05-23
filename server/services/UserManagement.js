@@ -7,7 +7,6 @@ const { saltRounds } = require('../enums_regex');
 const path = require('path');
 const ImageController = require('./ImageController');
 const jsonWebToken = require('jsonwebtoken');
-//const { secret } = require('../config');
 
 const hashPassword = util.promisify(bcrypt.hash);
 const jwtSign = util.promisify(jsonWebToken.sign);

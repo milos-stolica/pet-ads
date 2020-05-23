@@ -6,10 +6,10 @@ import Dropdown from './Dropdown';
 
 //dumb
 function SelectItemBar (props) {
-  const {barItems, activeItem, handleSelection} = props;
-  const {dropdown1, dropdown1Active, handleDropdown1Selection} = props;
-  const {dropdown2, dropdown2Active, handleDropdown2Selection} = props;
-  const {color} = props;
+  const { name, barItems, activeItem, handleSelection } = props;
+  const { dropdown1, dropdown1Active, handleDropdown1Selection } = props;
+  const { dropdown2, dropdown2Active, handleDropdown2Selection } = props;
+  const { color } = props;
   //special means it should be in group above divider
   const dropdown1Specials = dropdown1 ? dropdown1.filter(item => item.special) : [];
   const dropdown1NoNSpecials = dropdown1 ? dropdown1.filter(item => !item.special) : [];
@@ -21,14 +21,14 @@ function SelectItemBar (props) {
         className="navbar-toggler" 
         type="button" 
         data-toggle="collapse" 
-        data-target="#navbarSupportedContent" 
-        aria-controls="navbarSupportedContent" 
+        data-target={`#${name}`}
+        aria-controls={name} 
         aria-expanded="false" 
         aria-label="Toggle navigation">
         <span className="navbar-toggler-icon"></span>
       </button>
 
-      <div className="collapse navbar-collapse" id="navbarSupportedContent">
+      <div className="collapse navbar-collapse" id={name}>
         <ul className={"navbar-nav " + ((dropdown1 || dropdown2) ? "mr-auto" : "m-auto")}>
           {barItems.map(item => 
             <li key={item.name} className="nav-item">

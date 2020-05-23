@@ -104,6 +104,7 @@ function AdsPage ({allAds, allStates, types, loading, location}) {
        <Spinner></Spinner> : (
        <>
          <SelectItemBar 
+           name={'categorySelection'}
            barItems={petTypeBarItems}
            handleSelection={handlePetTypeChange} 
            activeItem={activePetType}
