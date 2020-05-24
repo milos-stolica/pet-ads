@@ -57,7 +57,7 @@ export function loadAds() {
   return (dispatch) => {
     dispatch(incrementAPIsInProgress());
     dispatch(loadingAdsStarted());
-    return AxiosInstance.get('/ads')
+    return AxiosInstance.get('/ads/all')
     .then(response => { 
       dispatch(loadingAdsFinished());
       if(response.data.length === 0) {

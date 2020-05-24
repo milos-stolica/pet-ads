@@ -10,7 +10,6 @@ router.param('id', (req, res, next, id) => {
 });
 
 router.route('/')
-.get(getAds)
 .put(
   checkAuthentificated, 
   checkUserPermissions('adManipulation'), 
@@ -25,5 +24,6 @@ router.delete('/:id',
   deleteAd, 
   updateUserAds('deleteAd'), 
   sendAd);
+router.get('/all', getAds)
 
 module.exports = router;
