@@ -72,6 +72,110 @@ function UserProfilePage(props) {
       <Row>
         <Col md={4} className="profile-img">
           <img src={`${host}/users_images/${user.image_name}`} alt="User profile"/>
+          <div className="personal-data">
+            <h5>Name</h5>
+            <p>{user.firstName}</p>
+            <h5>Last name</h5>
+            <p>{user.lastName}</p>
+            <h5>Email</h5>
+            <p>{user.email}</p>
+          </div>
+        </Col>
+        <Col md={6}>
+          <div className="profile-head">
+            <h5 className="profile-head-name">{`${user.firstName} ${user.lastName}`}</h5>
+            <ul className="nav nav-tabs" role="tablist">
+              <li className="nav-item">
+                <a 
+                  className={"nav-link tab-nav " + (!activeTab || activeTab === 'ads' ? 'active' : '')} 
+                  id="ads-tab" 
+                  data-toggle="tab" 
+                  href="#ads" 
+                  role="tab" 
+                  aria-controls="ads" 
+                  aria-selected={!activeTab || activeTab === 'ads'}>
+                  Manage ads
+                </a>
+              </li>
+              <li className="nav-item">
+                <a 
+                  className={"nav-link tab-nav " + (activeTab === 'subscriptions' ? 'active' : '')} 
+                  id="subscriptions-tab" 
+                  data-toggle="tab" 
+                  href="#profile" 
+                  role="tab" 
+                  aria-controls="profile" 
+                  aria-selected={activeTab === 'subscriptions'}>
+                  Manage subscriptions
+                </a>
+              </li>
+            </ul>
+          </div>
+          <div className="tab-content">
+            {(loadingAds || loadingUserSubscriptions) ? 
+              <Spinner></Spinner> : (
+              <>
+                <div 
+                  className={"tab-pane fade " + (!activeTab || activeTab === 'ads' ? 'show active' : '')} 
+                  id="ads" 
+                  role="tabpanel" 
+                  aria-labelledby="ads-tab">
+                  <Row>
+                    <Col className="text-right">
+                      <Link className="btn button-success float-right" to="/new/ad">Publish new ad</Link>
+                    </Col>
+                  </Row>
+                  <h5>My ads</h5>
+                  <AdList 
+                    ads={userAds} 
+                    lgCol={12} 
+                    mdCol={12}
+                    shouldAddModificationButtons={user.loggedIn}
+                    deleteAction={deleteAdById}
+                    deleteInProgress={deleteAdInProgress}
+                    petTypes={petTypes}
+                    showPrice={true}
+                    showImage={true}>
+                  </AdList>
+                </div>
+              
+                <div 
+                  className={"tab-pane fade " + (activeTab === 'subscriptions' ? 'show active' : '')} 
+                  id="profile" 
+                  role="tabpanel" 
+                  aria-labelledby="subscriptions-tab">
+                  <Row>
+                    <Col className="text-right">
+                      <Link className="btn btn-danger float-right" to="/new/subscription">Free subscription</Link>
+                    </Col>
+                  </Row>
+                  <h5>Active subscriptions</h5>
+                  <p>You will be notified as soon as required ad is published.</p>
+                  {userSubscriptions && userSubscriptions.map(subscription => {
+                    return(
+                      <InfoCard
+                        id={subscription._id}
+                        key={subscription._id}
+                        date={getFormatedDateTimeFromISOTime(subscription.updatedAt)}
+                        icon={petTypes2Icons.filter(item => item.name === subscription.petType).map(item => item.icon)[0]}
+                        title={getSubscriptionTitle(subscription.petType, subscription.adType)}
+                        information={getSubscriptionInformation(subscription.state, subscription.city)}
+                        links={getLinkButtons(subscription._id)}>
+                      </InfoCard>
+                    );
+                  })}
+                </div>
+              </>
+            )}
+          </div>
+        </Col>
+      </Row>        
+    </Container>
+  );
+    {/* <Container className="user-profile">
+      <Row>
+        <Col md={4} className="profile-img">
+          <img src={`${host}/users_images/${user.image_name}`} alt="User profile"/>
         </Col>
         <Col md={6}>
           <div className="profile-head">
@@ -176,8 +280,7 @@ function UserProfilePage(props) {
           </div>
         </Col>
       </Row>        
-    </Container>
-  );
+    </Container> */}
 }
 
 function mapStateToProps(state) {
