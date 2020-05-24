@@ -52,7 +52,6 @@ app.use('/subscriptions', subscriptionsRouter);
 
 app.get('*', (req, res, next) => {
   res.sendFile(path.resolve(__dirname, '../', 'build', 'index.html'));
-  next();
 });
 
 // catch 404 and forward to error handler
