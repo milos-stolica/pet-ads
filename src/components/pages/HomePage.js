@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import SelectItemBar from '../common/SelectItemBar';
+import CollapsibleSelectItemBar from '../common/CollapsibleSelectItemBar';
+import ItemSelectionBar from '../common/ItemSelectionBar';
 import { connect } from 'react-redux';
 import AdList from '../common/AdList';
 import {conditionalCallbackExecution as trySetState} from '../../utils/conditionalCallbackCall';
@@ -107,15 +108,15 @@ function HomePage ({allAds, allStates, types, loading}) {
       {loading ?
        <Spinner></Spinner> : (
        <>
-        <SelectItemBar
-          name={'petTypeSelection'}
+        <ItemSelectionBar
+          name={'pet-Type-Selection'}
           barItems={petTypeBarItems} 
           handleSelection={handlePetTypeChange} 
           activeItem={activePetType} 
           color={petTypeBarBackground}>
-        </SelectItemBar>
-        <SelectItemBar 
-          name={'categorySelection'}
+        </ItemSelectionBar>
+        <CollapsibleSelectItemBar 
+          name={'category-Selection'}
           barItems={categoryBarItems}
           handleSelection={handleCategoryChange} 
           activeItem={activeCategory}
@@ -126,7 +127,7 @@ function HomePage ({allAds, allStates, types, loading}) {
           dropdown2Active = {activeCity} 
           handleDropdown2Selection = {handleCityChange}
           color={categoryBarBackground}>
-        </SelectItemBar>
+        </CollapsibleSelectItemBar>
         <h6 className="general-info text-center my-3">{generalInfo}</h6>
         <AdList 
           ads={selectedAds} 

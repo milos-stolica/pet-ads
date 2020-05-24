@@ -5,7 +5,7 @@ import * as icons from '@fortawesome/free-solid-svg-icons';
 import Dropdown from './Dropdown';
 
 //dumb
-function SelectItemBar (props) {
+function CollapsibleSelectItemBar (props) {
   const { name, barItems, activeItem, handleSelection } = props;
   const { dropdown1, dropdown1Active, handleDropdown1Selection } = props;
   const { dropdown2, dropdown2Active, handleDropdown2Selection } = props;
@@ -37,7 +37,7 @@ function SelectItemBar (props) {
                 onClick={handleSelection} 
                 className={"bar-item " + (activeItem === item.name ? "selected-item" : "")} 
                 name={item.name}>
-                {item.name}
+                <span className="bar-item-name">{item.name}</span>
                 {item.icon && <FontAwesomeIcon className="icon m-auto" icon={icons[item.icon]}></FontAwesomeIcon>}
               </Button>
             </li>)
@@ -67,4 +67,4 @@ function SelectItemBar (props) {
   );
 }
 
-export default SelectItemBar;
+export default CollapsibleSelectItemBar;

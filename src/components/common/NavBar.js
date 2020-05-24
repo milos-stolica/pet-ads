@@ -20,7 +20,7 @@ function NavBar ({user, adTypes, actions}) {
   return (
     <nav className="navbar navbar-expand-lg navbar-dark bg-dark sticky-top">
       <NavLink to='/' className="navbar-brand" exact>
-        <FontAwesomeIcon className="icon m-auto" icon={faPaw}></FontAwesomeIcon>
+        <FontAwesomeIcon className="icon-navbar m-auto" icon={faPaw}></FontAwesomeIcon>
       </NavLink>
       <button 
         className="navbar-toggler" 

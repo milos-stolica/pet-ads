@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import AdList from '../common/AdList';
-import SelectItemBar from '../common/SelectItemBar';
+import CollapsibleSelectItemBar from '../common/CollapsibleSelectItemBar';
 import qs from 'query-string';
 import { connect } from "react-redux";
 import {conditionalCallbackExecution as trySetState} from '../../utils/conditionalCallbackCall';
@@ -103,8 +103,8 @@ function AdsPage ({allAds, allStates, types, loading, location}) {
       {loading ?
        <Spinner></Spinner> : (
        <>
-         <SelectItemBar 
-           name={'categorySelection'}
+         <CollapsibleSelectItemBar 
+           name={'category-Selection'}
            barItems={petTypeBarItems}
            handleSelection={handlePetTypeChange} 
            activeItem={activePetType}
@@ -115,7 +115,7 @@ function AdsPage ({allAds, allStates, types, loading, location}) {
            dropdown2Active = {activeCity} 
            handleDropdown2Selection = {handleCityChange}
            color={petTypeBarBackground}>
-         </SelectItemBar>
+         </CollapsibleSelectItemBar>
          <h6 className="general-info text-center my-3">{generalInfo}</h6>
          <AdList 
            ads={selectedAds} 

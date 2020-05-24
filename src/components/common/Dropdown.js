@@ -12,7 +12,7 @@ function Dropdown (props) {
         data-toggle="dropdown" 
         aria-haspopup="true" 
         aria-expanded="false">
-        {dropdownActive}
+        <span className="bar-item-name">{dropdownActive}</span>
       </Button>
       <div className="dropdown-menu dropdown-menu-right dropdown-menu-scroll" aria-labelledby="dropdownMenu">
         {dropdownSpecials.map(item => 

@@ -30,7 +30,7 @@ mongoose.connect(process.env.MONGOCONN, connectionOptions , (err) => {
   }
 });
 
-
+//app.use(require('cors')({origin: 'http://localhost:3000', credentials: true}));
 app.use(compression());
 app.use(helmet());
 app.use(cookieParser());
@@ -41,6 +41,8 @@ app.use('*', MulterUploader.parseFormData(upload));
 
 app.use(express.static(path.join(__dirname, 'public')));
 
+app.use(express.static(path.join(__dirname, '../', 'build')));
+
 app.get('/favicon.ico', (req, res) => res.sendStatus(204));
 
 app.use('/ads', adsRouter);
@@ -48,9 +50,9 @@ app.use('/types', typesRouter);
 app.use('/auth', authRouter);
 app.use('/subscriptions', subscriptionsRouter);
 
-app.use(express.static(path.join(__dirname, '../', 'build')));
-app.get('*', (req, res) => {
+app.get('*', (req, res, next) => {
   res.sendFile(path.resolve(__dirname, '../', 'build', 'index.html'));
+  next();
 });
 
 // catch 404 and forward to error handler

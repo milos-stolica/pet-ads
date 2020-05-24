@@ -41,19 +41,77 @@ h1{
 .card-info{
   background: -webkit-linear-gradient(left, #f3f3f3, #d8e094);
 }
+.icon-navbar{
+  font-size: 50px;
+  display: block;
+}
 .icon{
   font-size: 50px;
   display: block;
 }
-/* @media only screen and (max-width: 900px) {
-  .icon{
-    font-size: small;
-    display: block;
-  }
-} */
 .icon-small{
   font-size: 40px;
   display: block;
+}
+@media only screen and (max-width: 992px) {
+  h1{
+    font-size: 24px;
+  }
+  .icon{
+    font-size: 30px;
+    float: left;
+  }
+  .bar-item-name{
+    float: right;
+    font-size: 16px;
+    margin-top: 1%;
+    margin-left: 5px;
+  }
+  .bar-item-button{
+    padding: 5px 10px
+  }
+  .button-item-name{
+    display: none;
+  }
+  .icon-navbar{
+    font-size: 30px;
+    display: block;
+  }
+  .navbar-toggler-icon{
+    font-size: 15px;
+  }
+  .icon-small{
+    font-size: 25px;
+    display: block;
+  }
+}
+@media only screen and (max-width: 600px) {
+  h1{
+    font-size: 20px;
+  }
+  .icon{
+    font-size: 20px;
+    float: left;
+  }
+  .bar-item-name{
+    float: right;
+    margin-top: -3%;
+    margin-left: 5px;
+  }
+  .bar-item-button{
+    padding: 3px 6px
+  }
+}
+/* HomePage Component */
+.home-img{
+  height: 500px;
+  width: 100%;
+}
+@media only screen and (max-width: 992px) {
+  .home-img{
+    height: 30%;
+    width: 100%;
+  }
 }
 
 /* NavBar Component*/
@@ -132,16 +190,6 @@ h1{
 .tab-content{
   margin-top: -17%;
 }
-.home-img{
-  height: 500px;
-  width: 100%;
-}
-@media only screen and (max-width: 900px) {
-  .home-img{
-    height: 30%;
-    width: 100%;
-  }
-}
 .general-info{
   color:white;
 }
@@ -160,12 +208,6 @@ h1{
   color: white;
   text-decoration: none !important;
 }
-/* @media only screen and (max-width: 900px) {
-  .bar-item{
-    font-size: small;
-    font-weight: 400;
-  }
-} */
 .bar-item:hover{
   color: blanchedalmond;
 }
@@ -178,7 +220,6 @@ Button.selected-item{
   width: 200px;
   overflow: scroll;
 }
-
 /* AdDetailsPage Component */
 .ad-details{
   width: 70%;
