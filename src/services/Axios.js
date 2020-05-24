@@ -3,7 +3,7 @@ import { decrementAPIsInProgress } from '../redux/actions/apisInProgressActions'
 import dispatch from "../index";
 import { host } from '../utils/constants'
 const baseURL = host;
-const timeout = 10000;
+const timeout = 25000;
 
 const AxiosInstance = axios.create (
   {
