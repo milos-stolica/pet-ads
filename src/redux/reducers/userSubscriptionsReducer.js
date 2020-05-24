@@ -11,6 +11,8 @@ function userSubscriptionsReducer(state = initialState.userSubscriptions, action
       return state.map(subscription => subscription._id === action.subscription._id ? action.subscription : subscription);
     case types.DELETE_SUBSCRIPTION_SUCCESS:
       return state.filter(subscription => subscription._id !== action.subscription._id);
+    case types.LOGOUT_USER_SUCCESS:
+      return [];
     default:
       return state;
   }
