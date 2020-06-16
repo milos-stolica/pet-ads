@@ -7,6 +7,7 @@ import { useHistory } from 'react-router-dom';
 import SignupForm from '../forms/SignupForm';
 import Validator from '../../services/Validator';
 import Errors from '../../services/Errors';
+import { toast } from 'react-toastify';
 
 const initUser = {
   firstName: '',
@@ -34,13 +35,13 @@ function SignupPage ({actions}) {
   }
 
   function getFormErrors() {
-    const errors = {};
-    if(!Validator.isEmailValid(user.email)) errors.email = 'This is not valid email address.';
-    if(!Validator.hasNotNumberOrSpecialCh(user.firstName) || !Validator.lengthInRange(user.firstName, 0 , 50)) errors.firstName = 'This is not valid name.';
-    if(!Validator.hasNotNumberOrSpecialCh(user.lastName) || !Validator.lengthInRange(user.lastName, 0 , 50)) errors.lastName = 'This is not valid lastname.';
-    if(!Validator.isPasswordValid(user.password)) errors.password = 'Password is not strong enough.'
-    if(!Validator.isImage(file)) errors.file = 'Only images of png, jpeg or webp types are allowed.';
-    return errors;
+    return Validator.getRegistrationFormErrors({
+      email: user.email,
+      firstName: user.firstName,
+      lastName: user.lastName,
+      password: user.password,
+      file
+    });
   }
 
   function isFormValid() {
@@ -62,6 +63,7 @@ function SignupPage ({actions}) {
       .then(statusCode => {
         setSigningUp(false);
         statusCode < 400 && history.push('/signin');
+        statusCode < 400 && toast.success('You are successfully registered.');
         return statusCode;
       })
       .then(statusCode => {

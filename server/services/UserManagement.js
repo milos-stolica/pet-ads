@@ -39,20 +39,24 @@ module.exports = class UserManagement {
       if(!this.req.body || !this.req.file) {
         return false;
       }
-  
-      this.valid = Validator.isEmailValid(this.req.body.email) && Validator.hasNotNumberOrSpecialCh(this.req.body.firstName) && Validator.lengthInRange(this.req.body.firstName, 0, 50)
-      && Validator.hasNotNumberOrSpecialCh(this.req.body.lastName) && Validator.lengthInRange(this.req.body.lastName, 0, 50)
-      && Validator.isPasswordValid(this.req.body.password);
-  
-      return this.valid;
+
+      return Validator.isRegistrationFormValid({
+        email: this.req.body.email,
+        firstName: this.req.body.firstName,
+        lastName: this.req.body.lastName,
+        password: this.req.body.password
+      });
     }
 
     const validateEmailAndPassword = () => {
       if(!this.req.body) {
         return false;
       }
-      this.valid = Validator.isEmailValid(this.req.body.email) && Validator.isPasswordValid(this.req.body.password); 
-      return this.valid;
+      
+      return Validator.isLoginFormValid({
+        email: this.req.body.email,
+        password: this.req.body.password
+      });
     }
 
     let valid = false;
@@ -118,7 +122,7 @@ module.exports = class UserManagement {
           };
           const user = new UserModel(userData);
           user.save((err, userDoc) => {
-            if(err) reject(err);
+            if(err) return reject(err);
             resolve(projectUser(userDoc));
           });
         } catch(err) {

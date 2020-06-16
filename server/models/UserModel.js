@@ -1,19 +1,19 @@
 const mongoose = require('mongoose');
-const { email_regex, all_expect_num_and_spec_ch } = require('../enums_regex');
+const { emailRgx, disallowSpecialCharsAndNumsRgx } = require('../enums_regex');
 
 const UserSchema = new mongoose.Schema({
   firstName: {
     type: String,
     trim: true,
     required: true,
-    match: all_expect_num_and_spec_ch,
+    match: disallowSpecialCharsAndNumsRgx,
     maxlength: 50
   },
   lastName: {
     type: String,
     trim: true,
     required: true,
-    match: all_expect_num_and_spec_ch,
+    match: disallowSpecialCharsAndNumsRgx,
     maxlength: 50
   },
   email: {
@@ -21,7 +21,7 @@ const UserSchema = new mongoose.Schema({
     trim: true,
     required: true,
     unique: true,
-    match: email_regex
+    match: emailRgx
   },
   password: {
     type: String,

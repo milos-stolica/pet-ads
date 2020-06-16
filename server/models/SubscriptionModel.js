@@ -1,38 +1,38 @@
 const mongoose = require('mongoose');
-const { pet_types, ad_types, email_regex, all_expect_num_and_spec_ch } = require('../enums_regex');
+const { petTypes, adTypes, emailRgx, disallowSpecialCharsAndNumsRgx } = require('../enums_regex');
 
 const SubscriptionSchema = new mongoose.Schema({
   petType: {
     type: String,
     trim: true,
     required: true,
-    enum: pet_types
+    enum: petTypes
   },
   adType: {
     type: String,
     trim: true,
     required: true,
-    enum: ad_types
+    enum: adTypes
   },
   city: {
     type: String,
     trim: true,
     required: true,
-    match: all_expect_num_and_spec_ch,
+    match: disallowSpecialCharsAndNumsRgx,
     maxlength: 50
   },
   state: {
     type: String,
     trim: true,
     required: true,
-    match: all_expect_num_and_spec_ch,
+    match: disallowSpecialCharsAndNumsRgx,
     maxlength: 50
   },
   email: {
     type: String,
     trim: true,
     required: true,
-    match: email_regex,
+    match: emailRgx,
   },
   ownerId: {
     type: String,

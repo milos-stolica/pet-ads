@@ -7,8 +7,8 @@ const ImageController = require('./ImageController');
 module.exports = class AdsManager {
   constructor(req, action) {
     this.req = req;
-    this.valid = this.validate();
     this.action = action;
+    this.valid = this.validate();
     this.imgDestination = this.req.body ? path.join(__dirname, '../public', 'ads_images', this.req.body.ad_type) : null;
     this.imgSaver = this.req.file ? new ImageController(this.req.file.buffer, this.imgDestination, null) : null;
   }
@@ -18,15 +18,15 @@ module.exports = class AdsManager {
       return false;
     }
 
-    let valid = Validator.adTypeValid(this.req.body.ad_type) && Validator.hasNotNumberOrSpecialCh(this.req.body.city) && Validator.hasNotNumberOrSpecialCh(this.req.body.state)
-    && Validator.isPhoneValid(this.req.body.phone) && Validator.isEmailValid(this.req.body.email) && Validator.petTypeValid(this.req.body.type)
-    && Validator.lengthInRange(this.req.body.phone, 0, 50) && Validator.lengthInRange(this.req.body.city, 0, 50) && Validator.lengthInRange(this.req.body.state, 0, 50)
-    && Validator.lengthInRange(this.req.body.description);
-
-    if(valid && this.req.body.ad_type === 'For sale' && !Validator.valueInRange(this.req.body.price, 0)) {
-      valid = false;
-    }
-    return valid;
+    return Validator.isAdFormValid({
+      phone: this.req.body.phone,
+      city: this.req.body.city,
+      state: this.req.body.state,
+      adType: this.req.body.ad_type,
+      petType: this.req.body.type,
+      ...(this.req.body.description && { description: this.req.body.description }),
+      ...(this.req.body.ad_type === 'For sale' && { price: this.req.body.price})
+    });
   }
 
   getAds() {
@@ -37,7 +37,7 @@ module.exports = class AdsManager {
     return AdPetModel.findById(this.req.query.id);
   }
 
-  //TODO izbrisati cijenu ako se tip oglasa promijeni sa sell na neki drugi
+  //TODO delete price when ad type is changed from For sale to other
   async update() {
     if(!this.valid) return Promise.reject(createError(400, 'Validation failed'));
 
@@ -51,8 +51,8 @@ module.exports = class AdsManager {
         if(!shouldUpdateImageOrLocation(ad)) Promise.resolve(false);
         if(this.req.file) {
           //save new one and delete previously saved image
-          await this.imgSaver.saveImage();
-          const adDirectory = ad.ad_type !== this.req.body.ad_type ? this.req.body.ad_type : ad.ad_type;
+          await this.saveImage();
+          const adDirectory = ad.ad_type !== this.req.body.ad_type ? ad.ad_type : this.req.body.ad_type;
           await ImageController.deleteImage(path.join(__dirname, '../public', 'ads_images', adDirectory, ad.image_name));
         } else if (ad.ad_type !== this.req.body.ad_type){
           //only destination for image is changed
@@ -67,8 +67,9 @@ module.exports = class AdsManager {
     }
 
     try {
+      await tryUpdateImage();
       const ad = this.constructAd();
-      const [updatedAd, ] = await Promise.all([AdPetModel.findByIdAndUpdate(this.req.body.id, ad, { new: true }), tryUpdateImage()]);
+      const updatedAd = await AdPetModel.findByIdAndUpdate(this.req.body.id, ad, { new: true });
       return Promise.resolve(updatedAd);
     } catch (err) {
       return Promise.reject(err);
@@ -101,10 +102,10 @@ module.exports = class AdsManager {
     return this.imgSaver.saveImage();
   }
 
-  //TODO make this inaccessable out of this class
+  //TODO make this inaccessible out of this class
   constructAd() {
     const ad = {
-      description:this.req.body.description, 
+      description: this.req.body.description, 
       type: this.req.body.type,
       city: this.req.body.city,
       state: this.req.body.state,

@@ -59,12 +59,12 @@ function ManageSubscriptionPage({userSubscriptions, allStates, types, loading, a
   }
 
   function getFormErrors() {
-    const errors = {};
-    if(!Validator.hasNotNumberOrSpecialCh(subscription.city) || !Validator.lengthInRange(subscription.city, 0 , 50)) errors.city = 'This is not valid city name.';
-    if(!Validator.hasNotNumberOrSpecialCh(subscription.state) || !Validator.lengthInRange(subscription.state, 0 , 50)) errors.state = 'This is not valid state name.';
-    if(!Validator.typeValid(subscription.adType, types.ads)) errors.adType = 'This is not valid ad type.';
-    if(!Validator.typeValid(subscription.petType, types.pets)) errors.petType = 'This pet type is not supported yet.';
-    return errors;
+    return Validator.getManageSubscriptionFormErrors({
+      city: subscription.city,
+      state: subscription.state,
+      adType: subscription.adType,
+      petType: subscription.petType
+    }, types.ads, types.pets);
   }
 
   function isFormValid() {
@@ -77,27 +77,31 @@ function ManageSubscriptionPage({userSubscriptions, allStates, types, loading, a
     const state = allStates.find(state => state.name === subscription.state);
     if(state !== undefined) {
       CitiesManager.getCities(state.code, 10000).then(cities => {
-        setCities(cities.map(city => city.name));
+        setCities(['All cities', ...cities.map(city => city.name)]);
       });
     } else {
-      setCities([]);
+      setCities(['All cities']);
     }
   }
 
   function handleChange(event) {
-    setSubscription({...subscription, [event.target.name]: event.target.value});
+    setSubscription({
+      ...subscription, 
+      [event.target.name]: event.target.value, 
+      ...(event.target.name === 'state' && {city: 'All cities'})
+    });
   }
 
   function handleSubmit(event) {
     event.preventDefault();
     if(isFormValid()) {
       setActionInProgress(true);
-        let func = subscription._id ? 'updateSubscription' : 'addSubscription';
-        actions[func](subscription).then(statusCode => {
-          setActionInProgress(false);
-          statusCode < 400 ? history.push(`/user/profile?showTab=subscriptions`) : history.push(`/error/${statusCode}`);
-          toast.success(`Subscription successfully ${func === 'updateSubscription' ? 'updated' : 'saved.'}.`);
-        });
+      let func = subscription._id ? 'updateSubscription' : 'addSubscription';
+      actions[func](subscription).then(statusCode => {
+        setActionInProgress(false);
+        statusCode < 400 ? history.push(`/user/profile?showTab=subscriptions`) : history.push(`/error/${statusCode}`);
+        statusCode < 400 && toast.success(`Subscription successfully ${func === 'updateSubscription' ? 'updated' : 'saved.'}.`);
+      });
     }
   }
 

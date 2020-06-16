@@ -2,17 +2,17 @@ import types from "./actionTypes";
 import AxiosInstance, { handleAxiosResponse, handleAxiosError } from "../../services/Axios";
 import { incrementAPIsInProgress } from './apisInProgressActions';
 
-function loadAdTypesSuccess(ad_types) {
+function loadAdTypesSuccess(adTypes) {
   return {
     type: types.LOAD_AD_TYPES_SUCCESS,
-    ad_types
+    adTypes
   }
 }
 
-function loadPetTypesSuccess(pet_types) {
+function loadPetTypesSuccess(petTypes) {
   return {
     type: types.LOAD_PET_TYPES_SUCCESS,
-    pet_types
+    petTypes
   }
 }
 

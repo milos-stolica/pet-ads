@@ -6,6 +6,7 @@ import { Container, Card } from 'react-bootstrap';
 import { useHistory } from 'react-router-dom';
 import SigninForm from '../forms/SigninForm';
 import Validator from '../../services/Validator';
+import { toast } from 'react-toastify';
 
 const initCredentials = {
   email: '',
@@ -20,9 +21,10 @@ function SigninPage ({actions}) {
   const history = useHistory();
 
   function getFormErrors() {
-    const errors = {};
-    if(!Validator.isEmailValid(credentials.email) || !Validator.isPasswordValid(credentials.password)) errors.wrongCredentials = 'Wrong credentials.';
-    return errors;
+    return Validator.getLoginFormErrors({
+      email: credentials.email, 
+      password: credentials.password
+    });
   }
 
   function isFormValid() {
@@ -43,6 +45,7 @@ function SigninPage ({actions}) {
       .then(statusCode => {
          setSigningIn(false);
          (statusCode < 400 && history.push('/')) || (statusCode >= 400 && setErrors({wrongCredentials: 'Wrong credentials.'}));
+         statusCode < 400 && toast.success('Successfully logged in.');
       })
     }
   }

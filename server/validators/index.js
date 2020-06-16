@@ -1,39 +1,50 @@
-(function({phone_regex, email_regex, password_regex, all_expect_num_and_spec_ch, ad_types, pet_types}) {
+(function({phoneRgx, emailRgx, passwordRgx, disallowSpecialCharsAndNumsRgx, adTypes, petTypes}, Joi) {
   module.exports = class Validator {
-    static isEmailValid(email) {
-      return email_regex.test(email);
+
+    static isAdFormValid(fields) {
+      const manageAdScheme = Joi.object({
+        phone: Joi.string().pattern(phoneRgx).max(20),
+        city: Joi.string().max(50).pattern(disallowSpecialCharsAndNumsRgx),
+        state: Joi.string().max(50).pattern(disallowSpecialCharsAndNumsRgx),
+        adType: Joi.string().valid(...adTypes),
+        petType: Joi.string().valid(...petTypes),
+        ...(fields.description && {description: Joi.string().min(0).max(1000)}),
+        ...(fields.price && {price: Joi.number().min(0)})
+      });
+  
+      return !manageAdScheme.validate(fields, {abortEarly: false}).error;
     }
 
-    static isPasswordValid(password) {
-      return password_regex.test(password);
+    static isSubscriptionFormValid(fields) {
+      const manageSubscriptionScheme = Joi.object({
+        city: Joi.string().max(50).pattern(disallowSpecialCharsAndNumsRgx),
+        state: Joi.string().max(50).pattern(disallowSpecialCharsAndNumsRgx),
+        adType: Joi.string().valid(...adTypes),
+        petType: Joi.string().valid(...petTypes)
+      });
+  
+      return !manageSubscriptionScheme.validate(fields, {abortEarly: false}).error;
     }
 
-    static isPhoneValid(phone) {
-      return phone_regex.test(phone);
+    static isRegistrationFormValid(fields) {
+      const registrationScheme = Joi.object({
+        email: Joi.string().pattern(emailRgx),
+        password: Joi.string().pattern(passwordRgx),
+        firstName: Joi.string().pattern(disallowSpecialCharsAndNumsRgx).max(50),
+        lastName: Joi.string().pattern(disallowSpecialCharsAndNumsRgx).max(50)
+      });
+  
+      return !registrationScheme.validate(fields, {abortEarly: false}).error;
     }
 
-    static hasNotNumberOrSpecialCh(string) {
-      return all_expect_num_and_spec_ch.test(string);
-    }
+    static isLoginFormValid(fields) {
+      const loginScheme = Joi.object({
+        email: Joi.string().pattern(emailRgx),
+        password: Joi.string().pattern(passwordRgx)
+      });
 
-    static lengthInRange(string, minLength = 0, maxLength = 1000) {
-      return string.length >= minLength && string.length <= maxLength
-    }
-
-    static valueInRange(number, min = 0, max = Number.MAX_SAFE_INTEGER) {
-      if(!isNaN(parseFloat(number))) {
-        return number => min && number <= max;
-      }
-      return false;
-    }
-
-    static adTypeValid(type) {
-      return !!ad_types.find(adType => adType === type);
-    }
-
-    static petTypeValid(type) {
-      return !!pet_types.find(petType => petType === type);
+      return !loginScheme.validate(fields, {abortEarly: false}).error;
     }
   }
 })
-(require('../enums_regex'));
+(require('../enums_regex'), require('@hapi/joi'));

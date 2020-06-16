@@ -13,15 +13,16 @@ module.exports = class SubscriptionManager {
       return false;
     }
 
-    let valid = Validator.adTypeValid(this.req.body.adType) && Validator.hasNotNumberOrSpecialCh(this.req.body.city) && 
-    Validator.hasNotNumberOrSpecialCh(this.req.body.state) && Validator.petTypeValid(this.req.body.petType) && 
-    Validator.lengthInRange(this.req.body.city, 0, 50) && Validator.lengthInRange(this.req.body.state, 0, 50);
-
-    return valid;
+    return Validator.isSubscriptionFormValid({
+      city: this.req.body.city,
+      state: this.req.body.state,
+      adType: this.req.body.adType,
+      petType: this.req.body.petType,
+    });
   }
 
   getSubscriptionsForUser() {
-    return SubscriptionModel.find({ownerId: this.req.user._id}).sort({updatedAt: -1}).lean();
+    return SubscriptionModel.find({ownerId: this.req.user._id}).sort({updatedAt: -1});
   }
 
   async update() {

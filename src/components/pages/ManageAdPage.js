@@ -98,16 +98,16 @@ function ManageAdPage(props) {
   }
 
   function getFormErrors() {
-    const errors = {};
-    if(!Validator.isPhoneValid(ad.phone)) errors.phone = 'This is not valid phone number.';
-    if(ad.ad_type === 'For sale' && !Validator.valueInRange(ad.price, 0)) errors.price = 'Price must be number greater or equal to zero.';
-    if(!Validator.hasNotNumberOrSpecialCh(ad.city) || !Validator.lengthInRange(ad.city, 0 , 50)) errors.city = 'This is not valid city name.';
-    if(!Validator.hasNotNumberOrSpecialCh(ad.state) || !Validator.lengthInRange(ad.state, 0 , 50)) errors.state = 'This is not valid state name.';
-    if(!Validator.typeValid(ad.ad_type, types.ads)) errors.ad_type = 'This is not valid ad type.';
-    if(!Validator.typeValid(ad.type, types.pets)) errors.type = 'This pet type is not supported yet.';
-    if(ad._id === undefined && !Validator.isImage(ad.imageFile)) errors.file = 'Only images of png, jpeg or webp types are allowed.';
-    if(!Validator.lengthInRange(ad.description)) errors.description = 'Description allow up to 1000 characters.';
-    return errors;
+    return Validator.getManageAdFormErrors({
+      phone: ad.phone,
+      city: ad.city,
+      state: ad.state,
+      adType: ad.ad_type,
+      petType: ad.type,
+      ...(ad.description && { description: ad.description }),
+      ...((ad._id === undefined || ad.imageFile) && { file: ad.imageFile }),
+      ...(ad.ad_type === 'For sale' && { price: ad.price})
+    }, types.ads, types.pets);
   }
 
   function isFormValid() {
@@ -138,7 +138,7 @@ function ManageAdPage(props) {
       actions[func](ad).then(statusCode => {
         setActionInProgress(false);
         statusCode < 400 ? history.push('/user/profile?showTab=ads') : history.push(`/error/${statusCode}`);
-        toast.success(`Ad successfully ${func === 'updateAd' ? 'updated' : 'saved.'}.`);
+        statusCode < 400 && toast.success(`Ad successfully ${func === 'updateAd' ? 'updated' : 'saved.'}.`);
       });
     }
   }
